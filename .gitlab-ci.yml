@@ -2,6 +2,8 @@ stages:
   - build
 
 docker-build:
+  tags:
+    - hdm-gitlab-runner
   stage: build
   image: docker:latest
   services:

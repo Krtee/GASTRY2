@@ -5,7 +5,6 @@ docker-build:
   tags:
     - hdm-runner-yumatch
   stage: build
-  image: docker:latest
   services:
     - docker:dind
   before_script:

@@ -1,7 +1,5 @@
 # Client Blueprint
 
-Das ist das Blueprint Projekt für die Watermelon React Clients. Dieser Blueprint hat folgenden Funktionsumfang:
-
 - PWA ready
 - SASS support
 - React Router

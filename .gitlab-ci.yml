@@ -3,7 +3,7 @@ stages:
 
 docker-build:
   tags:
-    - hdm-gitlab-runner
+    - hdm-runner-yumatch
   stage: build
   image: docker:latest
   services:

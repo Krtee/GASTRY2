@@ -9,8 +9,7 @@ build:
   before_script:
     - cd client/
   script: 
-    - CI=false npm install
-    - npm help
+    - npm install
     - npm run build
 
 test:
@@ -20,7 +19,8 @@ test:
   before_script:
     - cd client/
   script:
-    - CI=true npm test
+    - npm install
+    - npm test
 
 # docker-build:
 #   tags:

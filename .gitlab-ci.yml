@@ -5,14 +5,14 @@ stages:
 
 build:
   stage: build
-  image: node:latest
+  image: node:lts
   script: 
     - npm install ./client
     - npm run build ./client
 
 test:
   stage: test
-  image: node
+  image: node:lts
   needs: ["build"]
   script:
     - CI=true npm test ./client

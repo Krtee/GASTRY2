@@ -8,6 +8,7 @@ build:
   image: node:lts
   script: 
     - npm install ./client
+    - npm build ./client
 
 test:
   stage: test

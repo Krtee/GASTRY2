@@ -5,10 +5,11 @@ stages:
 
 build:
   stage: build
-  image: node
-  script: 
+  image: node:lts
+  before_script:
     - cd client/
-    - npm install
+  script: 
+    - CI=false npm install
     - npm help
     - npm run build
 
@@ -17,7 +18,7 @@ test:
   image: node:lts
   needs: ["build"]
   script:
-    - CI=true npm test ./client
+    - CI=true npm test
 
 # docker-build:
 #   tags:

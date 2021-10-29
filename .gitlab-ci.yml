@@ -8,15 +8,14 @@ build:
   image: node:latest
   script: 
     - npm install ./client
-    - npm build
+    - npm run build ./client
 
 test:
   stage: test
   image: node
+  needs: ["build"]
   script:
-    - npm install
-    - CI=true npm test
-    - echo "Test successfully!"
+    - CI=true npm test ./client
 
 # docker-build:
 #   tags:

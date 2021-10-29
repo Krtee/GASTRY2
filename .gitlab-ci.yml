@@ -5,7 +5,7 @@ stages:
 
 build:
   stage: build
-  image: node
+  image: node:latest
   script: 
     - npm install
     - npm build

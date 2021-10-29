@@ -7,7 +7,7 @@ build:
   stage: build
   image: node
   script: 
-    - CI=false yarn install ./client
+    - yarn install
     - yarn help
     - yarn build ./client
 

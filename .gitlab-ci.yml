@@ -8,7 +8,8 @@ build:
   image: node:lts
   script: 
     - npm install ./client
-    - npm run build
+    - npm help
+    - npm run build:local ./client
 
 test:
   stage: test

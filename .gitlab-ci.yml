@@ -7,12 +7,14 @@ build:
   stage: build
   image: node
   script: 
-    - ls
-    - echo ls
+    - cd client/
+    - npm install
+    - npm help
+    - npm run build
 
 test:
   stage: test
-  image: node
+  image: node:lts
   needs: ["build"]
   script:
     - CI=true npm test ./client

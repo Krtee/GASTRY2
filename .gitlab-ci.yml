@@ -9,7 +9,7 @@ build:
   script: 
     - yarn install
     - yarn help
-    - yarn build ./client
+    - yarn build
 
 test:
   stage: test

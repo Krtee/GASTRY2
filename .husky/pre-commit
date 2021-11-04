@@ -1,0 +1,13 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+echo "Checking frontend"
+cd client
+echo "Running prettier check"
+npx prettier --check *
+echo "Implement tests to run npm test"
+echo "Checking backend"
+cd ../backend/data-service
+echo "Running tests in backend"
+./mvnw test
+
+

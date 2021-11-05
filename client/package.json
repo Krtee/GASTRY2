@@ -19,7 +19,7 @@
     "i18next-browser-languagedetector": "^6.0.1",
     "i18next-http-backend": "^1.1.0",
     "keycloak-js": "^12.0.2",
-    "node-sass": "^5.0.0",
+    "node-sass": "^6.0.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-i18next": "^11.8.5",
@@ -44,8 +44,7 @@
   "scripts": {
     "prepare": "cd .. && husky install",
     "start": "react-scripts start",
-    "build": "npm test -- --watchAll=false && react-scripts build",
-    "build-no-test": "react-scripts build",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006 -s public",

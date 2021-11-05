@@ -12,3 +12,7 @@
     4. Run docker-compose up (optional with "-d")
     5. Test with "curl localhost:8080/"
     6. Expected result: "Greetings from data-services in Yumatch!"
+
+# Docker Image
+
+Das aktuellste Image kann immer [hier](https://hub.docker.com/repository/docker/bassamxmednini/yumatch) gefunden werden.

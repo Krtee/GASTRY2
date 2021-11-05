@@ -15,7 +15,6 @@ build:
 test:
   stage: test
   image: node:lts
-  needs: ["build"]
   before_script:
     - cd client/
   script:
@@ -27,7 +26,6 @@ docker-build:
     - hdm-runner-yumatch
   stage: docker
   image: docker:20-dind
-  needs: ["test"]
   variables:
     DOCKER_HOST: tcp://docker:2375 
     DOCKER_DRIVER: overlay2

@@ -4,8 +4,6 @@ stages:
   - docker
 
 build:
-  only:
-    - develop
   stage: build
   image: node:lts
   before_script:
@@ -15,8 +13,6 @@ build:
     - npm run build
 
 test:
-  only:
-    - develop
   stage: test
   image: node:lts
   before_script:
@@ -26,8 +22,7 @@ test:
     - npm test
 
 docker-build:
-  only:
-    - main
+  when: manual
   tags:
     - hdm-runner-yumatch
   stage: docker

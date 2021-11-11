@@ -10,6 +10,7 @@ build:
     - cd client/
   script: 
     - rm -rf ./node_modules
+    - rm -rf ./node_modules/babel-loader
     - rm -rf ./package-lock.json
     - npm install
     - npm run build
@@ -21,6 +22,7 @@ test:
     - cd client/
   script:
     - rm -rf ./node_modules
+    - rm -rf ./node_modules/babel-loader
     - rm -rf ./package-lock.json
     - npm install
     - npm test

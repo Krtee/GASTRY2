@@ -9,6 +9,7 @@ build:
   before_script:
     - cd client/
   script: 
+    - npm prune
     - npm install
     - npm run build
 

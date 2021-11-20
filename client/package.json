@@ -93,5 +93,8 @@
     "@storybook/react": "^6.3.12",
     "husky": "^7.0.4",
     "prettier": "^2.4.1"
+  },
+  "peerDependencies": {
+    "babel-loader": "8.1.0"
   }
 }

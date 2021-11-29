@@ -4,10 +4,8 @@ import org.springframework.data.annotation.Id;
 
 import io.foodtinder.dataservice.constants.Category;
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 
 @Data
-@Slf4j
 public class Meal {
 
     @Id

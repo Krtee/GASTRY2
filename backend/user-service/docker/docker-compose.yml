@@ -1,0 +1,33 @@
+version: "3.7"
+services:
+  yumatch-user-service:
+    image: yumatch/user-service:latest
+    container_name: yumatch-user-service
+    # ports:
+    #   - 8082:80
+    restart: always
+    networks:
+      - yumatchnet
+      - yumatch-user-internal
+    depends_on:
+      - yumatch-user-database
+
+  yumatch-user-database:
+    image: mongo:4.2.3-bionic
+    container_name: yumatch-user-database
+    networks:
+      - yumatch-user-internal
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: IacFfG3xChlGv84v
+      MONGO_INITDB_ROOT_PASSWORD: UsiDqSv4tvdQvzF7
+    volumes:
+      - ./databases/yumatch:/data/db
+
+networks:
+  yumatchnet:
+    name: yumatch_network
+  yumatch-user-internal:
+    name: yumatch_user_internal

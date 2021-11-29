@@ -1,1 +1,8 @@
-{ "test": "geht!" }
+{
+  "test": "geht!",
+  "general": {
+    "pages": {
+      "MATCHING": "Matchen"
+    }
+  }
+}

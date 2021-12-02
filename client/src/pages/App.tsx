@@ -9,7 +9,7 @@ const App = () => {
     <BrowserRouter>
       <RecoilRoot>
         <Switch>
-          <Route path="/" exact>
+          <Route path="/">
             {/**initialized && keycloak && keycloak.authenticated ? (
             <h2>{t("test")}</h2>
           ) : (

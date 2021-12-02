@@ -26,6 +26,11 @@ public class Match {
         this.setUpdatedAt(LocalDateTime.now());
     }
 
+    public List<MatchRestaurantWrapper> calculateMatch() {
+
+        return this.getMatchedRestaurants();
+    }
+
     public List<MatchRestaurantWrapper> matchRestaurants() {
         // TODO get right matches
         return this.getMatchedRestaurants();

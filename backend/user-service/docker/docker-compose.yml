@@ -3,8 +3,6 @@ services:
   yumatch-user-service:
     image: yumatch/user-service:latest
     container_name: yumatch-user-service
-    # ports:
-    #   - 8082:80
     restart: always
     networks:
       - yumatchnet

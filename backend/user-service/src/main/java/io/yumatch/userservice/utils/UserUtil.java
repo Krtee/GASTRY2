@@ -40,7 +40,7 @@ public class UserUtil {
             adminUser.setFirstName("Admin");
             adminUser.setLastName("User");
             adminUser.setEmail(config.getAdminMail());
-            String password = keycloakUtil.generateRandomPassword();
+            String password = "test";
             adminUser.setPassword(password);
             int responseStatus = keycloakUtil.createNewUser(adminUser);
             adminUser = userRepo.save(adminUser);

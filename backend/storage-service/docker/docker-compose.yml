@@ -1,0 +1,21 @@
+version: "3.7"
+services:
+  yumatch-storage-service:
+    build: .
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - yumatch-minio
+
+  yumatch-minio:
+    image: quay.io/minio/minio
+    command: server /data --console-address ":9001"
+    ports:
+      - "9001:9001"
+      - "9000:9000"
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: yumatchadmin
+    volumes:
+      - ./storage:/data

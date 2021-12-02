@@ -1,8 +1,15 @@
 import React, { FC } from "react";
+import { LayoutProps } from "./Layout.types";
 
-interface LayoutProps {}
 
-const Layout: FC<LayoutProps> = ({}) => {
+
+const Layout: FC<LayoutProps> = ({
+  children,
+  navigationElements,
+  changeLocation,
+  currentLocation,
+
+}) => {
   return <div></div>;
 };
 

@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import { useRecoilValue } from "recoil";
@@ -11,7 +11,9 @@ import { UserRole } from "../state/User/User.types";
  */
 export enum Page {
   MATCHING = "MATCHING",
+  PROFILE = "PROFILE",
 }
+
 
 export interface NavigationPage {
   title: string;
@@ -42,6 +44,11 @@ export const useNavigation = (
       title: t(`general.pages.matching`),
       page: Page.MATCHING,
       route: "/matching",
+    },
+    {
+      title: t(`general.pages.profile`),
+      page: Page.PROFILE,
+      route: "/profile",
     },
   ];
 

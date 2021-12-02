@@ -1,0 +1,40 @@
+@import "../../styles/variables.scss";
+
+#layout-component {
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background-color: $color-background-main;
+
+  &-header {
+    flex: 1 0 8%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #d67278;
+  }
+
+  &-navigation-bar {
+    flex: 1 0 8%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #d67278;
+    border-top-left-radius: 40px;
+    border-top-right-radius: 40px;
+
+    div {
+      color: white;
+      text-align: center;
+      flex-grow: 1;
+    }
+  }
+
+  &-content {
+    padding: 0 3vw 1vh 3vw;
+
+    flex: 1 0 84%;
+    overflow-y: auto;
+  }
+}

@@ -2,7 +2,14 @@
   "test": "geht!",
   "general": {
     "pages": {
-      "MATCHING": "Matchen"
+      "MATCHING": "Matchen",
+      "register": {
+        "header": "Registriere dich",
+        "email": "E-Mail",
+        "password": "Passwort",
+        "passwordConfirm": "Passwort bestätigen",
+        "buttonLabel": "Registrieren"
+      }
     }
   }
 }

@@ -41,7 +41,7 @@ public class UserController {
         UserDto savedUser = userRepo.save(newUser);
         int responseStatus = keycloakUtil.createNewUser(savedUser);
         if (responseStatus == 201) {
-            return ResponseEntity.status(HttpStatus.CREATED).build();
+            return ResponseEntity.status(HttpStatus.CREATED).body(ResponseTypes.SUCCESSFUL);
         } else if (responseStatus == 409) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ResponseTypes.REGISTER_USER_EXISTS);
         }

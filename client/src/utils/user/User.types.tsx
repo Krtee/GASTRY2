@@ -3,11 +3,12 @@ export enum UserRole {
   USER = "USER"
 }
 
-export interface UserType {
+export interface User {
   id: string;
   firstName: string;
   lastName: string;
   username: string;
   email: string;
   role: UserRole | string;
+  password?: string;
 }

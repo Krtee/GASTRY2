@@ -1,7 +1,7 @@
 import { RecoilState, atom } from "recoil";
-import { UserRole, UserType } from "./User.types";
+import { UserRole, User } from "./User.types";
 
-export const userState: RecoilState<UserType> = atom({
+export const userState: RecoilState<User> = atom({
   key: "currentUser",
   default: {
     id: "",

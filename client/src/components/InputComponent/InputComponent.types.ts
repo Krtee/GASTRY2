@@ -4,5 +4,7 @@ export interface InputComponentProps {
   value: string;
   onChange(value: string): void;
   required?: boolean;
-  type?: "text" | "password" | "number"
+  onBlur?(value: string): void;
+  error?: string;
+  type?: "text" | "password" | "number";
 }

@@ -3,6 +3,17 @@ import { useState, useEffect } from "react";
 import axios, { AxiosInstance } from "axios";
 
 /**
+ * An enum containing different types of Responses
+ * @author Domenico Ferrari
+ */
+export enum ResponseTypes {
+  SUCCESSFUL,
+  REGISTER_ERROR,
+  LOGIN_ERROR,
+  REGISTER_USER_EXISTS,
+}
+
+/**
  * Creates a prefconfigured axios wrapper that also talks with
  * the keycloak instance.
  */

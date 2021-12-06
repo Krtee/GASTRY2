@@ -1,4 +1,5 @@
 import { AxiosInstance } from "axios";
+import { ResponseTypes } from "../AxiosUtil";
 import { User, UserRole } from "./User.types";
 
 /**
@@ -28,7 +29,7 @@ export const createEmptyUser = (): User => {
  export const createNewUser = async (
     axios: AxiosInstance,
     newUser: User
-  ): Promise<boolean> => {
+  ): Promise<ResponseTypes> => {
     return axios
       .post("/user/", newUser)
       .then((response) => response.data)

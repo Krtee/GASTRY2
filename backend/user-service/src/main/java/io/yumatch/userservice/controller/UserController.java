@@ -38,6 +38,7 @@ public class UserController {
     public ResponseEntity<ResponseTypes> createNewUser(@RequestBody UserDto newUser) {
         log.info("Request to create new user received!");
         newUser.setCreateDate(LocalDateTime.now());
+        log.info("this the new user: {}", newUser);
         UserDto savedUser = userRepo.save(newUser);
         int responseStatus = keycloakUtil.createNewUser(savedUser);
         if (responseStatus == 201) {

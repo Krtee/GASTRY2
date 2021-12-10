@@ -1,13 +1,12 @@
 import React, { FC } from "react";
-import Layout from "../components/layoutComponent/Layout";
 
 interface TutorialPageProps {}
 
 export const TutorialPage: FC<TutorialPageProps> = ({}) => {
   return (
-    <Layout>
+    <div>
       <button>to matching page</button>
-    </Layout>
+    </div>
   );
 };
 

@@ -36,7 +36,7 @@ public class RestUtils {
 
     @PostConstruct
     public void init() {
-        log.debug("Setting up the meal Db service webclient instance");
+        log.info("Setting up the meal Db service webclient instance");
         mealServiceWebClient = WebClient.builder()
                 .clientConnector(new ReactorClientHttpConnector(HttpClient.create().followRedirect(true)))
                 .baseUrl("www.themealdb.com").filter(logRequest()) // here is the
@@ -47,7 +47,8 @@ public class RestUtils {
                 .exchangeStrategies(ExchangeStrategies.builder()
                         .codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(16 * 1024 * 1024)).build())
                 .build();
-        if (mealrepository.findAll().size() > 0) {
+
+        if (mealrepository.findAll().size() <= 0) {
             log.info("No meals in DB yet, initializing repository...");
             fetchAllMealsForAllCategories();
         }

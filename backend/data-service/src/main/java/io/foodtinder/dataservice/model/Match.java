@@ -22,16 +22,11 @@ public class Match {
     public void update(Match updatedMatch) {
         this.setMatchedMeals(updatedMatch.getMatchedMeals());
         this.setUnmatchedMeals(updatedMatch.getUnmatchedMeals());
-        this.setMatchedRestaurants(updatedMatch.matchRestaurants());
+        this.setMatchedRestaurants(updatedMatch.getMatchedRestaurants());
         this.setUpdatedAt(LocalDateTime.now());
     }
 
     public List<MatchRestaurantWrapper> calculateMatch() {
-
-        return this.getMatchedRestaurants();
-    }
-
-    public List<MatchRestaurantWrapper> matchRestaurants() {
         // TODO get right matches
         return this.getMatchedRestaurants();
     }

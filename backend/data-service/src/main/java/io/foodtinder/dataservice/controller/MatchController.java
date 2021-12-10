@@ -1,5 +1,6 @@
 package io.foodtinder.dataservice.controller;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -29,10 +30,25 @@ public class MatchController {
     private MatchRepository matchRepository;
 
     /**
+     * POST API to create a match
+     * 
+     * @return 200 when successful, else returns 404
+     * @author Minh
+     */
+    @PostMapping(value = "/")
+    public ResponseEntity<Match> createMatch(@RequestBody Match newMatch) {
+        log.info("Request to create  match  for user {} received", newMatch.getUserId());
+        newMatch.setUpdatedAt(LocalDateTime.now());
+        newMatch.setCreatedAt(LocalDateTime.now());
+        return ResponseEntity.status(HttpStatus.OK).body(matchRepository.save(newMatch));
+    }
+
+    /**
      * Get API to receive match by id
      * 
      * @param id - a string representing the id
      * @return 200 when match found, 404 when not found
+     * @author Minh
      */
     @GetMapping(value = "/id")
     public ResponseEntity<Match> getMatchById(@RequestParam String id) {
@@ -52,6 +68,7 @@ public class MatchController {
      * 
      * @param userId - a string representing the userId
      * @return 200 when matches found, 404 when not found
+     * @author Minh
      */
     @GetMapping(value = "/user/id")
     public ResponseEntity<List<Match>> getMatchesByUserId(@RequestParam String userId) {
@@ -70,6 +87,7 @@ public class MatchController {
      * 
      * @param userId - a string representing the userId
      * @return 200 when matches found, 404 when not found
+     * @author Minh
      */
     @GetMapping(value = "/user/latest/id")
     public ResponseEntity<Match> getLatestMatchByUserId(@RequestParam String userId) {
@@ -85,8 +103,10 @@ public class MatchController {
     }
 
     /**
+     * POST API to update update a match
      * 
      * @return 200 when successful, else returns 404
+     * @author Minh
      */
     @PostMapping(value = "/update")
     public ResponseEntity<Match> updateMatchbyId(@RequestBody Match updatedMatch) {

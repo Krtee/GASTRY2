@@ -5,6 +5,7 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
@@ -13,8 +14,10 @@ import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import io.foodtinder.dataservice.constants.Category;
+import io.foodtinder.dataservice.model.GeoLocation;
 import io.foodtinder.dataservice.model.Meal;
-import io.foodtinder.dataservice.model.MealWrapper;
+import io.foodtinder.dataservice.model.requests.MapsResponseWrapper;
+import io.foodtinder.dataservice.model.requests.MealWrapper;
 import io.foodtinder.dataservice.repositories.MealRepository;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
@@ -25,6 +28,8 @@ import reactor.netty.http.client.HttpClient;
 public class RestUtils {
 
     private WebClient mealServiceWebClient;
+
+    private WebClient mapsServiceWebClient;
 
     @Autowired
     private MealRepository mealrepository;
@@ -46,6 +51,17 @@ public class RestUtils {
             log.info("No meals in DB yet, initializing repository...");
             fetchAllMealsForAllCategories();
         }
+        mapsServiceWebClient = WebClient.builder()
+                .clientConnector(new ReactorClientHttpConnector(HttpClient.create().followRedirect(true)))
+                .baseUrl("https://maps.googleapis.com/maps/api/place/nearbysearch/json").filter(logRequest()) // here is
+                                                                                                              // the
+                // magic
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .defaultHeader(HttpHeaders.USER_AGENT,
+                        "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; Googlebot/2.1; +http://www.google.com/bot.html) Safari/537.36")
+                .exchangeStrategies(ExchangeStrategies.builder()
+                        .codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(16 * 1024 * 1024)).build())
+                .build();
     }
 
     /**
@@ -95,6 +111,20 @@ public class RestUtils {
 
         }
 
+    }
+
+    private MapsResponseWrapper findRestaurants(GeoLocation location, String userLang, String keyword) {
+        MapsResponseWrapper res = mapsServiceWebClient.get()
+                .uri(uriBuilder -> uriBuilder.path("/internal/mail/")
+                        .queryParam("location", location.getLatitude() + "%" + location.getLongitude())
+                        .queryParam("language", userLang).queryParam("keyword", keyword)
+                        .queryParam("type", "restaurant")
+                        .build())
+                .retrieve()
+                .onStatus(status -> status.value() == HttpStatus.NOT_FOUND.value(),
+                        response -> Mono.empty())
+                .bodyToMono(MapsResponseWrapper.class).block();
+        return res;
     }
 
     // This method returns filter function which will log request data

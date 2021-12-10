@@ -16,6 +16,7 @@ export const createEmptyUser = (): User => {
     lastName: "",
     email: "",
     role: UserRole.USER,
+    posts: [],
   };
 };
 

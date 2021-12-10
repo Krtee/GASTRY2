@@ -1,5 +1,11 @@
 import { useTranslation } from "react-i18next";
-import { BrowserRouter, Redirect, Route, Switch, useHistory } from "react-router-dom";
+import {
+  BrowserRouter,
+  Redirect,
+  Route,
+  Switch,
+  useHistory,
+} from "react-router-dom";
 import { RecoilRoot } from "recoil";
 import MatchingPage from "./MatchingPage";
 import ProfilePage from "./ProfilePage";

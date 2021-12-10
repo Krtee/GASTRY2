@@ -1,9 +1,15 @@
-import InputComponent from './InputComponent'
+import InputComponent from "./InputComponent";
 
 export default {
   title: "InputComponent",
 };
 
 export const Test = () => {
-  return <InputComponent placeholder="Email" onChange={() => {}} />;
+  return (
+    <InputComponent
+      value=""
+      placeholder="Email"
+      onChange={(value) => console.log(value)}
+    />
+  );
 };

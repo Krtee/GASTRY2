@@ -19,21 +19,37 @@ export const createEmptyUser = (): User => {
   };
 };
 
-
 /**
  * API method to create a new user {@link User}
  * @param axios
  * @returns boolean for either successful creation or failed one
  * @author Domenico Ferrari
  */
- export const createNewUser = async (
-    axios: AxiosInstance,
-    newUser: User
-  ): Promise<ResponseTypes> => {
-    return axios
-      .post("/user/", newUser)
-      .then((response) => response.data)
-      .catch(() => {
-        console.error("Error while creating a new user!");
-      });
-  };
+export const createNewUser = async (
+  axios: AxiosInstance,
+  newUser: User
+): Promise<ResponseTypes> => {
+  return axios
+    .post("/user/", newUser)
+    .then((response) => response.data)
+    .catch(() => {
+      console.error("Error while creating a new user!");
+    });
+};
+
+/**
+ * API method to load an {@link User} by its id
+ *
+ * @param userId The id of the {@link User} to fetch
+ * @param axios The axios instance
+ * @returns Either the loaded user or undefined in case of an error
+ */
+export const loadSingleUser = async (
+  userId: string,
+  axios: AxiosInstance
+): Promise<User> => {
+  return axios
+    .get("/user/id/", { params: { userId: userId } })
+    .then((resp) => resp.data)
+    .catch((exc) => console.error("Error during user load!", exc));
+};

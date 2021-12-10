@@ -1,6 +1,6 @@
 export interface InputComponentProps {
   label?: string;
-  placeholder: string;
+  placeholder?: string;
   value: string;
   onChange(value: string): void;
   required?: boolean;

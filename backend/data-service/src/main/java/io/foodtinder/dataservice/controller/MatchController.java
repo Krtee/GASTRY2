@@ -32,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping("/meal/")
+@RequestMapping("/match")
 @CrossOrigin(origins = { "*" })
 public class MatchController {
 

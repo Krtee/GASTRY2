@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 
 import io.foodtinder.dataservice.constants.Category;
 import io.foodtinder.dataservice.model.Meal;
@@ -19,4 +20,8 @@ public interface MealRepository extends MongoRepository<Meal, String> {
     public Optional<Meal> getMealByIdMeal(String idMeal);
 
     public Optional<List<Meal>> findAllByStrCategory(Category category);
+
+    @Query(value = "{ '$sample' : { 'size': 15}")
+    public List<Meal> findRandomMeals();
+
 }

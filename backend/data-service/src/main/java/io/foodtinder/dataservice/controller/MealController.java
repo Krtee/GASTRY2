@@ -42,6 +42,18 @@ public class MealController {
     }
 
     /**
+     * A GET API to retrieve 15 random meals
+     * 
+     * @return 200 with meals
+     */
+    @GetMapping(value = "/some")
+    public ResponseEntity<List<Meal>> getSomeMeals(@RequestParam int count) {
+        log.info("Retrieving all meals saved on database...");
+        return ResponseEntity.status(HttpStatus.OK).body(mealRepository.findRandomMeals());
+
+    }
+
+    /**
      * Test API for deleting all meals from the repository
      * 
      * @return 200 when all entries have been deleted

@@ -3,6 +3,7 @@ package io.foodtinder.dataservice.model;
 import org.springframework.data.annotation.Id;
 
 import io.foodtinder.dataservice.constants.Category;
+import io.foodtinder.dataservice.constants.MealArea;
 import lombok.Data;
 
 @Data
@@ -13,7 +14,7 @@ public class Meal {
     private String strMeal;
     private Object strDrinkAlternate;
     private Category strCategory;
-    private String strArea;
+    private MealArea strArea;
     private String strInstructions;
     private String strMealThumb;
     private String strTags;

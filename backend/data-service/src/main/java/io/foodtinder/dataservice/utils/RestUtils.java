@@ -1,6 +1,9 @@
 
 package io.foodtinder.dataservice.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +17,11 @@ import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import io.foodtinder.dataservice.constants.Category;
+import io.foodtinder.dataservice.constants.MealArea;
 import io.foodtinder.dataservice.model.GeoLocation;
 import io.foodtinder.dataservice.model.Meal;
-import io.foodtinder.dataservice.model.requests.MapsResponseWrapper;
 import io.foodtinder.dataservice.model.requests.MealWrapper;
+import io.foodtinder.dataservice.model.requests.google.GoogleMapsResponseWrapper;
 import io.foodtinder.dataservice.repositories.MealRepository;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
@@ -95,6 +99,8 @@ public class RestUtils {
      */
     public void fetchAllMealsForAllCategories() {
         log.info("Start fetching all meals for all categories");
+
+        List<Meal> allFetchedMeals = new ArrayList<>();
         for (Category category : Category.values()) {
             log.info("Fetching all meals for category: {}", category);
             MealWrapper mealsForCategory = mealServiceWebClient.get()
@@ -106,26 +112,49 @@ public class RestUtils {
             for (Meal meal : mealsForCategory.getMeals()) {
 
                 meal.setStrCategory(category);
-                mealrepository.save(meal);
+                allFetchedMeals.add(meal);
             }
             log.info("Finished saving all meals");
-
         }
+
+        mealrepository.saveAll(allFetchedMeals);
+        log.info("Finished saving all meals");
+    }
+
+    public void fetchAllMealsForAllAreas() {
+        log.info("Start fetching all meals for all categories");
+
+        List<Meal> allFetchedMeals = new ArrayList<>();
+        for (MealArea area : MealArea.values()) {
+            log.info("Fetching all meals for area: {}", area);
+            MealWrapper mealsForArea = mealServiceWebClient.get()
+                    .uri("https://www.themealdb.com/api/json/v1/1/filter.php?c=" + area)
+                    .accept(MediaType.APPLICATION_JSON).retrieve().bodyToMono(MealWrapper.class).block();
+            log.info("Result for {}: {}", area, mealsForArea);
+            log.info("About to save meals to repository");
+
+            for (Meal meal : mealsForArea.getMeals()) {
+
+                meal.setStrArea(area);
+                allFetchedMeals.add(meal);
+            }
+        }
+        mealrepository.saveAll(allFetchedMeals);
+        log.info("Finished saving all meals");
 
     }
 
-    private MapsResponseWrapper findRestaurants(GeoLocation location, String userLang, String keyword) {
-        MapsResponseWrapper res = mapsServiceWebClient.get()
-                .uri(uriBuilder -> uriBuilder.path("/internal/mail/")
-                        .queryParam("location", location.getLatitude() + "%" + location.getLongitude())
+    public GoogleMapsResponseWrapper findRestaurants(GeoLocation location, String userLang, String keyword) {
+        return mapsServiceWebClient.get()
+                .uri(uriBuilder -> uriBuilder.path("/")
+                        .queryParam("location", location.getLatitude() + "%2C" + location.getLongitude())
                         .queryParam("language", userLang).queryParam("keyword", keyword)
                         .queryParam("type", "restaurant")
                         .build())
                 .retrieve()
                 .onStatus(status -> status.value() == HttpStatus.NOT_FOUND.value(),
                         response -> Mono.empty())
-                .bodyToMono(MapsResponseWrapper.class).block();
-        return res;
+                .bodyToMono(GoogleMapsResponseWrapper.class).block();
     }
 
     // This method returns filter function which will log request data

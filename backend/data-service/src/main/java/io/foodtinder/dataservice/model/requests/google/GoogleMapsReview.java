@@ -1,9 +1,9 @@
-package io.foodtinder.dataservice.model.requests;
+package io.foodtinder.dataservice.model.requests.google;
 
 import lombok.Data;
 
 @Data
-public class MapsReview {
+public class GoogleMapsReview {
     private String author_name;
     private String rating;
     private String relative_time_description;

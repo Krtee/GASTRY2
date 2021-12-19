@@ -1,4 +1,4 @@
-package io.foodtinder.dataservice.model.requests;
+package io.foodtinder.dataservice.model.requests.google;
 
 import java.util.List;
 
@@ -8,20 +8,20 @@ import io.foodtinder.dataservice.constants.BusinessStatus;
 import lombok.Data;
 
 @Data
-public class MapsResponseRestaurant {
+public class GoogleMapsResponseRestaurant {
 
     @Id
     private String place_id;
     private BusinessStatus business_status;
     private String name;
-    private MapsOpeningHours opening_hours;
-    private List<MapsPhotos> photos;
+    private GoogleMapsOpeningHours opening_hours;
+    private List<GoogleMapsPhotos> photos;
     private int price_level;
     private float rating;
     private int user_ratings_total;
     private String vicinity;
     private String website;
-    private List<MapsReview> reviews;
+    private List<GoogleMapsReview> reviews;
     private String url;
-    private List<MapsAddressComponents> address_components;
+    private List<GoogleMapsAddressComponents> address_components;
 }

@@ -1,8 +1,8 @@
-import React, { FC } from "react";
+import { FC } from "react";
 
 interface TutorialPageProps {}
 
-export const TutorialPage: FC<TutorialPageProps> = ({}) => {
+export const TutorialPage: FC<TutorialPageProps> = () => {
   return (
     <div>
       <button>to matching page</button>

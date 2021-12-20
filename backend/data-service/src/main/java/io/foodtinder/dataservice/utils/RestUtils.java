@@ -55,6 +55,7 @@ public class RestUtils {
         if (mealrepository.findAll().size() <= 0) {
             log.info("No meals in DB yet, initializing repository...");
             fetchAllMealsForAllCategories();
+            fetchAllMealsForAllAreas();
         }
         mapsServiceWebClient = WebClient.builder()
                 .clientConnector(new ReactorClientHttpConnector(HttpClient.create().followRedirect(true)))

@@ -199,7 +199,7 @@ public class MatchController {
                 maxTagEntry = entry;
             }
         }
-        GoogleRespSave googleRespSave = googleRepo.findAllbyAreaAndCategoryAndTag(maxAreaEntry.getKey(),
+        GoogleRespSave googleRespSave = googleRepo.findByAreaAndCategoryAndTag(maxAreaEntry.getKey(),
                 maxCategoryEntry.getKey(), maxTagEntry.getKey()).get(0);
         if (googleRespSave != null) {
             return ResponseEntity.status(HttpStatus.OK)

@@ -48,8 +48,9 @@ public class MealController {
      */
     @GetMapping(value = "/some")
     public ResponseEntity<List<Meal>> getSomeMeals(@RequestParam int count) {
-        log.info("Retrieving all meals saved on database...");
-        return ResponseEntity.status(HttpStatus.OK).body(mealRepository.findRandomMeals());
+        log.info("Retrieving {} meals saved on database...", count);
+
+        return ResponseEntity.status(HttpStatus.OK).body(mealRepository.getRandomMeals(count));
 
     }
 

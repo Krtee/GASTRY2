@@ -16,6 +16,13 @@ public class MealRepositoryImpl implements MealOperations {
     @Autowired
     private MongoOperations mongo;
 
+    /**
+     * DB-Method to fetch random meals. meals are not unique!
+     * 
+     * @param count how many meals should be fetched
+     * @return list of random {@link Meal}
+     * @author minh
+     */
     @Override
     public List<Meal> getRandomMeals(int count) {
         SampleOperation matchStage = Aggregation.sample(count);

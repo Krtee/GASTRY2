@@ -42,9 +42,10 @@ public class MealController {
     }
 
     /**
-     * A GET API to retrieve 15 random meals
+     * A GET API to retrieve random meals
      * 
-     * @return 200 with meals
+     * @param count how many meals should get fetched
+     * @return 200 with a list of random {@link Meal}
      */
     @GetMapping(value = "/some")
     public ResponseEntity<List<Meal>> getSomeMeals(@RequestParam int count) {
@@ -63,7 +64,6 @@ public class MealController {
     public ResponseEntity<?> deteleAllMeals() {
         mealRepository.deleteAll();
         return ResponseEntity.status(HttpStatus.OK).build();
-
     }
 
     /**

@@ -137,16 +137,23 @@ public class MatchController {
         return ResponseEntity.status(HttpStatus.OK).body(matchRepository.save(foundMatch));
     }
 
-    @PostMapping(value = "/match")
+    /**
+     * POST API - to match restaurants with given Match object
+     * 
+     * @param requestBody with matchObject and location
+     * @return three matched Restaurants
+     * @author minh
+     */
+    @PostMapping(value = "/restaurant")
     public ResponseEntity<List<GoogleMapsResponseRestaurant>> matchRestaurants(
             @RequestBody MatchRequestBody requestBody) {
-        log.info("Request to  match restaurants for match {} received", requestBody.getUpdatedMatch().getId());
-        Match foundMatch = matchRepository.findById(requestBody.getUpdatedMatch().getId()).orElse(null);
+        log.info("Request to  match restaurants for match {} received", requestBody.getMatch().getId());
+        Match foundMatch = matchRepository.findById(requestBody.getMatch().getId()).orElse(null);
         if (foundMatch == null) {
-            log.warn("Shopfloor board config with id {} not found to update!", requestBody.getUpdatedMatch().getId());
+            log.warn("Shopfloor board config with id {} not found to update!", requestBody.getMatch().getId());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        foundMatch.update(requestBody.getUpdatedMatch());
+        foundMatch.update(requestBody.getMatch());
         Map<String, Integer> area = new HashMap<>();
         Map<String, Integer> category = new HashMap<>();
         Map<String, Integer> tags = new HashMap<>();

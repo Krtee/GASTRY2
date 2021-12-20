@@ -6,6 +6,6 @@ import lombok.Data;
 
 @Data
 public class MatchRequestBody {
-    private Match updatedMatch;
+    private Match match;
     private GeoLocation location;
 }

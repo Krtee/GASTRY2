@@ -19,5 +19,4 @@ public class Meal {
     private String strMealThumb;
     private String strTags;
     private String strYoutube;
-    private double random;
 }

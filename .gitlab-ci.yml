@@ -4,6 +4,7 @@ stages:
   - docker
 
 build:
+  when: manual
   stage: build
   image: node:lts
   before_script:
@@ -13,6 +14,7 @@ build:
     - npm run build
 
 test:
+  when: manual
   stage: test
   image: node:lts
   before_script:

@@ -1,23 +1,27 @@
+import { ReactKeycloakProvider } from "@react-keycloak/web";
 import React, { Suspense } from "react";
 import ReactDOM from "react-dom";
+import { RecoilRoot } from "recoil";
 import "./i18n";
 import App from "./pages/App";
 import reportWebVitals from "./reportWebVitals";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import "./styles/index.scss";
+import keycloakInstance from "./utils/Keycloak";
 
 ReactDOM.render(
-  <React.StrictMode>
-    {/**<ReactKeycloakProvider
-      authClient={keycloakInstance}
-      LoadingComponent={<h2>KEYLOAK LOADING</h2>}
-    >
-      <App />
-    </ReactKeycloakProvider>*/}
-    <Suspense fallback={<h1>Loading</h1>}>
-      <App />
-    </Suspense>
-  </React.StrictMode>,
+  <ReactKeycloakProvider
+    authClient={keycloakInstance}
+    LoadingComponent={<div>TEST</div>}
+  >
+    <RecoilRoot>
+      <React.StrictMode>
+        <Suspense fallback={<div>...</div>}>
+          <App />
+        </Suspense>
+      </React.StrictMode>
+    </RecoilRoot>
+  </ReactKeycloakProvider>,
   document.getElementById("root")
 );
 

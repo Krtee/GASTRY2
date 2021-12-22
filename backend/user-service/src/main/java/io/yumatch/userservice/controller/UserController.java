@@ -4,11 +4,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import io.yumatch.userservice.constants.ResponseTypes;
 import io.yumatch.userservice.constants.UserRole;
 import io.yumatch.userservice.model.UserDto;
 import io.yumatch.userservice.repositories.UserRepository;
@@ -35,19 +35,32 @@ public class UserController {
      *         created on keycloak
      */
     @PostMapping(value = "/")
-    public ResponseEntity<String> createNewUser(@RequestBody UserDto newUser) {
+    public ResponseEntity<ResponseTypes> createNewUser(@RequestBody UserDto newUser) {
         log.info("Request to create new user received!");
         newUser.setCreateDate(LocalDateTime.now());
+        log.info("this the new user: {}", newUser);
+
+        if (userRepo.findByEmail(newUser.getEmail()).isPresent()) {
+            log.warn("User with this mail already exists");
+
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ResponseTypes.REGISTER_USER_EXISTS_MAIL);
+
+        }
+
+        if (userRepo.findByUsername(newUser.getUsername()).isPresent()) {
+            log.warn("User with this username already exists");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ResponseTypes.REGISTER_USER_EXISTS_USERNAME);
+
+        }
         UserDto savedUser = userRepo.save(newUser);
+
         int responseStatus = keycloakUtil.createNewUser(savedUser);
         if (responseStatus == 201) {
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        } else if (responseStatus == 409) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("User with this mail exists already");
+            return ResponseEntity.status(HttpStatus.CREATED).body(ResponseTypes.SUCCESSFUL);
         }
         log.warn("User creation on keycloak was not successful!");
         userRepo.delete(savedUser);
-        return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).build();
+        return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).body(ResponseTypes.REGISTER_ERROR);
     }
 
     /**

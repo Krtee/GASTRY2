@@ -16,6 +16,8 @@
     "@types/react-router": "^5.1.17",
     "@types/react-router-dom": "^5.1.7",
     "axios": "^0.21.1",
+    "dotenv": "^10.0.0",
+    "gsap": "^3.8.0",
     "i18next": "^19.8.7",
     "i18next-browser-languagedetector": "^6.0.1",
     "i18next-http-backend": "^1.1.0",

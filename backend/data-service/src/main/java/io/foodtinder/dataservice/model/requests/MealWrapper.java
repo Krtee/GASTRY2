@@ -1,7 +1,8 @@
-package io.foodtinder.dataservice.model;
+package io.foodtinder.dataservice.model.requests;
 
 import java.util.List;
 
+import io.foodtinder.dataservice.model.Meal;
 import lombok.Data;
 
 @Data

@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping("/meal/")
+@RequestMapping("/meal")
 @CrossOrigin(origins = { "*" })
 public class MealController {
 
@@ -42,6 +42,20 @@ public class MealController {
     }
 
     /**
+     * A GET API to retrieve random meals
+     * 
+     * @param count how many meals should get fetched
+     * @return 200 with a list of random {@link Meal}
+     */
+    @GetMapping(value = "/random")
+    public ResponseEntity<List<Meal>> getSomeMeals(@RequestParam int count) {
+        log.info("Retrieving {} meals saved on database...", count);
+
+        return ResponseEntity.status(HttpStatus.OK).body(mealRepository.getRandomMeals(count));
+
+    }
+
+    /**
      * Test API for deleting all meals from the repository
      * 
      * @return 200 when all entries have been deleted
@@ -50,7 +64,6 @@ public class MealController {
     public ResponseEntity<?> deteleAllMeals() {
         mealRepository.deleteAll();
         return ResponseEntity.status(HttpStatus.OK).build();
-
     }
 
     /**

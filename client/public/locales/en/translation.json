@@ -1,1 +1,15 @@
-{ "test": "working!" }
+{
+  "test": "working!",
+  "general": {
+    "pages": {
+      "MATCHING": "Matching",
+      "register": {
+        "header": "Register",
+        "email": "Email",
+        "password": "Password",
+        "passwordConfirm": "Confirm password",
+        "buttonLabel": "Register"
+      }
+    }
+  }
+}

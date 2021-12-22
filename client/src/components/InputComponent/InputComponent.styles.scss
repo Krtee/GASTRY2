@@ -1,0 +1,38 @@
+@import "../../styles/variables.scss";
+
+.input-component {
+  width: 100%;
+  &--label {
+    margin-left: 25px;
+    font-weight: bold;
+    font-size: smaller;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .input {
+    margin-bottom: 36px;
+
+    input {
+      width: 100%;
+      border-radius: 50px;
+      background-color: #fff;
+      border: 3px solid $color-border;
+      outline: none;
+      font-size: 22px;
+      padding: 15px 30px;
+    }
+  }
+
+  &--error-label {
+    margin-top: 6px;
+    margin-left: 25px;
+    font-weight: bold;
+    color: $yumatch-red;
+    font-size: smaller;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}

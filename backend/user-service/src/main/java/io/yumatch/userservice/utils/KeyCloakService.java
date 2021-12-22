@@ -33,11 +33,11 @@ public class KeyCloakService {
 
     @PostConstruct
     public void init() {
-        log.debug("Initializing keycloak instance!");
+        log.info("Initializing keycloak instance!");
         keycloakInstance = Keycloak.getInstance(config.getKeycloak().getUrl(), config.getKeycloak().getRealm(),
                 config.getKeycloak().getAdminUser(), config.getKeycloak().getAdminPassword(), "admin-cli");
 
-        log.debug("Keycloak instance, {}", keycloakInstance);
+        log.info("Keycloak instance, {}", keycloakInstance);
     }
 
     /**
@@ -53,7 +53,7 @@ public class KeyCloakService {
 
         // String newPassword = generateRandomPassword();
         Response response = userResource.create(createNewKeycloakUser(newUser, newUser.getPassword()));
-
+        log.info("Thats the response, {}", response.getEntity().toString());
         if (response.getStatus() == 201) {
             log.info("New user successfully created on keycloak!");
             String userId = response.getLocation().getPath().replaceAll(".*/([^/]+)$", "$1");

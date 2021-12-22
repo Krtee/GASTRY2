@@ -47,7 +47,7 @@ public class MealController {
      * @param count how many meals should get fetched
      * @return 200 with a list of random {@link Meal}
      */
-    @GetMapping(value = "/some")
+    @GetMapping(value = "/random")
     public ResponseEntity<List<Meal>> getSomeMeals(@RequestParam int count) {
         log.info("Retrieving {} meals saved on database...", count);
 

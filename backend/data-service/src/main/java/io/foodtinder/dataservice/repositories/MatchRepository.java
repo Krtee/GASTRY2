@@ -13,4 +13,6 @@ public interface MatchRepository extends MongoRepository<Match, String> {
 
     public Optional<List<Match>> findAllByUserId(String userId);
 
+    public Optional<Match> findFirstByUserIdOrderByCreatedAtDesc(String userId);
+
 }

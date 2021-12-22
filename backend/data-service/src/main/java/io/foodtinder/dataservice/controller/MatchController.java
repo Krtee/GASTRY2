@@ -1,8 +1,6 @@
 package io.foodtinder.dataservice.controller;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -108,10 +106,9 @@ public class MatchController {
     @GetMapping(value = "/user/latest/id")
     public ResponseEntity<Match> getLatestMatchByUserId(@RequestParam String userId) {
         log.info("Looking for match for user with id {}", userId);
-        List<Match> foundMatches = matchRepository.findAllByUserId(userId).orElse(null);
-        if (foundMatches != null) {
+        Match latestMatch = matchRepository.findFirstByUserIdOrderByCreatedAtDesc(userId).orElse(null);
+        if (latestMatch != null) {
             log.info("Successfully found match");
-            Match latestMatch = Collections.max(foundMatches, Comparator.comparing(match -> match.getCreatedAt()));
             return ResponseEntity.status(HttpStatus.OK).body(latestMatch);
         }
         log.info("No match found for said id");
@@ -133,7 +130,6 @@ public class MatchController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         foundMatch.update(updatedMatch);
-        matchRepository.save(foundMatch);
         return ResponseEntity.status(HttpStatus.OK).body(matchRepository.save(foundMatch));
     }
 
@@ -147,10 +143,11 @@ public class MatchController {
     @PostMapping(value = "/restaurant")
     public ResponseEntity<List<GoogleMapsResponseRestaurant>> matchRestaurants(
             @RequestBody MatchRequestBody requestBody) {
-        log.info("Request to  match restaurants for match {} received", requestBody.getMatch().getId());
-        Match foundMatch = matchRepository.findById(requestBody.getMatch().getId()).orElse(null);
+        String matchId = requestBody.getMatch().getId();
+        log.info("Request to  match restaurants for match {} received", matchId);
+        Match foundMatch = matchRepository.findById(matchId).orElse(null);
         if (foundMatch == null) {
-            log.warn("Shopfloor board config with id {} not found to update!", requestBody.getMatch().getId());
+            log.warn("Shopfloor board config with id {} not found to update!", matchId);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         foundMatch.update(requestBody.getMatch());
@@ -158,6 +155,10 @@ public class MatchController {
         Map<String, Integer> category = new HashMap<>();
         Map<String, Integer> tags = new HashMap<>();
 
+        /**
+         * loops through all matched meals and adds area, category and tags to a
+         * Key-Value Map. If a key repeats, the value count of that key goes up by one
+         */
         for (Meal matchedMeal : foundMatch.getMatchedMeals()) {
             String matchedArea = matchedMeal.getStrArea().name().toLowerCase();
             Integer indexOfArea = area.get(matchedArea);
@@ -186,6 +187,9 @@ public class MatchController {
             }
         }
 
+        /**
+         * gets all max Value in Key-Value Map
+         */
         Map.Entry<String, Integer> maxAreaEntry = null;
         for (Map.Entry<String, Integer> entry : area.entrySet()) {
             if (maxAreaEntry == null || entry.getValue().compareTo(maxAreaEntry.getValue()) > 0) {
@@ -206,6 +210,10 @@ public class MatchController {
                 maxTagEntry = entry;
             }
         }
+
+        /**
+         * looks for saved google Response in repository and returns it
+         */
         GoogleRespSave googleRespSave = googleRepo.findByAreaAndCategoryAndTag(maxAreaEntry.getKey(),
                 maxCategoryEntry.getKey(), maxTagEntry.getKey()).get(0);
         if (googleRespSave != null) {
@@ -213,6 +221,9 @@ public class MatchController {
                     .body(googleRespSave.getGoogleResp().getResults().stream().limit(3).collect(Collectors.toList()));
         }
 
+        /**
+         * if no response is found, fetches net google response
+         */
         GoogleMapsResponseWrapper newGoogleResp = restUtils.findRestaurants(requestBody.getLocation(), "DE",
                 maxAreaEntry.getKey() + " " + maxCategoryEntry.getKey() + " " + maxTagEntry.getKey());
 

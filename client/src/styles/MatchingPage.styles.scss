@@ -1,0 +1,21 @@
+.dot {
+    height: 75px;
+    width: 75px;
+    background-color: #d67278;
+    border-radius: 50%;
+    display: inline-block;
+    margin: auto;
+}
+
+.matching-buttons {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 22px;
+    display: block
+}

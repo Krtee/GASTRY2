@@ -12,10 +12,10 @@ const App = () => {
           <Route path="/" exact>
             <Redirect to="/matching" />
           </Route>
-          <Route path="/matching" component={MatchingPage} exact />
-          <Route path="/tutorial" component={TutorialPage} exact />
-          <Route path="/register" component={RegisterPage} exact />
-          <Route path="/profile" component={ProfilePage} exact />
+          <Route path="/matching" component={MatchingPage} />
+          <Route path="/tutorial" component={TutorialPage} />
+          <Route path="/register" component={RegisterPage} />
+          <Route path="/profile" component={ProfilePage} />
         </Switch>
       </RecoilRoot>
     </BrowserRouter>

@@ -60,7 +60,7 @@ export const useNavigation = (
       switch (user.role) {
         case UserRole.ADMIN:
         case UserRole.USER:
-          return [Page.MATCHING];
+          return [Page.MATCHING, Page.PROFILE];
       }
     }
     return [];

@@ -1,5 +1,5 @@
 import { FC } from "react";
-import Layout from "../components/LayoutComponent/Layout";
+import Layout from "../components/layoutComponent/Layout";
 import { Page, useNavigation } from "../utils/hooks/useNavigation";
 
 interface MatchingPageProps {}

@@ -98,6 +98,19 @@ public class UserController {
     }
 
     /**
+     * READ API to load favorite Restaurants
+     * 
+     * @param userId the id to get correct faves
+     * @return 200 with a loaded List of restaurants, which can be null
+     */
+    @GetMapping(value = "/favorite/restaurants")
+    public ResponseEntity<UserDto> getFavoriteRestaurants(@RequestParam String userId) {
+        log.info("Request to load favorite Restaurants by user id {} received", userId);
+        // TODO: When merged restaurant repo!;
+        return ResponseEntity.status(HttpStatus.OK).body(userRepo.findById(userId).orElse(null));
+    }
+
+    /**
      * READ API to load a single {@link User} instance by its username
      * 
      * @param username the username of the instance to fetch

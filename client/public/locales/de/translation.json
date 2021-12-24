@@ -18,6 +18,15 @@
         "REGISTER_ERROR": "Es ist ein Fehler beim Registrieren aufgetreten, bitte versuche es nochmal",
         "REGISTER_USER_EXISTS_MAIL": "Ein User mit dieser E-Mail existiert bereits",
         "REGISTER_USER_EXISTS_USERNAME": "Der Username ist bereits vergeben"
+      },
+      "profile": {
+        "favRestaurant": "Lieblingsrestaurant",
+        "visitedRestaurants": "Besuchte Restaurants",
+        "posts": "Beiträge",
+        "followers": "Abonennten",
+        "followings": "Abonniert",
+        "editProfile": "Profil bearbeiten",
+        "searchFriends": "Freunde suchen"
       }
     }
   }

@@ -9,6 +9,15 @@
         "password": "Password",
         "passwordConfirm": "Confirm password",
         "buttonLabel": "Register"
+      },
+      "profile": {
+        "favRestaurant": "Favorite restaurant",
+        "visitedRestaurants": "Visited restaurants",
+        "posts": "Posts",
+        "followers": "Followers",
+        "followings": "Followings",
+        "editProfile": "Edit profile",
+        "searchFriends": "Search friends"
       }
     }
   }

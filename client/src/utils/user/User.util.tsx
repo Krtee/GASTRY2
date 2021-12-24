@@ -10,12 +10,15 @@ import { User, UserRole } from "./User.types";
 export const createEmptyUser = (): User => {
   return {
     id: "",
+    photo: "",
     username: "",
     password: "",
     firstName: "",
     lastName: "",
+    address: "",
     email: "",
     role: UserRole.USER,
+    posts: [],
   };
 };
 
@@ -32,9 +35,8 @@ export const createNewUser = async (
   return axios
     .post("/user/", newUser)
     .then((response) => response.data)
-    .catch((error) => {
+    .catch(() => {
       console.error("Error while creating a new user!");
-      return error.response.data;
     });
 };
 
@@ -44,7 +46,7 @@ export const createNewUser = async (
  * @param userId The id of the {@link User} to fetch
  * @param axios The axios instance
  * @returns Either the loaded user or undefined in case of an error
- * @author Domenico Ferrari
+ * * @author Fadel Kaadan
  */
 export const loadSingleUser = async (
   userId: string,
@@ -52,6 +54,24 @@ export const loadSingleUser = async (
 ): Promise<User> => {
   return axios
     .get("/user/id/", { params: { userId: userId } })
+    .then((resp) => resp.data)
+    .catch((exc) => console.error("Error during user load!", exc));
+};
+
+/**
+ * API method to update an {@link User} by its id
+ *
+ * @param userId The id of the {@link User} to fetch
+ * @param axios The axios instance
+ * @param data The updated user info
+ * @returns Either the loaded user or undefined in case of an error
+ */
+export const updateUserInfo = async (
+  axios: AxiosInstance,
+  data: any
+): Promise<User> => {
+  return axios
+    .post("/user/update/", data)
     .then((resp) => resp.data)
     .catch((exc) => console.error("Error during user load!", exc));
 };

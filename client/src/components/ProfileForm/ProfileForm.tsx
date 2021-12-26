@@ -1,35 +1,26 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAxios } from "../../utils/AxiosUtil";
+import { User } from "../../utils/user/User.types";
 import { updateUserInfo } from "../../utils/user/User.util";
 import "./ProfileFormStyles.scss";
 
 interface ProfileFormProps {
-  userId: string;
-  photo: string;
-  name: string;
-  address: string;
-  favRestaurant: string;
+  userData: User;
   setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ProfileForm = ({
-  userId,
-  photo,
-  name,
-  address,
-  favRestaurant,
-  setIsEditing,
-}: ProfileFormProps) => {
+const inputs: string[] = [
+  "firstName",
+  "lastName",
+  "city",
+  "favoriteRestaurants",
+];
+
+const ProfileForm = ({ userData, setIsEditing }: ProfileFormProps) => {
   const axios = useAxios();
   const { t } = useTranslation();
-  const [formData, setFormData] = useState<any>({
-    userId,
-    photo,
-    name,
-    address,
-    favRestaurant,
-  });
+  const [formData, setFormData] = useState<User>(userData);
 
   return (
     <form
@@ -43,39 +34,19 @@ const ProfileForm = ({
         });
       }}
     >
-      <input
-        className="profile-form-input"
-        placeholder={t("name")}
-        value={formData.name}
-        onChange={(e) =>
-          setFormData((state: any) => ({
-            ...state,
-            name: e.target.value,
-          }))
-        }
-      />
-      <input
-        className="profile-form-input"
-        placeholder={t("address")}
-        value={formData.address}
-        onChange={(e) =>
-          setFormData((state: any) => ({
-            ...state,
-            address: e.target.value,
-          }))
-        }
-      />
-      <input
-        className="profile-form-input"
-        placeholder={t("favRestaurant")}
-        value={formData.favRestaurant}
-        onChange={(e) =>
-          setFormData((state: any) => ({
-            ...state,
-            favRestaurant: e.target.value,
-          }))
-        }
-      />
+      {inputs.map((input: string) => (
+        <input
+          className="profile-form-input"
+          placeholder={t(`${input}`)}
+          value={formData[input as keyof typeof formData]}
+          onChange={(e) =>
+            setFormData((state: any) => ({
+              ...state,
+              [input]: e.target.value,
+            }))
+          }
+        />
+      ))}
       <button onClick={() => {}}>{t("save")}</button>
     </form>
   );

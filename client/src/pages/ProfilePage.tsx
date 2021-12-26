@@ -12,26 +12,11 @@ import ProfileForm from "../components/ProfileForm/ProfileForm";
 import { useRecoilState } from "recoil";
 import { userState } from "../utils/user/User.state";
 
-const data = {
-  userId: "123",
-  photo: "",
-  name: "Fadel Kaadan",
-  username: "fadeleus",
-  address: "Maxi / Stuttgart",
-  fav_restaurant: "Büffel und Koi",
-  visitedRestaurantsCount: 13,
-  postsCount: 30,
-  followers: 26,
-  followings: 55,
-  posts: ["", "", "", "", ""],
-};
-
 const ProfilePage: FC<{}> = () => {
   const { t } = useTranslation();
   const { currentLocation, onLocationChange } = useNavigation(Page.PROFILE);
   const [selectedPage, setSelectedPage] = useState(nav_elements[0]);
   const [isEditing, setIsEditing] = useState(false);
-  // TODO: replace dummy data with user data
   const [user, setUser] = useRecoilState(userState);
 
   let { url } = useRouteMatch();
@@ -45,27 +30,20 @@ const ProfilePage: FC<{}> = () => {
       currentLocation={currentLocation}
     >
       {isEditing ? (
-        <ProfileForm
-          userId={data.userId}
-          photo={data.photo}
-          name={data.name}
-          address={data.address}
-          favRestaurant={data.fav_restaurant}
-          setIsEditing={setIsEditing}
-        />
+        <ProfileForm userData={user} setIsEditing={setIsEditing} />
       ) : (
         <div className="profile">
           <UserInfo
-            photo={data.photo}
-            name={data.name}
-            username={data.username}
-            fav_restaurant={data.fav_restaurant}
+            firstName={user.firstName}
+            lastName={user.lastName}
+            username={user.username}
           />
           <UserStats
-            visitedRestaurants={data.visitedRestaurantsCount}
-            posts={data.postsCount}
-            followers={data.followers}
-            followings={data.followings}
+            posts={user.posts ? user.posts.length : 0}
+            // TODO: get real data when added to the api
+            visitedRestaurants={0}
+            followers={user.followers ? user.followers.length : 0}
+            followings={user.followings ? user.followings.length : 0}
           />
           <div className="profile-interactions">
             <button
@@ -81,7 +59,7 @@ const ProfilePage: FC<{}> = () => {
           />
           <Switch>
             <Route exact path={`${url}`}>
-              <UserPosts posts={data.posts} />
+              <h1>posts</h1>
             </Route>
             <Route path={`${url}/favorites`}>
               <h1>favorites</h1>

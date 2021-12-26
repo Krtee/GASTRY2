@@ -29,13 +29,16 @@ const Layout: FC<LayoutProps> = ({
    */
   useEffect(() => {
     if (initialized && keycloak.authenticated && axios && !user.username)
-      keycloak
-        .loadUserProfile()
-        .then((profile) =>
-          loadSingleUser((profile as any).attributes.serviceId[0], axios).then(
-            (serverUser) => setUser(serverUser)
-          )
-        );
+      keycloak.loadUserProfile().then((profile) =>
+        loadSingleUser((profile as any).attributes.serviceId[0], axios).then(
+          (serverUser) => {
+            setUser({
+              ...serverUser,
+              id: (profile as any).id,
+            });
+          }
+        )
+      );
     // eslint-disable-next-line
   }, [keycloak, axios, user]);
 

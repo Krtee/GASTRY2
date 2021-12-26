@@ -1,6 +1,5 @@
 export interface UserInfoComponentProps {
-  photo: any;
-  name: string;
+  firstName: string;
+  lastName: string;
   username: string;
-  fav_restaurant?: string;
 }

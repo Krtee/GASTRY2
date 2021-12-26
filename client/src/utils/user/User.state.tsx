@@ -10,8 +10,12 @@ export const userState: RecoilState<User> = atom({
     lastName: "",
     username: "",
     email: "",
-    address: "",
+    city: "",
     role: "USER",
     posts: [],
+    preferences: [],
+    favoriteRestaurants: [],
+    followers: [],
+    followings: [],
   },
 });

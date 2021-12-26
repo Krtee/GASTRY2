@@ -15,10 +15,14 @@ export const createEmptyUser = (): User => {
     password: "",
     firstName: "",
     lastName: "",
-    address: "",
     email: "",
+    city: "",
     role: UserRole.USER,
     posts: [],
+    preferences: [],
+    favoriteRestaurants: [],
+    followers: [],
+    followings: [],
   };
 };
 

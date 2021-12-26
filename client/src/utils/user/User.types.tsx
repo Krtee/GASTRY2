@@ -10,8 +10,12 @@ export interface User {
   lastName: string;
   username: string;
   email: string;
-  address: string;
+  city: string;
   role: UserRole | string;
   password?: string;
   posts: [];
+  preferences: [];
+  favoriteRestaurants: [];
+  followers: [];
+  followings: [];
 }

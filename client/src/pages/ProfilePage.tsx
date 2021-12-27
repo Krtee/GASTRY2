@@ -11,6 +11,7 @@ import UserPosts from "../components/UserPosts/UserPosts";
 import ProfileForm from "../components/ProfileForm/ProfileForm";
 import { useRecoilState } from "recoil";
 import { userState } from "../utils/user/User.state";
+import UserSettings from "../components/UserSettings/UserSettings";
 
 const ProfilePage: FC<{}> = () => {
   const { t } = useTranslation();
@@ -60,6 +61,9 @@ const ProfilePage: FC<{}> = () => {
           <Switch>
             <Route exact path={`${url}`}>
               <h1>posts</h1>
+            </Route>
+            <Route path={`${url}/settings`}>
+              <UserSettings />
             </Route>
             <Route path={`${url}/favorites`}>
               <h1>favorites</h1>

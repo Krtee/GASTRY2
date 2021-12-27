@@ -27,6 +27,19 @@
         "followings": "Abonniert",
         "editProfile": "Profil bearbeiten",
         "searchFriends": "Freunde suchen"
+      },
+      "preferences": {
+        "diet": "Ernährungsweise",
+        "intolerances": "Deine Unverträglichkeiten",
+        "vegan": "Vegan",
+        "vegetarian": "vegetarisch",
+        "glutenFree": "Glutenfrei",
+        "pork": "Schweinefliesch",
+        "peanut": "Erdnuss",
+        "fish": "Fisch",
+        "Onions": "Zwiebel",
+        "garlic": "Knoblauch",
+        "tomatoe": "Tomaten"
       }
     }
   }

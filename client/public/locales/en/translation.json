@@ -18,6 +18,19 @@
         "followings": "Followings",
         "editProfile": "Edit profile",
         "searchFriends": "Search friends"
+      },
+      "preferences": {
+        "diet": "Diet",
+        "intolerances": "Your intolerances",
+        "vegan": "Vegan",
+        "vegetarian": "Vegetarian",
+        "glutenFree": "Gluten-free",
+        "pork": "Pork",
+        "peanut": "Peanut",
+        "fish": "Fish",
+        "onion": "Onion",
+        "garlic": "Garlic",
+        "tomatoe": "Tomatoe"
       }
     }
   }

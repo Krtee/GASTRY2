@@ -8,5 +8,5 @@ import io.foodtinder.dataservice.model.GoogleRespSave;
 
 public interface GoogleRepository extends MongoRepository<GoogleRespSave, String> {
 
-    public List<GoogleRespSave> findByAreaAndCategoryAndTag(String area, String category, String tag);
+    public List<GoogleRespSave> findFirstByAreaAndCategoryAndTag(String area, String category, String tag);
 }

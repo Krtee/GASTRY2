@@ -11,10 +11,13 @@ export interface User {
   username: string;
   email: string;
   city: string;
+  lat: string;
+  long: string;
   role: UserRole | string;
   password?: string;
   posts: [];
-  preferences: [];
+  diets: [];
+  intolerances: [];
   favoriteRestaurants: [];
   followers: [];
   followings: [];

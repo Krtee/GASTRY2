@@ -39,7 +39,11 @@
         "fish": "Fisch",
         "Onions": "Zwiebel",
         "garlic": "Knoblauch",
-        "tomatoe": "Tomaten"
+        "tomatoe": "Tomaten",
+        "location": "Deine Standort",
+        "enterCity": "PLZ oder Stadt eingeben",
+        "useLiveLocation": "Live Standort verwenden",
+        "recentLocations": "Vergangene Standorte"
       }
     }
   }

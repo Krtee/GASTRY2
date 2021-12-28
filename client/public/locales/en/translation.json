@@ -30,7 +30,11 @@
         "fish": "Fish",
         "onion": "Onion",
         "garlic": "Garlic",
-        "tomatoe": "Tomatoe"
+        "tomatoe": "Tomatoe",
+        "location": "Your location",
+        "enterCity": "Enter postal code or city",
+        "useLiveLocation": "Use live location",
+        "recentLocations": "Recent locations"
       }
     }
   }

@@ -5,9 +5,8 @@ import UserInfo from "../components/UserInfo/UserInfo";
 import UserStats from "../components/UserStats/UserStats";
 import { Page, useNavigation } from "../utils/hooks/useNavigation";
 import "../styles/ProfilePage.styles.scss";
-import ProfileNav, { nav_elements } from "../components/ProfileNav/ProfileNav";
+import ProfileNav from "../components/ProfileNav/ProfileNav";
 import { Switch, Route, useRouteMatch } from "react-router";
-import UserPosts from "../components/UserPosts/UserPosts";
 import ProfileForm from "../components/ProfileForm/ProfileForm";
 import { useRecoilState } from "recoil";
 import { userState } from "../utils/user/User.state";
@@ -16,7 +15,6 @@ import UserSettings from "../components/UserSettings/UserSettings";
 const ProfilePage: FC<{}> = () => {
   const { t } = useTranslation();
   const { currentLocation, onLocationChange } = useNavigation(Page.PROFILE);
-  const [selectedPage, setSelectedPage] = useState(nav_elements[0]);
   const [isEditing, setIsEditing] = useState(false);
   const [user, setUser] = useRecoilState(userState);
 
@@ -54,10 +52,7 @@ const ProfilePage: FC<{}> = () => {
               {t("general.pages.profile.editProfile")}
             </button>
           </div>
-          <ProfileNav
-            selectedPage={selectedPage}
-            setSelectedPage={setSelectedPage}
-          />
+          <ProfileNav />
           <Switch>
             <Route exact path={`${url}`}>
               <h1>posts</h1>

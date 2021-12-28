@@ -17,9 +17,12 @@ export const createEmptyUser = (): User => {
     lastName: "",
     email: "",
     city: "",
+    lat: "",
+    long: "",
     role: UserRole.USER,
     posts: [],
-    preferences: [],
+    diets: [],
+    intolerances: [],
     favoriteRestaurants: [],
     followers: [],
     followings: [],
@@ -50,7 +53,7 @@ export const createNewUser = async (
  * @param userId The id of the {@link User} to fetch
  * @param axios The axios instance
  * @returns Either the loaded user or undefined in case of an error
- * * @author Fadel Kaadan
+ * @author Fadel Kaadan
  */
 export const loadSingleUser = async (
   userId: string,
@@ -64,11 +67,10 @@ export const loadSingleUser = async (
 
 /**
  * API method to update an {@link User} by its id
- *
- * @param userId The id of the {@link User} to fetch
  * @param axios The axios instance
  * @param data The updated user info
  * @returns Either the loaded user or undefined in case of an error
+ * @author Fadel Kaadan
  */
 export const updateUserInfo = async (
   axios: AxiosInstance,

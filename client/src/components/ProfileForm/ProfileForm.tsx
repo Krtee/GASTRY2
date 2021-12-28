@@ -34,6 +34,7 @@ const ProfileForm = ({ userData, setIsEditing }: ProfileFormProps) => {
         });
       }}
     >
+      {console.log(formData)}
       {inputs.map((input: string) => (
         <input
           className="profile-form-input"

@@ -1,7 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Redirect, useHistory, useRouteMatch } from "react-router";
 import NavLink from "./NavLink/NavLink";
-import { ProfileNavProps } from "./ProfileNav.types";
 import "./ProfileNavStyles.scss";
 import camera from "../../assets/icons/camera.svg";
 import star from "../../assets/icons/star.svg";
@@ -14,7 +13,7 @@ export const nav_elements: string[] = [
   "mail",
 ];
 
-const ProfileNav = ({ selectedPage, setSelectedPage }: ProfileNavProps) => {
+const ProfileNav = () => {
   const { t } = useTranslation();
   let { url } = useRouteMatch();
 

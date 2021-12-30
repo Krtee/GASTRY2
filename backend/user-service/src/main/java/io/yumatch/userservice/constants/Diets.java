@@ -5,6 +5,6 @@ package io.yumatch.userservice.constants;
  * 
  * @author Domenico Ferrari
  */
-public enum Preferences {
+public enum Diets {
     VEGAN, VEGETARIAN, GLUTEN_FREE, NO_PORK
 }

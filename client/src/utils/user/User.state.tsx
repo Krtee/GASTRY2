@@ -1,5 +1,5 @@
 import { RecoilState, atom } from "recoil";
-import { User } from "./User.types";
+import { User, INTOLERANCES, DIETS } from "./User.types";
 
 export const userState: RecoilState<User> = atom({
   key: "currentUser",
@@ -15,8 +15,8 @@ export const userState: RecoilState<User> = atom({
     long: "",
     role: "USER",
     posts: [],
-    diets: [],
-    intolerances: [],
+    diets: [] as DIETS[],
+    intolerances: [] as INTOLERANCES[],
     favoriteRestaurants: [],
     followers: [],
     followings: [],

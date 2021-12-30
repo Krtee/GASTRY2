@@ -44,47 +44,46 @@ const UserSettings = () => {
   }, [liveLocation]);
 
   // Set initial diet & intolerance states
-  // useEffect(() => {
-  //   const dietsObj: any = {};
-  //   const intolerancesObj: any = {};
+  useEffect(() => {
+    const dietsObj: any = {};
+    const intolerancesObj: any = {};
 
-  //   user.diets?.map((item) => (dietsObj[item] = true));
-  //   user.intolerances?.map((item) => (intolerancesObj[item] = true));
+    user.diets?.map((item) => (dietsObj[item] = true));
+    user.intolerances?.map((item) => (intolerancesObj[item] = true));
 
-  //   setDiets(dietsObj);
-  //   setIntolerances(intolerancesObj);
-  // }, [user.diets, user.intolerances]);
+    setDiets(dietsObj);
+    setIntolerances(intolerancesObj);
+  }, [user.diets, user.intolerances]);
 
-  // useEffect(() => {
-  //   if (Object.keys(diets).length > 0) {
-  //     updateUserInfo(axios, {
-  //       ...user,
-  //       diets: convertObjToArr(diets),
-  //     }).then((result) => {
-  //       console.log(result);
-  //     });
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [diets]);
+  useEffect(() => {
+    if (Object.keys(diets).length > 0) {
+      updateUserInfo(axios, {
+        ...user,
+        diets: convertObjToArr(diets),
+      }).then((result) => {
+        console.log(result);
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [diets]);
 
-  // useEffect(() => {
-  //   if (Object.keys(intolerances).length > 0) {
-  //     updateUserInfo(axios, {
-  //       ...user,
-  //       intolerances: convertObjToArr(intolerances),
-  //     }).then((result) => {
-  //       console.log(result);
-  //     });
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [intolerances]);
+  useEffect(() => {
+    if (Object.keys(intolerances).length > 0) {
+      updateUserInfo(axios, {
+        ...user,
+        intolerances: convertObjToArr(intolerances),
+      }).then((result) => {
+        console.log(result);
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [intolerances]);
 
   return (
     <div className="user-settings">
       <h3 className="user-settings-subheading">
         {t("general.pages.preferences.diet")}
       </h3>
-      {console.log(user)}
       <div className="checkbox-inputs-wrapper">
         {dietsArr.map((diet) => (
           <Checkbox

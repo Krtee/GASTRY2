@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Redirect, useHistory, useRouteMatch } from "react-router";
+import { useRouteMatch } from "react-router";
 import NavLink from "./NavLink/NavLink";
 import "./ProfileNavStyles.scss";
 import camera from "../../assets/icons/camera.svg";

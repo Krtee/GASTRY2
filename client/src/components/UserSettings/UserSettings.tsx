@@ -19,6 +19,19 @@ const UserSettings = () => {
   const [liveLocation, setLiveLocation] = useState<boolean>(false);
   const [user, setUser] = useRecoilState(userState);
 
+  const submit = async () => {
+    try {
+      const result = await updateUserInfo(axios, {
+        ...user,
+        diets: convertObjToArr(diets),
+        intolerances: convertObjToArr(intolerances),
+      });
+      console.log(result);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   // save coords in recoil
   useEffect(() => {
     if (liveLocation) {
@@ -54,30 +67,6 @@ const UserSettings = () => {
     setDiets(dietsObj);
     setIntolerances(intolerancesObj);
   }, [user.diets, user.intolerances]);
-
-  useEffect(() => {
-    if (Object.keys(diets).length > 0) {
-      updateUserInfo(axios, {
-        ...user,
-        diets: convertObjToArr(diets),
-      }).then((result) => {
-        console.log(result);
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [diets]);
-
-  useEffect(() => {
-    if (Object.keys(intolerances).length > 0) {
-      updateUserInfo(axios, {
-        ...user,
-        intolerances: convertObjToArr(intolerances),
-      }).then((result) => {
-        console.log(result);
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [intolerances]);
 
   return (
     <div className="user-settings">
@@ -139,6 +128,8 @@ const UserSettings = () => {
       <h3 className="user-settings-subheading">
         {t("general.pages.preferences.recentLocations")}
       </h3>
+
+      <button onClick={submit}>save</button>
     </div>
   );
 };

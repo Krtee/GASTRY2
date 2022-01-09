@@ -1,6 +1,7 @@
 package io.foodtinder.dataservice.controller;
 
 import java.time.LocalDateTime;
+import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -147,7 +148,7 @@ public class MatchController {
         log.info("Request to  match restaurants for match {} received", matchId);
         Match foundMatch = matchRepository.findById(matchId).orElse(null);
         if (foundMatch == null) {
-            log.warn("Shopfloor board config with id {} not found to update!", matchId);
+            log.warn("Match with id {} not found to update!", matchId);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         foundMatch.update(requestBody.getMatch());
@@ -160,31 +161,40 @@ public class MatchController {
          * Key-Value Map. If a key repeats, the value count of that key goes up by one
          */
         for (Meal matchedMeal : foundMatch.getMatchedMeals()) {
+
             String matchedArea = matchedMeal.getStrArea().name().toLowerCase();
-            Integer indexOfArea = area.get(matchedArea);
-            if (indexOfArea == null) {
-                area.put(matchedArea, 1);
-            } else {
-                area.put(matchedArea, indexOfArea + 1);
-            }
-
-            String matchedCategory = matchedMeal.getStrCategory().name().toLowerCase();
-            Integer indexOfCategory = area.get(matchedCategory);
-            if (indexOfCategory == null) {
-                category.put(matchedCategory, 1);
-            } else {
-                category.put(matchedCategory, indexOfCategory + 1);
-            }
-
-            String[] matchedTags = matchedMeal.getStrTags().toLowerCase().split(",");
-            for (String matchedTag : matchedTags) {
-                Integer indexOfTags = area.get(matchedTag);
-                if (indexOfTags == null) {
-                    tags.put(matchedTag, 1);
+            if (matchedMeal.getStrArea() != null) {
+                Integer indexOfArea = area.get(matchedArea);
+                if (indexOfArea == null) {
+                    area.put(matchedArea, 1);
                 } else {
-                    tags.put(matchedTag, indexOfTags + 1);
+                    area.put(matchedArea, indexOfArea + 1);
                 }
             }
+
+            if (matchedMeal.getStrCategory() != null) {
+
+                String matchedCategory = matchedMeal.getStrCategory().name().toLowerCase();
+                Integer indexOfCategory = area.get(matchedCategory);
+                if (indexOfCategory == null) {
+                    category.put(matchedCategory, 1);
+                } else {
+                    category.put(matchedCategory, indexOfCategory + 1);
+                }
+            }
+
+            if (matchedMeal.getStrTags() != null) {
+                String[] matchedTags = matchedMeal.getStrTags().toLowerCase().split(",");
+                for (String matchedTag : matchedTags) {
+                    Integer indexOfTags = area.get(matchedTag);
+                    if (indexOfTags == null) {
+                        tags.put(matchedTag, 1);
+                    } else {
+                        tags.put(matchedTag, indexOfTags + 1);
+                    }
+                }
+            }
+
         }
 
         /**
@@ -197,11 +207,20 @@ public class MatchController {
             }
         }
 
+        if (maxAreaEntry == null) {
+            log.warn("no maxCategoryEntry");
+            maxAreaEntry = new AbstractMap.SimpleEntry<String, Integer>("", 0);
+        }
+
         Map.Entry<String, Integer> maxCategoryEntry = null;
         for (Map.Entry<String, Integer> entry : category.entrySet()) {
             if (maxCategoryEntry == null || entry.getValue().compareTo(maxCategoryEntry.getValue()) > 0) {
                 maxCategoryEntry = entry;
             }
+        }
+        if (maxCategoryEntry == null) {
+            log.warn("no maxCategoryEntry");
+            maxCategoryEntry = new AbstractMap.SimpleEntry<String, Integer>("", 0);
         }
 
         Map.Entry<String, Integer> maxTagEntry = null;
@@ -210,30 +229,44 @@ public class MatchController {
                 maxTagEntry = entry;
             }
         }
+        if (maxTagEntry == null) {
+            log.warn("no maxTag");
+            maxTagEntry = new AbstractMap.SimpleEntry<String, Integer>("", 0);
+        }
+
+        log.info("Looking for respSaves");
 
         /**
          * looks for saved google Response in repository and returns it
          */
-        GoogleRespSave googleRespSave = googleRepo.findByAreaAndCategoryAndTag(maxAreaEntry.getKey(),
-                maxCategoryEntry.getKey(), maxTagEntry.getKey()).get(0);
-        if (googleRespSave != null) {
+        List<GoogleRespSave> googleRespSave = googleRepo.findByAreaAndCategoryAndTag(maxAreaEntry.getKey(),
+                maxCategoryEntry.getKey(), maxTagEntry.getKey());
+        if (googleRespSave.size() > 0
+                && googleRespSave.get(0) != null
+                && googleRespSave.get(0).getGoogleResp() != null
+                && googleRespSave.get(0).getGoogleResp().getResults() != null) {
+            log.info("found RespSave");
+
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(googleRespSave.getGoogleResp().getResults().stream().limit(3).collect(Collectors.toList()));
+                    .body(googleRespSave.get(0).getGoogleResp().getResults().stream().limit(3)
+                            .collect(Collectors.toList()));
+
         }
 
+        log.info("No saved resp found, make new resp");
         /**
          * if no response is found, fetches net google response
          */
         GoogleMapsResponseWrapper newGoogleResp = restUtils.findRestaurants(requestBody.getLocation(), "DE",
-                maxAreaEntry.getKey() + " " + maxCategoryEntry.getKey() + " " + maxTagEntry.getKey());
+                maxAreaEntry.getKey() + "|" + maxCategoryEntry.getKey() + "|" + maxTagEntry.getKey());
 
-        googleRespSave = new GoogleRespSave();
-        googleRespSave.setGoogleResp(newGoogleResp);
-        googleRespSave.setArea(maxAreaEntry.getKey());
-        googleRespSave.setCategory(maxCategoryEntry.getKey());
-        googleRespSave.setTag(maxTagEntry.getKey());
+        GoogleRespSave newGoogleRespSave = new GoogleRespSave();
+        newGoogleRespSave.setGoogleResp(newGoogleResp);
+        newGoogleRespSave.setArea(maxAreaEntry.getKey());
+        newGoogleRespSave.setCategory(maxCategoryEntry.getKey());
+        newGoogleRespSave.setTag(maxTagEntry.getKey());
 
-        googleRepo.save(googleRespSave);
+        googleRepo.save(newGoogleRespSave);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(newGoogleResp.getResults().stream().limit(3).collect(Collectors.toList()));

@@ -59,8 +59,8 @@ public class RestUtils {
         }
         mapsServiceWebClient = WebClient.builder()
                 .clientConnector(new ReactorClientHttpConnector(HttpClient.create().followRedirect(true)))
-                .baseUrl("https://maps.googleapis.com/maps/api/place/nearbysearch/json").filter(logRequest()) // here is
-                                                                                                              // the
+                .baseUrl("https://maps.googleapis.com").filter(logRequest()) // here is
+                                                                             // the
                 // magic
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .defaultHeader(HttpHeaders.USER_AGENT,
@@ -129,7 +129,7 @@ public class RestUtils {
         for (MealArea area : MealArea.values()) {
             log.info("Fetching all meals for area: {}", area);
             MealWrapper mealsForArea = mealServiceWebClient.get()
-                    .uri("https://www.themealdb.com/api/json/v1/1/filter.php?c=" + area)
+                    .uri("https://www.themealdb.com/api/json/v1/1/filter.php?a=" + area)
                     .accept(MediaType.APPLICATION_JSON).retrieve().bodyToMono(MealWrapper.class).block();
             log.info("Result for {}: {}", area, mealsForArea);
             log.info("About to save meals to repository");
@@ -146,11 +146,16 @@ public class RestUtils {
     }
 
     public GoogleMapsResponseWrapper findRestaurants(GeoLocation location, String userLang, String keyword) {
+        log.info("Start fetching all restaurants for keywords");
+
         return mapsServiceWebClient.get()
-                .uri(uriBuilder -> uriBuilder.path("/")
-                        .queryParam("location", location.getLatitude() + "%2C" + location.getLongitude())
-                        .queryParam("language", userLang).queryParam("keyword", keyword)
+                .uri(uriBuilder -> uriBuilder.path("/maps/api/place/nearbysearch/json")
+                        .queryParam("location", location.getLatitude() + "," + location.getLongitude())
+                        .queryParam("radius", 1500)
+                        .queryParam("language", userLang)
+                        .queryParam("keyword", keyword)
                         .queryParam("type", "restaurant")
+                        .queryParam("key", "AIzaSyAJt9waW0hVfZ5bSufYZEGGPNYn6zAviq8")
                         .build())
                 .retrieve()
                 .onStatus(status -> status.value() == HttpStatus.NOT_FOUND.value(),

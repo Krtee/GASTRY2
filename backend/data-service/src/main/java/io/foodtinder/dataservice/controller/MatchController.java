@@ -1,7 +1,9 @@
 package io.foodtinder.dataservice.controller;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.time.LocalDateTime;<<<<<<<HEAD
+import java.util.ArrayList;=======
+import java.util.AbstractMap;
+import java.util.HashMap;>>>>>>>develop
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -170,7 +172,7 @@ public class MatchController {
         log.info("Request to  match restaurants for match {} received", matchId);
         Match foundMatch = matchRepository.findById(matchId).orElse(null);
         if (foundMatch == null) {
-            log.warn("Shopfloor board config with id {} not found to update!", matchId);
+            log.warn("Match with id {} not found to update!", matchId);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 

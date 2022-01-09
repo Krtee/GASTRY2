@@ -1,5 +1,6 @@
 package io.foodtinder.dataservice.utils;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,6 +46,7 @@ public class MatchUtils {
      * @return keyword String
      */
     public Map<String, String> getKeyWordStringForMatches(List<Match> matches) {
+
         Map<String, Integer> area = new HashMap<>();
         Map<String, Integer> category = new HashMap<>();
         Map<String, Integer> tags = new HashMap<>();
@@ -55,29 +57,37 @@ public class MatchUtils {
          */
         for (Match match : matches) {
             for (Meal matchedMeal : match.getMatchedMeals()) {
+
                 String matchedArea = matchedMeal.getStrArea().name().toLowerCase();
-                Integer indexOfArea = area.get(matchedArea);
-                if (indexOfArea == null) {
-                    area.put(matchedArea, 1);
-                } else {
-                    area.put(matchedArea, indexOfArea + 1);
-                }
-
-                String matchedCategory = matchedMeal.getStrCategory().name().toLowerCase();
-                Integer indexOfCategory = area.get(matchedCategory);
-                if (indexOfCategory == null) {
-                    category.put(matchedCategory, 1);
-                } else {
-                    category.put(matchedCategory, indexOfCategory + 1);
-                }
-
-                String[] matchedTags = matchedMeal.getStrTags().toLowerCase().split(",");
-                for (String matchedTag : matchedTags) {
-                    Integer indexOfTags = area.get(matchedTag);
-                    if (indexOfTags == null) {
-                        tags.put(matchedTag, 1);
+                if (matchedMeal.getStrArea() != null) {
+                    Integer indexOfArea = area.get(matchedArea);
+                    if (indexOfArea == null) {
+                        area.put(matchedArea, 1);
                     } else {
-                        tags.put(matchedTag, indexOfTags + 1);
+                        area.put(matchedArea, indexOfArea + 1);
+                    }
+                }
+
+                if (matchedMeal.getStrCategory() != null) {
+
+                    String matchedCategory = matchedMeal.getStrCategory().name().toLowerCase();
+                    Integer indexOfCategory = area.get(matchedCategory);
+                    if (indexOfCategory == null) {
+                        category.put(matchedCategory, 1);
+                    } else {
+                        category.put(matchedCategory, indexOfCategory + 1);
+                    }
+                }
+
+                if (matchedMeal.getStrTags() != null) {
+                    String[] matchedTags = matchedMeal.getStrTags().toLowerCase().split(",");
+                    for (String matchedTag : matchedTags) {
+                        Integer indexOfTags = area.get(matchedTag);
+                        if (indexOfTags == null) {
+                            tags.put(matchedTag, 1);
+                        } else {
+                            tags.put(matchedTag, indexOfTags + 1);
+                        }
                     }
                 }
             }
@@ -93,11 +103,20 @@ public class MatchUtils {
             }
         }
 
+        if (maxAreaEntry == null) {
+            log.warn("no maxCategoryEntry");
+            maxAreaEntry = new AbstractMap.SimpleEntry<String, Integer>("", 0);
+        }
+
         Map.Entry<String, Integer> maxCategoryEntry = null;
         for (Map.Entry<String, Integer> entry : category.entrySet()) {
             if (maxCategoryEntry == null || entry.getValue().compareTo(maxCategoryEntry.getValue()) > 0) {
                 maxCategoryEntry = entry;
             }
+        }
+        if (maxCategoryEntry == null) {
+            log.warn("no maxCategoryEntry");
+            maxCategoryEntry = new AbstractMap.SimpleEntry<String, Integer>("", 0);
         }
 
         Map.Entry<String, Integer> maxTagEntry = null;
@@ -105,6 +124,10 @@ public class MatchUtils {
             if (maxTagEntry == null || entry.getValue().compareTo(maxTagEntry.getValue()) > 0) {
                 maxTagEntry = entry;
             }
+        }
+        if (maxTagEntry == null) {
+            log.warn("no maxTag");
+            maxTagEntry = new AbstractMap.SimpleEntry<String, Integer>("", 0);
         }
 
         Map<String, String> result = new HashMap<>();
@@ -164,7 +187,10 @@ public class MatchUtils {
          */
         List<GoogleRespSave> googleRespSaveList = googleRepo.findFirstByAreaAndCategoryAndTag(maxValues.get("area"),
                 maxValues.get("category"), maxValues.get("tag"));
-        if (googleRespSaveList.size() < 0) {
+        if (googleRespSaveList.size() < 0
+                && googleRespSaveList.get(0) != null
+                && googleRespSaveList.get(0).getGoogleResp() != null
+                && googleRespSaveList.get(0).getGoogleResp().getResults() != null) {
             for (GoogleRespSave save : googleRespSaveList) {
                 if (generalUtils.distance(save.getLocation().getLatitude(), location.getLatitude(),
                         save.getLocation().getLongitude(), location.getLongitude()) > 2000) {
@@ -188,6 +214,7 @@ public class MatchUtils {
         googleRespSave.setArea(maxValues.get("area"));
         googleRespSave.setCategory(maxValues.get("category"));
         googleRespSave.setTag(maxValues.get("tag"));
+        googleRespSave.setLocation(location);
 
         googleRepo.save(googleRespSave);
 

@@ -4,7 +4,7 @@ import "./Switch.styles.scss";
 const Switch = ({ label, checked, onChange }: SwitchProps) => {
   return (
     <label className="form-switch">
-      <input type="Switch" checked={checked} onChange={onChange} />
+      <input type="checkbox" checked={checked} onChange={onChange} />
       <i></i>
       {label}
     </label>

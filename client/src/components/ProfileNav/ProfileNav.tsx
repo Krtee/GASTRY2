@@ -1,10 +1,9 @@
-import { useTranslation } from "react-i18next";
 import { useRouteMatch } from "react-router";
 import NavLink from "./NavLink/NavLink";
 import "./ProfileNavStyles.scss";
 import camera from "../../assets/icons/camera.svg";
 import star from "../../assets/icons/star.svg";
-import allergies from "../../assets/icons/allergies.svg";
+import settings from "../../assets/icons/settings.svg";
 
 export const nav_elements: string[] = [
   "posts",
@@ -14,22 +13,13 @@ export const nav_elements: string[] = [
 ];
 
 const ProfileNav = () => {
-  const { t } = useTranslation();
   let { url } = useRouteMatch();
 
   return (
     <div className="profile-nav">
-      <NavLink label={t("posts")} to={`${url}`} icon={camera} />
-      <NavLink
-        label={t("settings")}
-        to={`${url}/${"settings"}`}
-        icon={allergies}
-      />
-      <NavLink
-        label={t("favorites")}
-        to={`${url}/${"favorites"}`}
-        icon={star}
-      />
+      <NavLink label={""} to={`${url}`} icon={camera} />
+      <NavLink label={""} to={`${url}/${"favorites"}`} icon={star} />
+      <NavLink label={""} to={`${url}/${"settings"}`} icon={settings} />
     </div>
   );
 };

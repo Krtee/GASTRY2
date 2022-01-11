@@ -16,7 +16,7 @@ const UserStats: FC<UserStatsComponentProps> = ({
       <div className="user-stats-box">
         <p className="user-stats-number">{visitedRestaurants}</p>
         <p className="user-stats-label">
-          {t("general.pages.profile.visitedRestaurants")}
+          {t("general.pages.profile.restaurants")}
         </p>
       </div>
       <div className="user-stats-box">

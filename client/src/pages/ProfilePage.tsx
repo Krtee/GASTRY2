@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Layout from "../components/layoutComponent/Layout";
 import UserInfo from "../components/UserInfo/UserInfo";
@@ -12,6 +12,7 @@ import { useRecoilState } from "recoil";
 import { userState } from "../utils/user/User.state";
 import UserSettings from "../components/UserSettings/UserSettings";
 import Posts from "../components/Posts/Posts";
+import { Link } from "react-router-dom";
 
 const ProfilePage: FC<{}> = () => {
   const { t } = useTranslation();
@@ -20,6 +21,10 @@ const ProfilePage: FC<{}> = () => {
   const [user, setUser] = useRecoilState(userState);
 
   let { url } = useRouteMatch();
+
+  useEffect(() => {
+    
+  }, []);
 
   return (
     <Layout
@@ -52,6 +57,12 @@ const ProfilePage: FC<{}> = () => {
             >
               {t("general.pages.profile.editProfile")}
             </button>
+            <Link
+              className="profile-interactions-element profile-search-btn"
+              to="/search"
+            >
+              {t("general.pages.profile.searchFriends")}
+            </Link>
           </div>
           <ProfileNav />
           <Switch>

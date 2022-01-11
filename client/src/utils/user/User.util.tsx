@@ -23,6 +23,8 @@ export const createEmptyUser = (): User => {
     posts: [],
     diets: [],
     intolerances: [],
+    types: [],
+    cuisines: [],
     favoriteRestaurants: [],
     followers: [],
     followings: [],

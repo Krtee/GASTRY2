@@ -3,19 +3,36 @@ export enum UserRole {
   USER = "USER",
 }
 
+export enum TYPES {
+  CAFE = "cafe",
+  COLD = "cold",
+  WARM = "warm",
+  DESSERT = "dessert",
+}
+
 export enum DIETS {
-  VEGAN = "VEGAN",
-  VEGETARIAN = "VEGETARIAN",
-  GLUTENFREE = "GLUTENFREE",
-  PORK = "PORK",
+  VEGAN = "vegan",
+  VEGETARIAN = "vegetarian",
+  GLUTENFREE = "glutenFree",
+  NOPORK = "noPork",
 }
 
 export enum INTOLERANCES {
-  PEANUT = "PEANUT",
-  FISH = "FISH",
-  ONION = "ONION",
-  GARLIC = "GARLIC",
-  TOMATOE = "TOMATOE",
+  PEANUT = "peanut",
+  FISH = "fish",
+  ONION = "onion",
+  GARLIC = "garlic",
+  TOMATOE = "tomatoe",
+}
+
+export enum CUISINES {
+  ITALIAN = "italian",
+  ASIAN = "asian",
+  GREEK = "greek",
+  SOUTHAMERICAN = "southAmerican",
+  AFRICAN = "african",
+  SPANISH = "spanish",
+  FRENCH = "french",
 }
 
 export interface User {
@@ -33,6 +50,8 @@ export interface User {
   posts: [];
   diets: DIETS[];
   intolerances: INTOLERANCES[];
+  cuisines: CUISINES[];
+  types: TYPES[];
   favoriteRestaurants: [];
   followers: [];
   followings: [];

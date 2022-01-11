@@ -1,10 +1,9 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import Checkbox from "../Checkbox/Checkbox";
-import { dietsArr, intolerancesArr } from "./UserSettings.types";
+import Switch from "../Switch/Switch";
+import { cuisinesArr, dietsArr, typesArr } from "./UserSettings.types";
 import { convertObjToArr } from "../../utils/GeneralUtils";
 import "./UserSettings.styles.scss";
-import Searchbar from "../Searchbar/Searchbar";
 import { useAxios } from "../../utils/AxiosUtil";
 import { updateUserInfo } from "../../utils/user/User.util";
 import { useRecoilState } from "recoil";
@@ -14,7 +13,8 @@ const UserSettings = () => {
   const axios = useAxios();
   const { t } = useTranslation();
   const [diets, setDiets] = useState<any>({});
-  const [intolerances, setIntolerances] = useState<any>({});
+  const [types, setTypes] = useState<any>({});
+  const [cuisines, setCuisines] = useState<any>({});
   const [city, setCity] = useState<string>("");
   const [liveLocation, setLiveLocation] = useState<boolean>(false);
   const [user, setUser] = useRecoilState(userState);
@@ -24,7 +24,8 @@ const UserSettings = () => {
       const result = await updateUserInfo(axios, {
         ...user,
         diets: convertObjToArr(diets),
-        intolerances: convertObjToArr(intolerances),
+        types: convertObjToArr(types),
+        cuisines: convertObjToArr(cuisines),
       });
       console.log(result);
     } catch (err) {
@@ -59,52 +60,73 @@ const UserSettings = () => {
   // Set initial diet & intolerance states
   useEffect(() => {
     const dietsObj: any = {};
-    const intolerancesObj: any = {};
+    const typesObj: any = {};
+    const cuisinesObj: any = {};
 
     user.diets?.map((item) => (dietsObj[item] = true));
-    user.intolerances?.map((item) => (intolerancesObj[item] = true));
+    user.cuisines?.map((item) => (cuisinesObj[item] = true));
+    user.types?.map((item) => (typesObj[item] = true));
 
     setDiets(dietsObj);
-    setIntolerances(intolerancesObj);
-  }, [user.diets, user.intolerances]);
+    setCuisines(cuisinesObj);
+    setTypes(typesObj);
+  }, [user.cuisines, user.diets, user.intolerances, user.types]);
 
   return (
     <div className="user-settings">
       <h3 className="user-settings-subheading">
-        {t("general.pages.preferences.diet")}
+        {t("general.pages.preferences.type")}
       </h3>
-      <div className="checkbox-inputs-wrapper">
-        {dietsArr.map((diet) => (
-          <Checkbox
-            key={diet}
-            label={diet}
-            checked={diets[diet] === undefined ? false : diets[diet]}
+      <div className="switch-inputs-wrapper">
+        {typesArr.map((item) => (
+          <Switch
+            key={item}
+            label={t(`general.pages.preferences.${item}`)}
+            checked={types[item] === undefined ? false : types[item]}
             onChange={() =>
-              setDiets((prevState: any) => ({
+              setTypes((prevState: any) => ({
                 ...prevState,
-                [diet]: !prevState[diet],
+                [item]: !prevState[item],
               }))
             }
           />
         ))}
       </div>
+
       <h3 className="user-settings-subheading">
-        {t("general.pages.preferences.intolerances")}
+        {t("general.pages.preferences.diet")}
       </h3>
-      <div className="checkbox-inputs-wrapper">
-        {intolerancesArr.map((intolerance) => (
-          <Checkbox
-            key={intolerance}
-            label={intolerance}
+      <div className="switch-inputs-wrapper">
+        {dietsArr.map((item) => (
+          <Switch
+            key={item}
+            label={t(`general.pages.preferences.${item}`)}
+            checked={diets[item] === undefined ? false : diets[item]}
+            onChange={() =>
+              setDiets((prevState: any) => ({
+                ...prevState,
+                [item]: !prevState[item],
+              }))
+            }
+          />
+        ))}
+      </div>
+
+      <h3 className="user-settings-subheading">
+        {t("general.pages.preferences.selectFlavors")}
+      </h3>
+      <div className="switch-inputs-wrapper-1-col">
+        {cuisinesArr.map((cuisine) => (
+          <Switch
+            key={cuisine}
+            label={t(`general.pages.preferences.${cuisine}`)}
             checked={
-              intolerances[intolerance] === undefined
-                ? false
-                : intolerances[intolerance]
+              cuisines[cuisine] === undefined ? false : cuisines[cuisine]
             }
             onChange={() =>
-              setIntolerances((prevState: any) => ({
+              setCuisines((prevState: any) => ({
                 ...prevState,
-                [intolerance]: !prevState[intolerance],
+                [cuisine]: !prevState[cuisine],
               }))
             }
           />
@@ -113,23 +135,6 @@ const UserSettings = () => {
       <h3 className="user-settings-subheading">
         {t("general.pages.preferences.location")}
       </h3>
-      <Searchbar
-        value={city}
-        placeholder={t("general.pages.preferences.enterCity")}
-        onChange={(e: ChangeEvent<HTMLInputElement>) =>
-          setCity(e.currentTarget.value)
-        }
-      />
-      <Checkbox
-        label={t("general.pages.preferences.useLiveLocation")}
-        checked={liveLocation}
-        onChange={() => setLiveLocation((prevState: boolean) => !prevState)}
-      />
-      <h3 className="user-settings-subheading">
-        {t("general.pages.preferences.recentLocations")}
-      </h3>
-
-      <button onClick={submit}>save</button>
     </div>
   );
 };

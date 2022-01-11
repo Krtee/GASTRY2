@@ -1,4 +1,9 @@
-import { DIETS, INTOLERANCES } from "../../utils/user/User.types";
+import {
+  CUISINES,
+  DIETS,
+  INTOLERANCES,
+  TYPES,
+} from "../../utils/user/User.types";
 
 export interface UserSettingsProps {}
 
@@ -6,12 +11,30 @@ export const dietsArr: DIETS[] = [
   DIETS.VEGAN,
   DIETS.VEGETARIAN,
   DIETS.GLUTENFREE,
-  DIETS.PORK,
+  DIETS.NOPORK,
 ];
+
 export const intolerancesArr: INTOLERANCES[] = [
   INTOLERANCES.PEANUT,
   INTOLERANCES.FISH,
   INTOLERANCES.ONION,
   INTOLERANCES.GARLIC,
   INTOLERANCES.TOMATOE,
+];
+
+export const cuisinesArr: CUISINES[] = [
+  CUISINES.ITALIAN,
+  CUISINES.ASIAN,
+  CUISINES.GREEK,
+  CUISINES.SOUTHAMERICAN,
+  CUISINES.AFRICAN,
+  CUISINES.SPANISH,
+  CUISINES.FRENCH,
+];
+
+export const typesArr: TYPES[] = [
+  TYPES.CAFE,
+  TYPES.COLD,
+  TYPES.WARM,
+  TYPES.DESSERT,
 ];

@@ -21,12 +21,18 @@
       },
       "profile": {
         "favRestaurant": "Lieblingsrestaurant",
-        "visitedRestaurants": "Besuchte Restaurants",
+        "restaurants": "Restaurants",
         "posts": "Beiträge",
         "followers": "Abonennten",
         "followings": "Abonniert",
         "editProfile": "Profil bearbeiten",
         "searchFriends": "Freunde suchen"
+      },
+      "search": {
+        "findNameOrEmail": "Name oder E-Mail suchen",
+        "prevSelection": "Letzte Auswahl",
+        "add": "hinzufügen",
+        "yourFriends": "Deine Freunde"
       },
       "preferences": {
         "diet": "Ernährungsweise",

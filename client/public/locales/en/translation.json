@@ -12,12 +12,18 @@
       },
       "profile": {
         "favRestaurant": "Favorite restaurant",
-        "visitedRestaurants": "Visited restaurants",
+        "restaurants": "Restaurants",
         "posts": "Posts",
         "followers": "Followers",
         "followings": "Followings",
         "editProfile": "Edit profile",
         "searchFriends": "Search friends"
+      },
+      "search": {
+        "findNameOrEmail": "Find name or email",
+        "prevSelection": "Previews selection",
+        "add": "Add",
+        "yourFriends": "Your friends"
       },
       "preferences": {
         "diet": "Diet",

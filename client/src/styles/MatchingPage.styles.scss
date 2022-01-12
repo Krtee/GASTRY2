@@ -1,11 +1,21 @@
-.dot {
-    height: 75px;
-    width: 75px;
+.button-big {
+    height: 55px;
+    width: 55px;
     background-color: #d67278;
     border-radius: 50%;
     display: inline-block;
     margin: auto;
 }
+
+.button-small {
+    border: 2px solid #FCA262;  
+    height: 45px;
+    width: 45px;
+    border-radius: 50%;
+    display: inline-block;
+    margin: auto;
+}
+
 
 .matching-buttons {
     margin-top: 10px;
@@ -13,9 +23,75 @@
     justify-content: center;
 }
 
-.center {
+.button-center {
     margin-left: auto;
     margin-right: auto;
-    padding-top: 22px;
-    display: block
+    padding-top: 17px;
+    display: block;
+    height: 40px;
+    width: 40px;
+}
+
+.button-small-style {
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 12px;
+    padding-bottom: 6px;
+    display: block;
+    height: 35px;
+    width: 35px;
+}
+
+.container {
+    margin-top: 30px;
+    position: relative;
+    text-align: center;
+    color: white;
+}
+
+.progressBar {
+    position: absolute;
+    width: 100%;
+    height: 30px;
+    background: rgba(242, 89, 75, .5);
+    overflow: hidden;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    bottom: 4px;
+    left: 0px;
+}
+  
+.progressBarStyle {
+    position: absolute;
+    left: 0;
+    background-image: linear-gradient(to right, rgba(187, 0, 45, 1) , rgba(242, 89, 75, 1), rgba(214, 54, 39, 1));
+    height: 100%;
+    border-bottom-right-radius: 25px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, .2);
+    transition: 0.5s ease;
+}
+
+.progressBarText {
+    line-height: 30px; 
+    vertical-align: middle;
+    bottom: 4px;
+}
+  
+.top-left {
+    position: absolute;
+    top: 10px;
+    left: 8px;
+}
+  
+  
+.back-button {
+    top: -10px;
+    left: -10px;
+    position: absolute;
+    background-image: linear-gradient(to right, rgba(232, 106, 95, 1) , rgba(242, 89, 75, 1), rgba(214, 54, 39, 1));
+    height: 45px;
+    width: 45px;
+    border-radius: 50%;
+    display: flex;
+
 }

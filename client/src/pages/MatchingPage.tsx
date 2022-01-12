@@ -1,22 +1,30 @@
 import { FC, useState } from "react";
-import Layout from "../components/layoutComponent/Layout";
+import Layout from "../components/LayoutComponent/Layout";
 import { Page, useNavigation } from "../utils/hooks/useNavigation";
 import "../styles/MatchingPage.styles.scss";
-import likeimage from '../assets/images/like.svg';
-import dislikeimage from '../assets/images/dislike.svg';
+import likesvg from '../assets/images/like.svg';
+import dislikesvg from '../assets/images/dislike.svg';
+import resetsvg from '../assets/images/reset.svg';
+import settingsvg from '../assets/images/settings.svg';
+import groupaddsvg from '../assets/images/groupadd.svg';
+import arrow from '../assets/images/arrow.svg';
+
 import SwipableCard from "../components/swipableCard/SwipableCard";
 
 interface MatchingPageProps {}
 
 var executed = false;
 
+
 const MatchingPage: FC<MatchingPageProps> = ({}) => {
   const { currentLocation, onLocationChange } = useNavigation(Page.MATCHING);
 
-  const [images, setImages] = useState<any[]>([]);
+  const [images, setImages] = useState<any[]>(["https://images.pexels.com/photos/2198626/pexels-photo-2198626.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260"]);
+
+  const [progress, setProgress] = useState<number>(10)
+
 
   const divStyle = {
-    marginTop: '30px',
     height: '80%',
     width: '100%',
     color: 'blue',
@@ -25,10 +33,18 @@ const MatchingPage: FC<MatchingPageProps> = ({}) => {
 
 
   function likeImage() {
-    console.log("Klappt")
+    if (progress < 100) {
+      setProgress(progress + 10)
+    }
   }
 
   function dislikeImage() {
+    if (progress > 10) {
+      setProgress(progress - 10)
+    }
+  }
+
+  function resetImage() {
     console.log("Klappt")
   }
 
@@ -38,7 +54,7 @@ const MatchingPage: FC<MatchingPageProps> = ({}) => {
     return function() {
         if (!executed) {
           executed = true;
-          fetch('http://yumatch.mi.hdm-stuttgart.de/api/data/meal/some?count=10', {
+          fetch('', {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -55,7 +71,7 @@ const MatchingPage: FC<MatchingPageProps> = ({}) => {
     };
   })();
 
-  getImages();
+  //getImages();
 
   return (
     <Layout
@@ -65,11 +81,20 @@ const MatchingPage: FC<MatchingPageProps> = ({}) => {
       changeLocation={onLocationChange}
       currentLocation={currentLocation}>
       <SwipableCard>
-        <img style={divStyle} src={images[images.length - 1]} />
+        <div className="container">
+          <span onClick={resetImage} className="back-button"><img className="top-left" src={arrow} /></span>
+          <img style={divStyle} src={images[images.length - 1]} />
+          <div className="progressBar">
+            <div className="progressBarStyle" style={{width: progress + "%" }}><span className="progressBarText">{ progress + "%" }</span></div>
+          </div>
+        </div>
       </SwipableCard>
       <div className="matching-buttons">
-        <span onClick={likeImage} className="dot"><img className="center" src={likeimage} /></span>
-        <span onClick={dislikeImage} className="dot"><img className="center" src={dislikeimage} /></span>
+        <span className="button-small"><img className="button-small-style" src={settingsvg} /></span>
+        <span onClick={dislikeImage} className="button-big"><img className="button-center" src={dislikesvg} /></span>
+        <span onClick={resetImage} className="button-small"><img className="button-small-style" src={resetsvg} /></span>
+        <span onClick={likeImage} className="button-big"><img className="button-center" src={likesvg} /></span>
+        <span className="button-small"><img className="button-small-style" src={groupaddsvg} /></span>
       </div>
     </Layout>
   );

@@ -10,6 +10,5 @@ export const userState: RecoilState<User> = atom({
     username: "",
     email: "",
     role: "USER",
-    posts: [],
   },
 });

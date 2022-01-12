@@ -39,12 +39,24 @@ public class UserController {
         log.info("Request to create new user received!");
         newUser.setCreateDate(LocalDateTime.now());
         log.info("this the new user: {}", newUser);
+
+        if (userRepo.findByEmail(newUser.getEmail()).isPresent()) {
+            log.warn("User with this mail already exists");
+
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ResponseTypes.REGISTER_USER_EXISTS_MAIL);
+
+        }
+
+        if (userRepo.findByUsername(newUser.getUsername()).isPresent()) {
+            log.warn("User with this username already exists");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ResponseTypes.REGISTER_USER_EXISTS_USERNAME);
+
+        }
         UserDto savedUser = userRepo.save(newUser);
+
         int responseStatus = keycloakUtil.createNewUser(savedUser);
         if (responseStatus == 201) {
             return ResponseEntity.status(HttpStatus.CREATED).body(ResponseTypes.SUCCESSFUL);
-        } else if (responseStatus == 409) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(ResponseTypes.REGISTER_USER_EXISTS);
         }
         log.warn("User creation on keycloak was not successful!");
         userRepo.delete(savedUser);

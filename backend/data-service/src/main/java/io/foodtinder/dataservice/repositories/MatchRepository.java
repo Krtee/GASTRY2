@@ -9,8 +9,10 @@ import io.foodtinder.dataservice.model.Match;
 
 public interface MatchRepository extends MongoRepository<Match, String> {
 
-    public Optional<Match> gerMatchById(String id);
+    public Optional<Match> getMatchById(String id);
 
     public Optional<List<Match>> findAllByUserId(String userId);
+
+    public Optional<Match> findFirstByUserIdOrderByCreatedAtDesc(String userId);
 
 }

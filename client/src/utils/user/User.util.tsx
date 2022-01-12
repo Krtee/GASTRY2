@@ -16,7 +16,6 @@ export const createEmptyUser = (): User => {
     lastName: "",
     email: "",
     role: UserRole.USER,
-    posts: [],
   };
 };
 
@@ -33,8 +32,9 @@ export const createNewUser = async (
   return axios
     .post("/user/", newUser)
     .then((response) => response.data)
-    .catch(() => {
+    .catch((error) => {
       console.error("Error while creating a new user!");
+      return error.response.data;
     });
 };
 
@@ -44,6 +44,7 @@ export const createNewUser = async (
  * @param userId The id of the {@link User} to fetch
  * @param axios The axios instance
  * @returns Either the loaded user or undefined in case of an error
+ * @author Domenico Ferrari
  */
 export const loadSingleUser = async (
   userId: string,

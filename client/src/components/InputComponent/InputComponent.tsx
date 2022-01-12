@@ -3,44 +3,48 @@ import { InputComponentProps } from "./InputComponent.types";
 import "./InputComponent.styles.scss";
 
 const InputComponent: FC<InputComponentProps> = ({
+  id,
   placeholder,
   onChange,
   value,
   type = "text",
-  required,
   onBlur,
   label,
-  error,
+  required,
+  errorLabel,
 }) => {
   return (
     <div className="input-component">
       {label && (
         <div className="input-component--label">
-          <p>
-            {label}
-            {error && <span>{error}</span>}
-          </p>
+          <p>{label}</p>
         </div>
       )}
-      <input
-        className="input"
-        placeholder={placeholder}
-        onChange={(evt) => {
-          evt.preventDefault();
-          onChange(evt.target.value);
-        }}
-        type={type}
-        value={value}
-        required={required}
-        onBlur={
-          onBlur
-            ? (evt) => {
-                evt.preventDefault();
-                onBlur(evt.target.value);
-              }
-            : () => {}
-        }
-      />
+      <div className="input">
+        <input
+          type={type}
+          placeholder={placeholder}
+          onChange={(evt) => {
+            evt.preventDefault();
+            onChange(evt.target.value);
+          }}
+          value={value}
+          required={required}
+          onBlur={
+            onBlur
+              ? (evt) => {
+                  evt.preventDefault();
+                  onBlur(evt.target.value);
+                }
+              : () => {}
+          }
+        />
+        {errorLabel && (
+          <div className="input-component--error-label">
+            <p>{errorLabel}</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

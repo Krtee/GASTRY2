@@ -11,5 +11,4 @@ export interface User {
   email: string;
   role: UserRole | string;
   password?: string;
-  posts: [];
 }

@@ -1,47 +1,65 @@
-import { FC, useState } from "react";
-import Layout from "../components/LayoutComponent/Layout";
-import InputComponent from "../components/InputComponent/InputComponent";
-import Button from "../components/button/Button";
+import { useKeycloak } from "@react-keycloak/web";
+import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useHistory } from "react-router";
+import ButtonComponent from "../components/ButtonComponent/ButtonComponent";
+import InputComponent from "../components/InputComponent/InputComponent";
+import Layout from "../components/LayoutComponent/Layout";
 import "../styles/RegisterPage.styles.scss";
-import { createEmptyUser, createNewUser } from "../utils/user/User.util";
-import { User } from "../utils/user/User.types";
-import { useSetRecoilState } from "recoil";
-import { userState } from "../utils/user/User.state";
 import { ResponseTypes, useAxios } from "../utils/AxiosUtil";
+import { User } from "../utils/user/User.types";
+import { createEmptyUser, createNewUser } from "../utils/user/User.util";
 
 interface RegisterPageProps {}
 
 const RegisterPage: FC<RegisterPageProps> = () => {
   const { t } = useTranslation();
   const [registerUser, setRegisterUser] = useState<User>(createEmptyUser());
+  const { keycloak, initialized } = useKeycloak();
+
   const [confirmPassword, setConfirmPassword] = useState({
-    error: "",
+    error: false,
     value: "",
   });
   const axios = useAxios();
-  const setUser = useSetRecoilState(userState);
+  const [registerError, setRegisterError] = useState<ResponseTypes>();
+  const history = useHistory();
+
+  /**
+   * Helper method to redirect to matching when user already is logged in
+   * @author Domenico Ferrari
+   */
+  useEffect(() => {
+    if (initialized && keycloak.authenticated) history.replace("/matching");
+    // eslint-disable-next-line
+  }, [keycloak, axios]);
 
   return (
     <Layout hideBar hideHeader>
-      <div className="wrapper">
-        <h2 className="header">yumatch</h2>
+      <div className="register-page-wrapper">
+        <div className="header-wrapper">
+          <h2 className="header">yumatch</h2>
+          {registerError && (
+            <p className="register-error-header">
+              {t(`general.pages.register.${registerError}`)}
+            </p>
+          )}
+        </div>
+
         <form
           className="form"
+          onInvalid={(evt) => {
+            evt.preventDefault();
+          }}
           onSubmit={(evt) => {
             evt.preventDefault();
+            if (confirmPassword.error) return;
             createNewUser(axios, registerUser).then((result) => {
-              switch (result) {
-                case ResponseTypes.SUCCESSFUL:
-                  setUser(registerUser);
-                  console.log("Successfully created new user");
-                  return;
-                case ResponseTypes.REGISTER_ERROR:
-                  console.log("Error while registering");
-                  return;
-                case ResponseTypes.REGISTER_USER_EXISTS:
-                  console.log("User already exists");
-                  return;
+              if (result === ResponseTypes.SUCCESSFUL) {
+                setRegisterError(undefined);
+                keycloak.login({ loginHint: registerUser.username });
+              } else {
+                setRegisterError(result);
               }
             });
           }}
@@ -67,7 +85,7 @@ const RegisterPage: FC<RegisterPageProps> = () => {
                 email: value,
               }))
             }
-            type="text"
+            type="email"
             required
           />
           <InputComponent
@@ -83,6 +101,7 @@ const RegisterPage: FC<RegisterPageProps> = () => {
             required
           />
           <InputComponent
+            id="passwordAgainField"
             placeholder={t("general.pages.register.passwordAgain")}
             value={confirmPassword.value}
             onChange={(value) =>
@@ -91,19 +110,29 @@ const RegisterPage: FC<RegisterPageProps> = () => {
                 value: value,
               }))
             }
-            onBlur={(value) =>
-              setConfirmPassword((passwordState) => ({
-                ...passwordState,
-                error: value,
-              }))
+            onBlur={(value) => {
+              if (value !== registerUser.password) {
+                setConfirmPassword((passwordState) => ({
+                  ...passwordState,
+                  error: true,
+                }));
+              } else {
+                setConfirmPassword((passwordState) => ({
+                  ...passwordState,
+                  error: false,
+                }));
+              }
+            }}
+            errorLabel={
+              confirmPassword.error ? "Passwörter stimmen nicht überein" : ""
             }
-            error={confirmPassword.error}
             type="password"
             required
           />
-          <Button
-            label={t("general.pages.register.buttonLabel")}
+          <ButtonComponent
             onClick={() => {}}
+            type="submit"
+            value={t("general.pages.register.buttonLabel")}
           />
         </form>
       </div>

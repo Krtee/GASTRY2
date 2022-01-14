@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 
-interface Geolocation {
+export interface Geolocation {
   loaded: boolean;
   coordinates?: Coordinates;
   error?: any;
 }
-interface Coordinates {
+export interface Coordinates {
   latitude: string;
   longitude: string;
 }

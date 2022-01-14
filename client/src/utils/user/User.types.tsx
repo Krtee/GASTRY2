@@ -9,6 +9,6 @@ export interface User {
   lastName: string;
   username: string;
   email: string;
-  role: UserRole | string;
+  role: UserRole;
   password?: string;
 }

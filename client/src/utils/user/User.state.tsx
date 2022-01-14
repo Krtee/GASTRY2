@@ -1,14 +1,7 @@
-import { RecoilState, atom } from "recoil";
+import { atom, RecoilState } from "recoil";
 import { User } from "./User.types";
 
-export const userState: RecoilState<User> = atom({
+export const userState: RecoilState<User | undefined> = atom<User | undefined>({
   key: "currentUser",
-  default: {
-    id: "",
-    firstName: "",
-    lastName: "",
-    username: "",
-    email: "",
-    role: "USER",
-  },
+  default: undefined,
 });

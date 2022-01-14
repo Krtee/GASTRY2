@@ -21,7 +21,7 @@ const RegisterPage: FC<RegisterPageProps> = () => {
     error: false,
     value: "",
   });
-  const axios = useAxios();
+  const { axios } = useAxios();
   const [registerError, setRegisterError] = useState<ResponseTypes>();
   const history = useHistory();
 

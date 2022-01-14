@@ -1,15 +1,13 @@
 import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Route, Switch, useRouteMatch } from "react-router";
 import Layout from "../components/LayoutComponent/Layout";
-import UserInfo from "../components/UserInfo/UserInfo";
-import UserStats from "../components/UserStats/UserStats";
-import { Page, useNavigation } from "../utils/hooks/useNavigation";
-import "../styles/ProfilePage.styles.scss";
 import ProfileNav, { nav_elements } from "../components/ProfileNav/ProfileNav";
-import { Switch, Route, useRouteMatch } from "react-router";
+import UserInfo from "../components/UserInfo/UserInfo";
 import UserPosts from "../components/UserPosts/UserPosts";
-
-interface Props {}
+import UserStats from "../components/UserStats/UserStats";
+import "../styles/ProfilePage.styles.scss";
+import { Page, useNavigation } from "../utils/hooks/useNavigation";
 
 const data = {
   photo: "",

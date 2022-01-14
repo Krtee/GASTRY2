@@ -9,6 +9,11 @@ export interface Coordinates {
   latitude: string;
   longitude: string;
 }
+/**
+ * hook to get current geolocation of user
+ * @returns {@link Geolocation}
+ * @author Minh
+ */
 const useGeoLocation = () => {
   const [location, setLocation] = useState<Geolocation>({
     loaded: false,

@@ -1,4 +1,4 @@
-import { atom, RecoilState, RecoilValueReadOnly, selector } from "recoil";
+import { atom, RecoilState, selector } from "recoil";
 import { axiosState } from "../Axios.state";
 import { userState } from "../user/User.state";
 import { Match } from "./Match.types";
@@ -8,20 +8,10 @@ import {
   postNewMatch,
 } from "./Match.Utils";
 
-export const currentMatchInfo: RecoilValueReadOnly<{
-  remainingMealsToMatchCount: number;
-}> = selector<{
-  remainingMealsToMatchCount: number;
-}>({
-  key: "currentMatchInfo",
-  get: ({ get }) => ({
-    remainingMealsToMatchCount:
-      15 -
-      get(currentMatchState).matchedMeals.length -
-      get(currentMatchState).matchedMeals.length,
-  }),
-});
-
+/**
+ * selector to fetch the latest Match
+ * @author Minh
+ */
 export const latestMatchSelector = selector<Match>({
   key: "latestMatchSelector",
   get: async ({ get }) => {
@@ -47,9 +37,3 @@ export const currentMatchState: RecoilState<Match> = atom<Match>({
   key: "currentMatchState",
   default: latestMatchSelector,
 });
-
-/*export const setMatchedMealsSelector = selector({
-  key: "setMatchedMealsSelector",
-  set: ({ get }, newValue: Meals) => {},
-});
-*/

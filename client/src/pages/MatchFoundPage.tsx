@@ -3,8 +3,8 @@ import Layout from "../components/LayoutComponent/Layout";
 
 interface MatchFoundPageProps {}
 
-const MatchFoundPage: FC<MatchFoundPageProps> = ({}) => {
-  return <Layout>ye</Layout>;
+const MatchFoundPage: FC<MatchFoundPageProps> = () => {
+  return <Layout>TODO</Layout>;
 };
 
 export default MatchFoundPage;

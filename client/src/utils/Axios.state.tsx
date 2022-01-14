@@ -13,6 +13,8 @@ export const axiosState: RecoilState<AxiosState> = atom<AxiosState>({
 });
 
 // mount this component under your application's root
+// needed to use axios in selectors
+// @author Minh
 export const AxiosSubscriber: FC<{}> = () => {
   const setAxiosState = useSetRecoilState(axiosState);
   const { keycloak, initialized } = useKeycloak();
@@ -26,14 +28,13 @@ export const AxiosSubscriber: FC<{}> = () => {
         "Content-Type": "application/json;charset=UTF-8",
       },
     });
-    console.log("updading axios", instance);
 
     setAxiosState({ instance: instance });
 
     return () => {
       setAxiosState({ instance: null });
     };
-  }, [baseURL, initialized, keycloak, keycloak.token]);
+  }, [baseURL, initialized, keycloak, keycloak.token, setAxiosState]);
 
   return <></>;
 };

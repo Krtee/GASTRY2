@@ -3,6 +3,10 @@ import { axiosState } from "../Axios.state";
 import { Meal } from "./Meal.types";
 import { fetchRandomMeals } from "./Meal.utils";
 
+/**
+ * random Meal selector to fetch meals to swipe
+ * @author Minh
+ */
 export const randomMealsSelector = selector<Meal[]>({
   key: "randomMealsSelector",
   get: async ({ get }) => {
@@ -22,6 +26,7 @@ export const randomMealsSelector = selector<Meal[]>({
     return [];
   },
 });
+
 export const randomMealsState: RecoilState<Meal[]> = atom<Meal[]>({
   key: "randomMealState",
   default: randomMealsSelector,

@@ -1,21 +1,13 @@
-import {
-  createRef,
-  FC,
-  Suspense,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { createRef, FC, Suspense, useMemo, useRef, useState } from "react";
 import { useHistory } from "react-router";
 import TinderCard from "react-tinder-card";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { ReactComponent as ArrowIcon } from "../assets/images/arrow.svg";
-import dislikesvg from "../assets/images/dislike.svg";
-import groupaddsvg from "../assets/images/groupadd.svg";
-import likesvg from "../assets/images/like.svg";
-import resetsvg from "../assets/images/reset.svg";
-import settingsvg from "../assets/images/settings.svg";
+import { ReactComponent as DislikeIcon } from "../assets/images/dislike.svg";
+import { ReactComponent as GroupAddIcon } from "../assets/images/groupadd.svg";
+import { ReactComponent as LikeIcon } from "../assets/images/like.svg";
+import { ReactComponent as ResetIcon } from "../assets/images/reset.svg";
+import { ReactComponent as SettingIcon } from "../assets/images/settings.svg";
 import Layout from "../components/LayoutComponent/Layout";
 import ModalComponent from "../components/ModalComponent/ModalComponent";
 import "../styles/MatchingPage.styles.scss";
@@ -30,14 +22,12 @@ import { Meal } from "../utils/meal/Meal.types";
 
 interface MatchingPageProps {}
 
-const MatchingPage: FC<MatchingPageProps> = ({}) => {
+const MatchingPage: FC<MatchingPageProps> = () => {
   const { currentLocation, onLocationChange } = useNavigation(Page.MATCHING);
   const [currentMatch, setCurrentMatch] =
     useRecoilState<Match>(currentMatchState);
   const mealsToSwipe = useRecoilValue<Meal[]>(randomMealsState);
   const [currentIndex, setCurrentIndex] = useState(mealsToSwipe.length - 1);
-  const [lastDirection, setLastDirection] = useState<"left" | "right">();
-  // used for outOfFrame closure
   const currentIndexRef = useRef(currentIndex);
   const canGoBack = currentIndex < mealsToSwipe.length - 1;
   const canSwipe = currentIndex >= 0;
@@ -47,13 +37,12 @@ const MatchingPage: FC<MatchingPageProps> = ({}) => {
     useState<boolean>(false);
   const location = useGeoLocation();
   const { axios } = useAxios();
-
   const childRefs: any[] = useMemo(
     () =>
       Array(mealsToSwipe.length)
         .fill(0)
         .map((i) => createRef()),
-    []
+    [mealsToSwipe.length]
   );
 
   const updateCurrentIndex = (val: number) => {
@@ -79,11 +68,23 @@ const MatchingPage: FC<MatchingPageProps> = ({}) => {
       default:
     }
     setdisableGoBack(false);
-    setLastDirection(direction);
     updateCurrentIndex(index - 1);
+    if (index === 0) {
+      setShowLoadingMatchModal(true);
+      matchRestaurants(axios, currentMatch, location).then((res) => {
+        setCurrentMatch(res);
+        setTimeout(() => {
+          history.push("/matching/result");
+        }, 3000);
+      });
+    }
   };
 
-  const outOfFrame = (name: string, idx: number) => {
+  /**
+   * handles meals, that are out of frame
+   * @param idx
+   */
+  const outOfFrame = (idx: number) => {
     // handle the case in which go back is pressed before card goes outOfFrame
     currentIndexRef.current >= idx && childRefs[idx].current.restoreCard();
     // TODO: when quickly swipe and restore multiple times the same card,
@@ -91,6 +92,10 @@ const MatchingPage: FC<MatchingPageProps> = ({}) => {
     // during latest swipes. Only the last outOfFrame event should be considered valid
   };
 
+  /**
+   * handler if programatically swiped
+   * @param dir direction to swipe: either left or right
+   */
   const swipe = async (dir: "left" | "right") => {
     if (canSwipe && currentIndex < mealsToSwipe.length) {
       await childRefs[currentIndex].current.swipe(dir); // Swipe the card!
@@ -115,17 +120,6 @@ const MatchingPage: FC<MatchingPageProps> = ({}) => {
     await childRefs[newIndex].current.restoreCard();
   };
 
-  useEffect(() => {
-    if (currentIndex === -1) {
-      setShowLoadingMatchModal(true);
-      matchRestaurants(axios, currentMatch, location).then((res) => {
-        setCurrentMatch(res);
-        setTimeout(() => {
-          history.push("/matching/result");
-        }, 3000);
-      });
-    }
-  }, [currentIndex]);
   return (
     <Layout
       navigationElements={Object.entries(Page).map((page) => ({
@@ -135,7 +129,11 @@ const MatchingPage: FC<MatchingPageProps> = ({}) => {
       currentLocation={currentLocation}
       className="matching-page"
     >
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense
+        fallback={
+          <div>{/** TODO implement loading component */}Loading...</div>
+        }
+      >
         <div className="swipeable-card-container">
           {mealsToSwipe.map((meal, index) => (
             <TinderCard
@@ -143,13 +141,13 @@ const MatchingPage: FC<MatchingPageProps> = ({}) => {
               key={meal.idMeal}
               onSwipe={(dir) => swiped(dir as "left" | "right", meal, index)}
               preventSwipe={["up", "down"]}
-              onCardLeftScreen={() => outOfFrame(meal.idMeal, index)}
+              onCardLeftScreen={() => outOfFrame(index)}
               className="container"
             >
               <span onClick={() => goBack()} className="back-button">
                 <ArrowIcon />
               </span>
-              <img src={meal.strMealThumb} />
+              <img src={meal.strMealThumb} alt={meal.strMeal} />
               <div className="progressBar">
                 <div
                   className="progressBarStyle"
@@ -168,25 +166,32 @@ const MatchingPage: FC<MatchingPageProps> = ({}) => {
 
         <div className="matching-buttons">
           <span className="button-small">
-            <img className="button-small-style" src={settingsvg} />
+            <SettingIcon className="button-small-style" />
           </span>
           <span onClick={() => swipe("left")} className="button-big">
-            <img className="button-center" src={dislikesvg} />
+            <DislikeIcon className="button-center" />
           </span>
           <span
             onClick={() => !disableGoBack && goBack()}
             className="button-small"
           >
-            <img className="button-small-style" src={resetsvg} />
+            <ResetIcon className="button-small-style" />
           </span>
           <span onClick={() => swipe("right")} className="button-big">
-            <img className="button-center" src={likesvg} />
+            <LikeIcon className="button-center" />
           </span>
           <span className="button-small">
-            <img className="button-small-style" src={groupaddsvg} />
+            <GroupAddIcon className="button-small-style" />
           </span>
         </div>
-        {showLoadingMatchModal && <ModalComponent></ModalComponent>}
+        {showLoadingMatchModal && (
+          <ModalComponent className="matching-loading">
+            {/** TODO implement image and translations */}
+            <p>Es ist ein ...</p>
+            <p>YUMMMMatch</p>
+            <p>Und die besten Restaurants in deiner Nähe sind...</p>
+          </ModalComponent>
+        )}
       </Suspense>
     </Layout>
   );

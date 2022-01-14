@@ -10,6 +10,13 @@ export const createEmptyMatch = (userId?: string): Match => ({
   matchedRestaurants: [],
 });
 
+/**
+ * GET API - to fetch the latest match for user
+ * @param axios axios instance
+ * @param userId id of the current user
+ * @returns a match if successful, else returns undefined
+ * @author Minh
+ */
 export const fetchLatestMatchForUser = (
   axios: AxiosInstance,
   userId: string
@@ -21,6 +28,13 @@ export const fetchLatestMatchForUser = (
     .then(({ data }) => data)
     .catch(() => undefined);
 
+/**
+ * POST API - to post a new match
+ * @param axios axios instance
+ * @param match to create
+ * @returns created Match if successful, else returns undefined
+ * @author Minh
+ */
 export const postNewMatch = (
   axios: AxiosInstance,
   match: Match
@@ -30,25 +44,13 @@ export const postNewMatch = (
     .then(({ data }) => data)
     .catch(() => undefined);
 
-export const getOrCreateMatch = async (
-  axios?: AxiosInstance,
-  userId?: string
-) => {
-  if (!axios || axios === null || !userId) {
-    return createEmptyMatch("");
-  }
-  const latestMatchResp = await fetchLatestMatchForUser(axios, userId);
-  if (latestMatchResp) {
-    return latestMatchResp;
-  } else {
-    const newMatchResp = await postNewMatch(axios, createEmptyMatch(userId));
-    if (newMatchResp) {
-      return newMatchResp;
-    }
-  }
-  return createEmptyMatch(userId);
-};
-
+/**
+ *   POST API - to update an existing match
+ * @param axios axios instance
+ * @param newMatch match to update
+ * @returns updated Match
+ * @author Minh
+ */
 export const updateMatch = (
   axios: AxiosInstance,
   newMatch: Match
@@ -58,6 +60,14 @@ export const updateMatch = (
     .then((res) => res.data)
     .catch(() => undefined);
 
+/**
+ * POST API - to get matching Restaurant for given match
+ * @param axios axios instance
+ * @param newMatch match object, whre restaurants should be matched
+ * @param location geolocation of use
+ * @returns update Match
+ * @author Minh
+ */
 export const matchRestaurants = (
   axios: AxiosInstance,
   newMatch: Match,

@@ -37,7 +37,7 @@ public class MultiUserMatchController {
     /**
      * POST API to create a match
      * 
-     * @return 200 when successful, else returns 404
+     * @return 200 when successful
      * @author Minh
      */
     @PostMapping(value = "/")

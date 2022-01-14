@@ -1,9 +1,7 @@
 package io.foodtinder.dataservice.controller;
 
-import java.time.LocalDateTime;<<<<<<<HEAD
-import java.util.ArrayList;=======
-import java.util.AbstractMap;
-import java.util.HashMap;>>>>>>>develop
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +19,9 @@ import io.foodtinder.dataservice.model.Match;
 import io.foodtinder.dataservice.model.MatchRestaurantWrapper;
 import io.foodtinder.dataservice.model.MultiUserMatch;
 import io.foodtinder.dataservice.model.requests.MatchRequestBody;
-import io.foodtinder.dataservice.repositories.GoogleRepository;
 import io.foodtinder.dataservice.repositories.MatchRepository;
 import io.foodtinder.dataservice.repositories.MultiUserMatchRepository;
 import io.foodtinder.dataservice.utils.MatchUtils;
-import io.foodtinder.dataservice.utils.RestUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -129,14 +125,16 @@ public class MatchController {
         log.info("Request to  match restaurants for match {} received", matchId);
         Match foundMatch = matchRepository.findById(matchId).orElse(null);
         if (foundMatch == null) {
-            log.warn("Shopfloor board config with id {} not found to update!", matchId);
+            log.warn("match with id {} not found to update!", matchId);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
         foundMatch.update(requestBody.getMatch());
         if (foundMatch.isPartOfGroup()) {
+            log.info("given match is part of a multi user match");
             MultiUserMatch multiUserMatch = multiUserMatchRepo.findByMatches(foundMatch.getId()).get(0);
             if (multiUserMatch != null && matchUtils.checkIfAllMatchesAreFinishedInsideMultiUserMatch(multiUserMatch)) {
+                log.info("group match finished");
                 List<Match> allMatchesInMultiUserMatch = new ArrayList<Match>();
                 for (String multiUserMatchId : multiUserMatch.getMatches()) {
                     Match foundMatchForMultiUser = matchRepository.findById(multiUserMatchId).orElse(null);
@@ -151,6 +149,7 @@ public class MatchController {
             }
         } else if ((foundMatch.getMatchedMeals().size() + foundMatch.getUnmatchedMeals().size()) >= 15
                 && foundMatch.getMatchedRestaurants().size() < 3) {
+            log.info("solo match is finished");
             foundMatch
                     .setMatchedRestaurants(matchUtils.matchRestaurants(List.of(foundMatch), requestBody.getLocation()));
             foundMatch.setUpdatedAt(LocalDateTime.now());

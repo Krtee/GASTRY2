@@ -1,6 +1,10 @@
 .user-stats {
   display: flex;
   justify-content: space-between;
+  border: 2px solid #f2594b;
+  border-radius: 28px;
+  padding: 16px 28px;
+  margin-bottom: 24px;
 
   &-box {
     text-align: center;

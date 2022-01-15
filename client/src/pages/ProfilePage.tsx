@@ -22,9 +22,7 @@ const ProfilePage: FC<{}> = () => {
 
   let { url } = useRouteMatch();
 
-  useEffect(() => {
-    
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <Layout
@@ -42,6 +40,7 @@ const ProfilePage: FC<{}> = () => {
             firstName={user.firstName}
             lastName={user.lastName}
             username={user.username}
+            setIsEditing={setIsEditing}
           />
           <UserStats
             posts={user.posts ? user.posts.length : 0}
@@ -50,20 +49,6 @@ const ProfilePage: FC<{}> = () => {
             followers={user.followers ? user.followers.length : 0}
             followings={user.followings ? user.followings.length : 0}
           />
-          <div className="profile-interactions">
-            <button
-              className="profile-interactions-element profile-edit-btn"
-              onClick={() => setIsEditing(true)}
-            >
-              {t("general.pages.profile.editProfile")}
-            </button>
-            <Link
-              className="profile-interactions-element profile-search-btn"
-              to="/search"
-            >
-              {t("general.pages.profile.searchFriends")}
-            </Link>
-          </div>
           <ProfileNav />
           <Switch>
             <Route exact path={`${url}`}>

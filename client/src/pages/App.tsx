@@ -3,6 +3,7 @@ import { RecoilRoot } from "recoil";
 import MatchingPage from "./MatchingPage";
 import ProfilePage from "./ProfilePage";
 import RegisterPage from "./RegisterPage";
+import SearchPage from "./SearchPage";
 import TutorialPage from "./TutorialPage";
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
           <Route path="/tutorial" component={TutorialPage} />
           <Route path="/register" component={RegisterPage} />
           <Route path="/profile" component={ProfilePage} />
+          <Route path="/search" component={SearchPage} />
         </Switch>
       </RecoilRoot>
     </BrowserRouter>

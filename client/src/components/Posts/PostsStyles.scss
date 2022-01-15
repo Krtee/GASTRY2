@@ -2,8 +2,6 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 1px;
-  height: 38vh;
-  overflow: scroll;
 
   &-item {
     width: 100%;

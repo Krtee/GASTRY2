@@ -52,7 +52,7 @@ const friends = [
   },
   {
     _id: 6,
-    name: "Bassam Something",
+    name: "Bassam Mednini",
   },
   {
     _id: 7,

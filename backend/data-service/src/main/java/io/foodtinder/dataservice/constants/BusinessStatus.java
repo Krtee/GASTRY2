@@ -1,5 +1,5 @@
 package io.foodtinder.dataservice.constants;
 
 public enum BusinessStatus {
-    OPERATIONAL,
+    OPERATIONAL, CLOSED_TEMPORARILY, CLOSED_PERMANENTLY
 }

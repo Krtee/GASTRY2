@@ -18,17 +18,13 @@ public class Match {
     private List<Meal> matchedMeals;
     private List<Meal> unmatchedMeals;
     private List<MatchRestaurantWrapper> matchedRestaurants;
+    private boolean partOfGroup;
 
     public void update(Match updatedMatch) {
         this.setMatchedMeals(updatedMatch.getMatchedMeals());
         this.setUnmatchedMeals(updatedMatch.getUnmatchedMeals());
         this.setMatchedRestaurants(updatedMatch.getMatchedRestaurants());
+        this.setPartOfGroup(updatedMatch.isPartOfGroup());
         this.setUpdatedAt(LocalDateTime.now());
     }
-
-    public List<MatchRestaurantWrapper> calculateMatch() {
-        // TODO get right matches
-        return this.getMatchedRestaurants();
-    }
-
 }

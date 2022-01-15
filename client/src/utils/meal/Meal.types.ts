@@ -1,11 +1,11 @@
 export interface Meal {
   idMeal: string;
   strMeal: string;
-  strCategory: Category;
+  strCategory: string;
   strArea: string;
   strInstructions?: string;
   strMealThumb?: string;
-  strTags: string;
+  strTags?: string;
   strYoutube?: string;
 }
 

@@ -10,4 +10,5 @@ public class GoogleRespSave {
     private String area;
     private String category;
     private String tag;
+    private GeoLocation location;
 }

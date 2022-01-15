@@ -1,0 +1,138 @@
+[
+    {
+        "idMeal": "52874",
+        "strMeal": "Beef and Mustard Pie",
+        "strArea": "CANADIAN",
+        "strCategory": "BEEF",
+        "strMealThumb": "https://www.themealdb.com/images/media/meals/sytuqu1511553755.jpg"
+    },
+    {
+        "idMeal": "52878",
+        "strMeal": "Beef and Oyster pie",
+        "strCategory": "BEEF",
+        "strArea": "CANADIAN",
+        "strMealThumb": "https://www.themealdb.com/images/media/meals/wrssvt1511556563.jpg"
+    },
+
+    {
+        "idMeal": "52818",
+        "strMeal": "Chicken Fajita Mac and Cheese",
+        "strCategory": "CHICKEN",
+        "strArea": "CANADIAN",
+        "strMealThumb": "https://www.themealdb.com/images/media/meals/qrqywr1503066605.jpg"
+    },
+    {
+        "idMeal": "52875",
+        "strMeal": "Chicken Ham and Leek Pie",
+        "strCategory": "CHICKEN",
+        "strArea": "CANADIAN",
+        "strMealThumb": "https://www.themealdb.com/images/media/meals/xrrtss1511555269.jpg"
+    },
+
+    {
+        "idMeal": "52958",
+        "strMeal": "Peanut Butter Cookies",
+        "strCategory": "DESSERT",
+        "strArea": "CANADIAN",
+        "strMealThumb": "https://www.themealdb.com/images/media/meals/1544384070.jpg"
+    },
+    {
+        "idMeal": "52916",
+        "strMeal": "Pear Tarte Tatin",
+        "strCategory": "DESSERT",
+        "strArea": "CANADIAN",
+        "strMealThumb": "https://www.themealdb.com/images/media/meals/rxvxrr1511797671.jpg"
+    },
+    {
+        "idMeal": "53022",
+        "strMeal": "Polskie Naleśniki (Polish Pancakes)",
+        "strCategory": "DESSERT",
+        "strArea": "CANADIAN",
+        "strMealThumb": "https://www.themealdb.com/images/media/meals/58bkyo1593350017.jpg"
+    },
+    {
+        "idMeal": "53046",
+        "strMeal": "Portuguese custard tarts",
+        "strCategory": "DESSERT",
+        "strArea": "CANADIAN",
+        "strMealThumb": "https://www.themealdb.com/images/media/meals/vmz7gl1614350221.jpg"
+    },
+
+    {
+        "idMeal": "53018",
+        "strMeal": "Bigos (Hunters Stew)",
+        "strCategory": "PORK",
+        "strArea": "CANADIAN",
+        "strMealThumb": "https://www.themealdb.com/images/media/meals/md8w601593348504.jpg"
+    },
+    {
+        "idMeal": "53049",
+        "strMeal": "Apam balik",
+        "strCategory": "DESSERT",
+        "strArea": "CANADIAN",
+        "strMealThumb": "https://www.themealdb.com/images/media/meals/adxcbq1619787919.jpg"
+    },
+    {
+        "idMeal": "52893",
+        "strMeal": "Apple & Blackberry Crumble",
+        "strCategory": "DESSERT",
+        "strArea": "CANADIAN",
+        "strMealThumb": "https://www.themealdb.com/images/media/meals/xvsurr1511719182.jpg"
+    },
+    {
+        "idMeal": "52768",
+        "strMeal": "Apple Frangipan Tart",
+        "strCategory": "DESSERT",
+        "strArea": "CANADIAN",
+        "strMealThumb": "https://www.themealdb.com/images/media/meals/wxywrq1468235067.jpg"
+    },
+    {
+        "idMeal": "52767",
+        "strMeal": "Bakewell tart",
+        "strCategory": "DESSERT",
+        "strArea": "CANADIAN",
+        "strMealThumb": "https://www.themealdb.com/images/media/meals/wyrqqq1468233628.jpg"
+    },
+    {
+        "idMeal": "52910",
+        "strMeal": "Chinon Apple Tarts",
+        "strCategory": "DESSERT",
+        "strArea": "CANADIAN",
+        "strMealThumb": "https://www.themealdb.com/images/media/meals/qtqwwu1511792650.jpg"
+    },
+    {
+        "idMeal": "52856",
+        "strMeal": "Choc Chip Pecan Pie",
+        "strCategory": "DESSERT",
+        "strArea": "CANADIAN",
+        "strMealThumb": "https://www.themealdb.com/images/media/meals/rqvwxt1511384809.jpg"
+    },
+    {
+        "idMeal": "52853",
+        "strMeal": "Chocolate Avocado Mousse",
+        "strCategory": "DESSERT",
+        "strArea": "CANADIAN",
+        "strMealThumb": "https://www.themealdb.com/images/media/meals/uttuxy1511382180.jpg"
+    },
+    {
+        "idMeal": "52966",
+        "strMeal": "Chocolate Caramel Crispy",
+        "strCategory": "DESSERT",
+        "strArea": "CANADIAN",
+        "strMealThumb": "https://www.themealdb.com/images/media/meals/1550442508.jpg"
+    },
+    {
+        "idMeal": "52776",
+        "strMeal": "Chocolate Gateau",
+        "strCategory": "DESSERT",
+        "strArea": "CANADIAN",
+        "strMealThumb": "https://www.themealdb.com/images/media/meals/tqtywx1468317395.jpg"
+    },
+    {
+        "idMeal": "52860",
+        "strMeal": "Chocolate Raspberry Brownies",
+        "strCategory": "DESSERT",
+        "strArea": "CANADIAN",
+        "strMealThumb": "https://www.themealdb.com/images/media/meals/yypvst1511386427.jpg"
+    }
+]

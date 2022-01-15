@@ -1,34 +1,33 @@
 import { ChangeEvent, FC, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useRecoilState } from "recoil";
-import { userState } from "../utils/user/User.state";
 import Layout from "../components/layoutComponent/Layout";
 import { Page, useNavigation } from "../utils/hooks/useNavigation";
 import "../styles/SearchPage.styles.scss";
+import { Result } from "../utils/search/Search.types";
 
-const results: any = [
+const results: Result[] = [
   {
-    _id: 1,
+    _id: "1",
     email: "minh@email.com",
   },
   {
-    _id: 2,
+    _id: "2",
     email: "domenico@email.com",
   },
   {
-    _id: 3,
+    _id: "3",
     email: "nathalie@email.com",
   },
   {
-    _id: 4,
+    _id: "4",
     email: "bassam@email.com",
   },
   {
-    _id: 5,
+    _id: "5",
     email: "ines@email.com",
   },
   {
-    _id: 6,
+    _id: "6",
     email: "katharina@email.com",
   },
 ];
@@ -64,7 +63,6 @@ const SearchPage: FC<{}> = () => {
   const { t } = useTranslation();
   const { currentLocation, onLocationChange } = useNavigation();
   const [searchValue, setSearchValue] = useState<string>("");
-  const [user, setUser] = useRecoilState(userState);
   const [focused, setFocused] = useState(false);
 
   const onFocus = () => setFocused(true);

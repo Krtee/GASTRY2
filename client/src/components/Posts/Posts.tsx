@@ -26,7 +26,7 @@ const dummyData = [
   },
 ];
 
-const Posts = ({ posts }: PostsProps) => {
+const Posts: React.FC<PostsProps> = ({ posts }) => {
   return (
     <div className="posts">
       {dummyData.map((post, index) => (

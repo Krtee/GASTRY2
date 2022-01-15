@@ -4,35 +4,35 @@ export enum UserRole {
 }
 
 export enum TYPES {
-  CAFE = "cafe",
-  COLD = "cold",
-  WARM = "warm",
-  DESSERT = "dessert",
+  CAFE = "CAFE",
+  COLD = "COLD",
+  WARM = "WARM",
+  DESSERT = "DESSERT",
 }
 
 export enum DIETS {
-  VEGAN = "vegan",
-  VEGETARIAN = "vegetarian",
-  GLUTENFREE = "glutenFree",
-  NOPORK = "noPork",
+  VEGAN = "VEGAN",
+  VEGETARIAN = "VEGETARIAN",
+  GLUTENFREE = "GLUTEN_FREE",
+  NOPORK = "NO_PORK",
 }
 
 export enum INTOLERANCES {
-  PEANUT = "peanut",
-  FISH = "fish",
-  ONION = "onion",
-  GARLIC = "garlic",
-  TOMATOE = "tomatoe",
+  PEANUT = "PEANUT",
+  FISH = "FISH",
+  ONION = "ONION",
+  GARLIC = "GARLIC",
+  TOMATOE = "TOMATOE",
 }
 
 export enum CUISINES {
-  ITALIAN = "italian",
-  ASIAN = "asian",
-  GREEK = "greek",
-  SOUTHAMERICAN = "southAmerican",
-  AFRICAN = "african",
-  SPANISH = "spanish",
-  FRENCH = "french",
+  ITALIAN = "ITALIAN",
+  ASIAN = "ASIAN",
+  GREEK = "GREEK",
+  SOUTHAMERICAN = "SOUTH_AMERICAN",
+  AFRICAN = "AFRICAN",
+  SPANISH = "SPANISH",
+  FRENCH = "FRENCH",
 }
 
 export interface User {

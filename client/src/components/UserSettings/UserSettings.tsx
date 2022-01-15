@@ -1,17 +1,24 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Switch from "../Switch/Switch";
-import { cuisinesArr, dietsArr, typesArr } from "./UserSettings.types";
 import { convertObjToArr } from "../../utils/GeneralUtils";
 import "./UserSettings.styles.scss";
 import { useAxios } from "../../utils/AxiosUtil";
 import { updateUserInfo } from "../../utils/user/User.util";
 import { useRecoilState } from "recoil";
 import { userState } from "../../utils/user/User.state";
+import { CUISINES, DIETS, TYPES } from "../../utils/user/User.types";
 
 const UserSettings = () => {
   const axios = useAxios();
   const { t } = useTranslation();
+
+  /* 
+  - preferences are saved as object like { vegan: true, meat: false } 
+  - no easy way to create a type here bc the object is empty
+  at first then it gets populated when user change preferences
+  - they are then converted to array of enums when sent to backend
+  */
   const [diets, setDiets] = useState<any>({});
   const [types, setTypes] = useState<any>({});
   const [cuisines, setCuisines] = useState<any>({});
@@ -78,10 +85,10 @@ const UserSettings = () => {
         {t("general.pages.preferences.type")}
       </h3>
       <div className="switch-inputs-wrapper">
-        {typesArr.map((item) => (
+        {Object.values(TYPES).map((item) => (
           <Switch
             key={item}
-            label={t(`general.pages.preferences.${item}`)}
+            label={t(`general.pages.preferences.${item.toLowerCase()}`)}
             checked={types[item] === undefined ? false : types[item]}
             onChange={() =>
               setTypes((prevState: any) => ({
@@ -97,10 +104,10 @@ const UserSettings = () => {
         {t("general.pages.preferences.diet")}
       </h3>
       <div className="switch-inputs-wrapper">
-        {dietsArr.map((item) => (
+        {Object.values(DIETS).map((item) => (
           <Switch
             key={item}
-            label={t(`general.pages.preferences.${item}`)}
+            label={t(`general.pages.preferences.${item.toLowerCase()}`)}
             checked={diets[item] === undefined ? false : diets[item]}
             onChange={() =>
               setDiets((prevState: any) => ({
@@ -116,10 +123,10 @@ const UserSettings = () => {
         {t("general.pages.preferences.selectFlavors")}
       </h3>
       <div className="switch-inputs-wrapper-1-col">
-        {cuisinesArr.map((cuisine) => (
+        {Object.values(CUISINES).map((cuisine) => (
           <Switch
             key={cuisine}
-            label={t(`general.pages.preferences.${cuisine}`)}
+            label={t(`general.pages.preferences.${cuisine.toLowerCase()}`)}
             checked={
               cuisines[cuisine] === undefined ? false : cuisines[cuisine]
             }

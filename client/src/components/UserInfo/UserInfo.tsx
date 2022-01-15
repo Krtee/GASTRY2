@@ -4,12 +4,12 @@ import PictureEditable from "../PictureEditable/PictureEditable";
 import { UserInfoComponentProps } from "./UserInfo.types";
 import "./UserInfoStyles.scss";
 
-const UserInfo = ({
+const UserInfo: React.FC<UserInfoComponentProps> = ({
   firstName,
   lastName,
   username,
   setIsEditing,
-}: UserInfoComponentProps) => {
+}) => {
   const { t } = useTranslation();
   const onUpload = () => {};
 

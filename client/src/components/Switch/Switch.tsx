@@ -1,7 +1,7 @@
 import { SwitchProps } from "./Switch.types";
 import "./Switch.styles.scss";
 
-const Switch = ({ label, checked, onChange }: SwitchProps) => {
+const Switch: React.FC<SwitchProps> = ({ label, checked, onChange }) => {
   return (
     <label className="form-switch">
       <input type="checkbox" checked={checked} onChange={onChange} />

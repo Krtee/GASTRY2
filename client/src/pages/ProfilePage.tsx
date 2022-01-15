@@ -1,5 +1,4 @@
 import { FC, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import Layout from "../components/layoutComponent/Layout";
 import UserInfo from "../components/UserInfo/UserInfo";
 import UserStats from "../components/UserStats/UserStats";
@@ -12,10 +11,8 @@ import { useRecoilState } from "recoil";
 import { userState } from "../utils/user/User.state";
 import UserSettings from "../components/UserSettings/UserSettings";
 import Posts from "../components/Posts/Posts";
-import { Link } from "react-router-dom";
 
 const ProfilePage: FC<{}> = () => {
-  const { t } = useTranslation();
   const { currentLocation, onLocationChange } = useNavigation(Page.PROFILE);
   const [isEditing, setIsEditing] = useState(false);
   const [user, setUser] = useRecoilState(userState);

@@ -14,6 +14,7 @@ const Searchbar = ({ value, placeholder, onChange }: SearchbarProps) => {
         onChange={(e: ChangeEvent<HTMLInputElement>) =>
           onChange(e.target.value)
         }
+        autoFocus
       />
     </div>
   );

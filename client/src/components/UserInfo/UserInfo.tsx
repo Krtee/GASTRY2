@@ -1,29 +1,22 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import PictureEditable from "../PictureEditable/PictureEditable";
-import { UserInfoComponentProps } from "./UserInfo.types";
 import "./UserInfoStyles.scss";
 
-const UserInfo: React.FC<UserInfoComponentProps> = ({
-  firstName,
-  lastName,
-  username,
-  setIsEditing,
-}) => {
+const UserInfo: React.FC<{}> = () => {
   const { t } = useTranslation();
   const onUpload = () => {};
 
   return (
     <div className="user-info">
       <div className="user-info-header">
-        {/* <div className="user-info-header-background"></div> */}
-        <button
-          className="user-info-interactions-element user-info-edit-btn"
-          onClick={() => setIsEditing(true)}
+        <Link
+          className="user-info-interactions-element user-info-search-btn"
+          to="/edit"
         >
           <span className="user-info-edit-btn-icon user-info-interactions-element-icon"></span>
           {t("general.pages.profile.editProfile")}
-        </button>
+        </Link>
         <PictureEditable
           styles={{ background: "black" }}
           photo={""}

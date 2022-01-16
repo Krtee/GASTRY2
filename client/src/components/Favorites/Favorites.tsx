@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import "./Favorites.stylings.scss";
 import { favsDummyData } from "./Favorites.types";
 
-const Favorites = () => {
+const Favorites: React.FC<{}> = () => {
   const { t } = useTranslation();
 
   const removeFavorite = (id: string) => {

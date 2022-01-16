@@ -10,10 +10,11 @@
     text-align: center;
     color: #f2594b;
     font-weight: 500;
+    text-decoration: none;
   }
 
-  &-label {
-  }
   &-number {
+    font-weight: 900;
+    margin-bottom: 4px;
   }
 }

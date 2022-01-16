@@ -18,8 +18,8 @@ const ProfileNav = () => {
   return (
     <div className="profile-nav">
       <NavLink label={""} to={`${url}`} icon={camera} />
-      <NavLink label={""} to={`${url}/${"favorites"}`} icon={star} />
-      <NavLink label={""} to={`${url}/${"settings"}`} icon={settings} />
+      <NavLink label={""} to={`${url}/favorites`} icon={star} />
+      <NavLink label={""} to={`${url}/settings`} icon={settings} />
     </div>
   );
 };

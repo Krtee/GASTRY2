@@ -23,7 +23,13 @@
         "followers": "Followers",
         "followings": "Followings",
         "editProfile": "Edit profile",
-        "searchFriends": "Search friends"
+        "searchFriends": "Search friends",
+        "firstName": "First name",
+        "lastName": "Last name",
+        "username": "Username",
+        "bio": "Bio",
+        "editPic": "Edit picture",
+        "saveChanges": "Save changes"
       },
       "search": {
         "findNameOrEmail": "Find name or email",

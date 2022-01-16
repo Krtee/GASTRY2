@@ -28,7 +28,13 @@
         "followers": "Abonennten",
         "followings": "Abonniert",
         "editProfile": "Profil bearbeiten",
-        "searchFriends": "Freunde suchen"
+        "searchFriends": "Freunde suchen",
+        "firstName": "Vorname",
+        "lastName": "Nachname",
+        "username": "Benutzername",
+        "bio": "Biografie",
+        "editPic": "Profilbild bearbeiten",
+        "saveChanges": "Änderungen speichern"
       },
       "search": {
         "findNameOrEmail": "Name oder E-Mail suchen",

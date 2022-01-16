@@ -11,6 +11,7 @@ import { useRecoilState } from "recoil";
 import { userState } from "../utils/user/User.state";
 import UserSettings from "../components/UserSettings/UserSettings";
 import Posts from "../components/Posts/Posts";
+import Favorites from "../components/Favorites/Favorites";
 
 const ProfilePage: FC<{}> = () => {
   const { currentLocation, onLocationChange } = useNavigation(Page.PROFILE);
@@ -55,7 +56,7 @@ const ProfilePage: FC<{}> = () => {
               <UserSettings />
             </Route>
             <Route path={`${url}/favorites`}>
-              <Posts />
+              <Favorites />
             </Route>
           </Switch>
         </div>

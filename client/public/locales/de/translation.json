@@ -3,7 +3,9 @@
   "general": {
     "buttons": {
       "logout": "Ausloggen",
-      "login": "Einloggen"
+      "login": "Einloggen",
+      "add": "Hinzufügen",
+      "added": "Hinzugefügt"
     },
     "pages": {
       "MATCHING": "Matchen",

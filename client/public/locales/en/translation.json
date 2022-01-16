@@ -1,6 +1,12 @@
 {
   "test": "working!",
   "general": {
+    "buttons": {
+      "logout": "Logout",
+      "login": "Login",
+      "add": "Add",
+      "added": "Added"
+    },
     "pages": {
       "MATCHING": "Matching",
       "register": {

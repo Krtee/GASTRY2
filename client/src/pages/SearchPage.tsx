@@ -96,7 +96,9 @@ const SearchPage: FC<{}> = () => {
           <div className="search-page-search-results">
             {searchValue.length > 2 &&
               results
-                .filter((result: any) => result.email.includes(searchValue))
+                .filter((result: any) =>
+                  result.email.toLowerCase().includes(searchValue)
+                )
                 ?.map((result: any) => (
                   <div
                     key={result._id}

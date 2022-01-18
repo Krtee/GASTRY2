@@ -20,10 +20,7 @@ export const randomMealsSelector = selector<Meal[]>({
       parseInt(process.env.REACT_APP_DEFAULT_MEAL_COUNT || "15")
     );
 
-    if (randomMeals) {
-      return randomMeals;
-    }
-    return [];
+    return randomMeals || [];
   },
 });
 

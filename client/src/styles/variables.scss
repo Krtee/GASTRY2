@@ -1,3 +1,4 @@
+// auto generated colors
 $color-main: #f2594b;
 $color-background-main: #f9eee1;
 $color-text-main: #fff;
@@ -11,7 +12,15 @@ $color-textfield-main: #fff;
 $color-textfield-hover: #fff;
 $color-textfield-inactive: #fff;
 
+// yumatch colors
 $color-border: #f2594b;
 
 $yumatch-red: #bb002d;
 $button-default: #f2594b;
+$primary-background-color: #fca262;
+$primary-button-background: linear-gradient(
+  90deg,
+  $yumatch-red -7.87%,
+  $button-default 52.42%,
+  #d63627 109.06%
+);

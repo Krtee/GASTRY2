@@ -21,7 +21,9 @@ import io.foodtinder.dataservice.constants.MealArea;
 import io.foodtinder.dataservice.model.GeoLocation;
 import io.foodtinder.dataservice.model.Meal;
 import io.foodtinder.dataservice.model.requests.MealWrapper;
+import io.foodtinder.dataservice.model.requests.google.GoogleMapsResponseRestaurant;
 import io.foodtinder.dataservice.model.requests.google.GoogleMapsResponseWrapper;
+import io.foodtinder.dataservice.model.requests.google.GoogleMapsSingleResultWrapper;
 import io.foodtinder.dataservice.repositories.MealRepository;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
@@ -146,6 +148,14 @@ public class RestUtils {
 
     }
 
+    /**
+     * fetch restaurant to given location and keywords
+     * 
+     * @param location
+     * @param userLang
+     * @param keyword
+     * @return
+     */
     public GoogleMapsResponseWrapper findRestaurants(GeoLocation location, String userLang, String keyword) {
         log.info("Start fetching all restaurants for keywords");
 
@@ -162,6 +172,29 @@ public class RestUtils {
                 .onStatus(status -> status.value() == HttpStatus.NOT_FOUND.value(),
                         response -> Mono.empty())
                 .bodyToMono(GoogleMapsResponseWrapper.class).block();
+    }
+
+    /**
+     * fetch all contact data for restaurant
+     * 
+     * @param restaurantId place_id of restaurant
+     * @return {@link GoogleMapsResponseRestaurant}
+     */
+    public GoogleMapsResponseRestaurant getRestaurantInfo(String restaurantId) {
+        log.info("start fetching restaurant info");
+
+        GoogleMapsSingleResultWrapper resp = mapsServiceWebClient.get()
+                .uri(uriBuilder -> uriBuilder.path("/maps/api/place/details/json")
+                        .queryParam("fields",
+                                "address_component,business_status,formatted_address,geometry,name,place_id,url,vicinity,international_phone_number,formatted_phone_number,opening_hours,website")
+                        .queryParam("place_id", restaurantId)
+                        .queryParam("key", "AIzaSyAJt9waW0hVfZ5bSufYZEGGPNYn6zAviq8")
+                        .build())
+                .retrieve()
+                .onStatus(status -> status.value() == HttpStatus.NOT_FOUND.value(),
+                        response -> Mono.empty())
+                .bodyToMono(GoogleMapsSingleResultWrapper.class).block();
+        return resp.getResult();
     }
 
     // This method returns filter function which will log request data

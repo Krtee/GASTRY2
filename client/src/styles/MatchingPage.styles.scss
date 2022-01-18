@@ -100,8 +100,8 @@
   }
 
   .back-button {
-    top: -5px;
-    left: -5px;
+    top: 16px;
+    left: 16px;
     position: absolute;
     background-image: linear-gradient(
       to right,
@@ -120,6 +120,13 @@
 .matching-loading {
   background-color: #f9eee1;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  color: #bb002d;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 28px;
+  line-height: 34px;
+  text-align: center;
 }

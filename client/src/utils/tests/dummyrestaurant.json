@@ -1,0 +1,239 @@
+{
+    "id": "61e2f652b41e2238437ca06c",
+    "userId": "",
+    "createdAt": "2022-01-15T16:28:56.023",
+    "updatedAt": "2022-01-15T16:29:06.429675",
+    "matchedMeals": [
+        {
+            "idMeal": "52971",
+            "strMeal": "Kafteji",
+            "strDrinkAlternate": null,
+            "strCategory": "VEGETARIAN",
+            "strArea": "TUNISIAN",
+            "strInstructions": null,
+            "strMealThumb": "https://www.themealdb.com/images/media/meals/1bsv1q1560459826.jpg",
+            "strTags": null,
+            "strYoutube": null
+        },
+        {
+            "idMeal": "52907",
+            "strMeal": "Duck Confit",
+            "strDrinkAlternate": null,
+            "strCategory": "MISCELLANEOUS",
+            "strArea": "FRENCH",
+            "strInstructions": null,
+            "strMealThumb": "https://www.themealdb.com/images/media/meals/wvpvsu1511786158.jpg",
+            "strTags": null,
+            "strYoutube": null
+        },
+        {
+            "idMeal": "52885",
+            "strMeal": " Bubble & Squeak",
+            "strDrinkAlternate": null,
+            "strCategory": "PORK",
+            "strArea": "BRITISH",
+            "strInstructions": null,
+            "strMealThumb": "https://www.themealdb.com/images/media/meals/xusqvw1511638311.jpg",
+            "strTags": null,
+            "strYoutube": null
+        },
+        {
+            "idMeal": "52940",
+            "strMeal": "Brown Stew Chicken",
+            "strDrinkAlternate": null,
+            "strCategory": "CHICKEN",
+            "strArea": "JAMAICAN",
+            "strInstructions": null,
+            "strMealThumb": "https://www.themealdb.com/images/media/meals/sypxpx1515365095.jpg",
+            "strTags": null,
+            "strYoutube": null
+        },
+        {
+            "idMeal": "52934",
+            "strMeal": "Chicken Basquaise",
+            "strDrinkAlternate": null,
+            "strCategory": "CHICKEN",
+            "strArea": "FRENCH",
+            "strInstructions": null,
+            "strMealThumb": "https://www.themealdb.com/images/media/meals/wruvqv1511880994.jpg",
+            "strTags": null,
+            "strYoutube": null
+        },
+        {
+            "idMeal": "52925",
+            "strMeal": "Split Pea Soup",
+            "strDrinkAlternate": null,
+            "strCategory": "SIDE",
+            "strArea": "CANADIAN",
+            "strInstructions": null,
+            "strMealThumb": "https://www.themealdb.com/images/media/meals/xxtsvx1511814083.jpg",
+            "strTags": null,
+            "strYoutube": null
+        },
+        {
+            "idMeal": "52958",
+            "strMeal": "Peanut Butter Cookies",
+            "strDrinkAlternate": null,
+            "strCategory": "DESSERT",
+            "strArea": "AMERICAN",
+            "strInstructions": null,
+            "strMealThumb": "https://www.themealdb.com/images/media/meals/1544384070.jpg",
+            "strTags": null,
+            "strYoutube": null
+        },
+        {
+            "idMeal": "52772",
+            "strMeal": "Teriyaki Chicken Casserole",
+            "strDrinkAlternate": null,
+            "strCategory": "CHICKEN",
+            "strArea": "JAPANESE",
+            "strInstructions": null,
+            "strMealThumb": "https://www.themealdb.com/images/media/meals/wvpsxx1468256321.jpg",
+            "strTags": null,
+            "strYoutube": null
+        },
+        {
+            "idMeal": "52847",
+            "strMeal": "Pork Cassoulet",
+            "strDrinkAlternate": null,
+            "strCategory": "PORK",
+            "strArea": "FRENCH",
+            "strInstructions": null,
+            "strMealThumb": "https://www.themealdb.com/images/media/meals/wxuvuv1511299147.jpg",
+            "strTags": null,
+            "strYoutube": null
+        },
+        {
+            "idMeal": "53033",
+            "strMeal": "Japanese gohan rice",
+            "strDrinkAlternate": null,
+            "strCategory": "SIDE",
+            "strArea": "JAPANESE",
+            "strInstructions": null,
+            "strMealThumb": "https://www.themealdb.com/images/media/meals/kw92t41604181871.jpg",
+            "strTags": null,
+            "strYoutube": null
+        },
+        {
+            "idMeal": "52836",
+            "strMeal": "Seafood fideuà",
+            "strDrinkAlternate": null,
+            "strCategory": "SEAFOOD",
+            "strArea": "SPANISH",
+            "strInstructions": null,
+            "strMealThumb": "https://www.themealdb.com/images/media/meals/wqqvyq1511179730.jpg",
+            "strTags": null,
+            "strYoutube": null
+        },
+        {
+            "idMeal": "52822",
+            "strMeal": "Toad In The Hole",
+            "strDrinkAlternate": null,
+            "strCategory": "PORK",
+            "strArea": "BRITISH",
+            "strInstructions": null,
+            "strMealThumb": "https://www.themealdb.com/images/media/meals/ytuvwr1503070420.jpg",
+            "strTags": null,
+            "strYoutube": null
+        },
+        {
+            "idMeal": "53050",
+            "strMeal": "Ayam Percik",
+            "strDrinkAlternate": null,
+            "strCategory": "CHICKEN",
+            "strArea": "MALAYSIAN",
+            "strInstructions": null,
+            "strMealThumb": "https://www.themealdb.com/images/media/meals/020z181619788503.jpg",
+            "strTags": null,
+            "strYoutube": null
+        }
+    ],
+    "unmatchedMeals": null,
+    "matchedRestaurants": [
+        {
+            "restaurant": {
+                "place_id": "ChIJWfPhnUzbmUcRcec8rrszYSs",
+                "business_status": "OPERATIONAL",
+                "name": "Bistro Einstein",
+                "opening_hours": {
+                    "open_now": true,
+                    "weekday_text": null,
+                    "periods": null
+                },
+                "photos": [
+                    {
+                        "height": 2862,
+                        "width": 4288,
+                        "photo_reference": "Aap_uEA0Uar6wbXQjSn67RIrEsGfzb5c616W2jDQPoetB3omLgm1dc-s_-y7ykYr1FE7qrXtg-syZK5ASCakmeFdoIZSlGTcW1OZsTMZ_tcZMR_q5gw8Z7jMauKXIO_PpvDf8uqSp8VgPsDcPUKTCsqN5KB0bOQXPo68-Cd-PEVZK2uPKBPq"
+                    }
+                ],
+                "price_level": 2,
+                "rating": 4,
+                "user_ratings_total": 200,
+                "vicinity": "Wilhelmspl. 5, Stuttgart",
+                "website": null,
+                "reviews": null,
+                "url": null,
+                "address_components": null
+            },
+            "index": 0
+        },
+        {
+            "restaurant": {
+                "place_id": "ChIJe7uBjRjbmUcRVIadPgRJ5Mo",
+                "business_status": "OPERATIONAL",
+                "name": "Burgerheart Stuttgart",
+                "opening_hours": {
+                    "open_now": true,
+                    "weekday_text": null,
+                    "periods": null
+                },
+                "photos": [
+                    {
+                        "height": 1667,
+                        "width": 2500,
+                        "photo_reference": "Aap_uEDdtHT6WPziVhobraPA_8Fw7BNtTkgp0CFElOMgJS1nzoAYYooRbWeAEHSP7O20vFx66HC9STNJxF_NFvmo_RzpF3y-dJibLslhg-M2jT-s_SK4CZMoHygTilAVFVqjnCa44GIKP7xV-mUgs2afVLl0vlvUl4JakK67k2lxKULgjaLt"
+                    }
+                ],
+                "price_level": 2,
+                "rating": 3.8,
+                "user_ratings_total": 1140,
+                "vicinity": "Tübinger Str. 8, Stuttgart",
+                "website": null,
+                "reviews": null,
+                "url": null,
+                "address_components": null
+            },
+            "index": 1
+        },
+        {
+            "restaurant": {
+                "place_id": "ChIJFz2II0nbmUcRF7RXLeBtKMs",
+                "business_status": "OPERATIONAL",
+                "name": "Triple B - Beef Burger Brothers",
+                "opening_hours": {
+                    "open_now": true,
+                    "weekday_text": null,
+                    "periods": null
+                },
+                "photos": [
+                    {
+                        "height": 3024,
+                        "width": 4032,
+                        "photo_reference": "Aap_uED4wL1VsVqc6_ToK1bAy2QKbOEB-gJ6cWp6gc_fLD8OyqWwVAxlBgDLxpZHl4n5Wd1k3szS-MnkGzkajfulcn9E1P7iLCZR6OfYa0jdGfOraYWiEp8UX1zdZujFr4TGuaim5U9YFLiPzKF531zhiYpV9x3x4fsK5eio7ZqRH1NcGsY"
+                    }
+                ],
+                "price_level": 2,
+                "rating": 4.5,
+                "user_ratings_total": 2112,
+                "vicinity": "Marienstraße 28, Stuttgart",
+                "website": null,
+                "reviews": null,
+                "url": null,
+                "address_components": null
+            },
+            "index": 2
+        }
+    ],
+    "partOfGroup": false
+}

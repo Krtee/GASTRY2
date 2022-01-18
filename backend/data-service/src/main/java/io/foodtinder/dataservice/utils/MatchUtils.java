@@ -21,6 +21,7 @@ import io.foodtinder.dataservice.model.requests.google.GoogleMapsResponseRestaur
 import io.foodtinder.dataservice.model.requests.google.GoogleMapsResponseWrapper;
 import io.foodtinder.dataservice.repositories.GoogleRepository;
 import io.foodtinder.dataservice.repositories.MatchRepository;
+import io.foodtinder.dataservice.repositories.RestaurantRepository;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -32,6 +33,9 @@ public class MatchUtils {
 
     @Autowired
     private GoogleRepository googleRepo;
+
+    @Autowired
+    private RestaurantRepository restaurantRepo;
 
     @Autowired
     private RestUtils restUtils;
@@ -58,8 +62,10 @@ public class MatchUtils {
          */
         for (Match match : matches) {
             for (Meal matchedMeal : match.getMatchedMeals()) {
-                String matchedArea = matchedMeal.getStrArea().name().toLowerCase();
+                log.info("check meal {}, from {}, which is {}, tags: {}", matchedMeal.getStrMeal(),
+                        matchedMeal.getStrArea(), matchedMeal.getStrCategory(), matchedMeal.getStrTags());
                 if (matchedMeal.getStrArea() != null) {
+                    String matchedArea = matchedMeal.getStrArea().name().toLowerCase();
                     Integer indexOfArea = area.get(matchedArea);
                     if (indexOfArea == null) {
                         area.put(matchedArea, 1);
@@ -69,7 +75,6 @@ public class MatchUtils {
                 }
 
                 if (matchedMeal.getStrCategory() != null) {
-
                     String matchedCategory = matchedMeal.getStrCategory().name().toLowerCase();
                     Integer indexOfCategory = category.get(matchedCategory);
                     if (indexOfCategory == null) {
@@ -174,17 +179,29 @@ public class MatchUtils {
          */
         List<GoogleRespSave> googleRespSaveList = googleRepo.findFirstByAreaAndCategoryAndTag(maxValues.get("area"),
                 maxValues.get("category"), maxValues.get("tag"));
+
         if (googleRespSaveList.size() < 0
                 && googleRespSaveList.get(0) != null
-                && googleRespSaveList.get(0).getGoogleResp() != null
-                && googleRespSaveList.get(0).getGoogleResp().getResults() != null) {
+                && googleRespSaveList.get(0).getRestaurants() != null) {
             for (GoogleRespSave save : googleRespSaveList) {
                 if (generalUtils.distance(save.getLocation().getLatitude(), location.getLatitude(),
                         save.getLocation().getLongitude(), location.getLongitude()) > 2000) {
-                    return mapGoogleRestaurantsToWrapper(save.getGoogleResp().getResults()
-                            .stream()
-                            .limit(3)
-                            .collect(Collectors.toList()));
+                    log.info("found saved response");
+
+                    List<GoogleMapsResponseRestaurant> restaurantsToReturn = new ArrayList<GoogleMapsResponseRestaurant>();
+
+                    int indexOfRestaurantId = 0;
+                    while (restaurantsToReturn.size() <= 10) {
+                        GoogleMapsResponseRestaurant tempRestaurant = restaurantRepo
+                                .findByPlaceId(save.getRestaurants().get(indexOfRestaurantId)).orElse(null);
+
+                        if (tempRestaurant != null) {
+                            restaurantsToReturn
+                                    .add(tempRestaurant);
+                        }
+                        indexOfRestaurantId++;
+                    }
+                    return mapGoogleRestaurantsToWrapper(restaurantsToReturn);
                 }
             }
         }
@@ -197,18 +214,33 @@ public class MatchUtils {
                 maxValues.get("area") + " " + maxValues.get("category") + " " + maxValues.get("tag"));
 
         googleRespSave = new GoogleRespSave();
-        googleRespSave.setGoogleResp(newGoogleResp);
+        googleRespSave.setRestaurants(newGoogleResp.getResults()
+                .stream()
+                .map(GoogleMapsResponseRestaurant::getPlace_id)
+                .collect(Collectors.toList()));
         googleRespSave.setArea(maxValues.get("area"));
         googleRespSave.setCategory(maxValues.get("category"));
         googleRespSave.setTag(maxValues.get("tag"));
         googleRespSave.setLocation(location);
-
         googleRepo.save(googleRespSave);
 
+        List<GoogleMapsResponseRestaurant> restaurantsToSave = new ArrayList<GoogleMapsResponseRestaurant>();
+
+        for (GoogleMapsResponseRestaurant restaurantToSave : newGoogleResp.getResults()) {
+            GoogleMapsResponseRestaurant foundRestaurant = restaurantRepo.findByPlaceId(restaurantToSave.getPlace_id())
+                    .orElse(null);
+            if (foundRestaurant == null) {
+                log.info("saving restaurant {}", restaurantToSave.getName());
+                restaurantsToSave.add(restaurantToSave);
+            }
+            ;
+        }
+        restaurantRepo.saveAll(restaurantsToSave);
+
         return mapGoogleRestaurantsToWrapper(
-                googleRespSave.getGoogleResp().getResults()
+                newGoogleResp.getResults()
                         .stream()
-                        .limit(3)
+                        .limit(10)
                         .collect(Collectors.toList()));
 
     }

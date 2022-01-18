@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import { useRecoilValue } from "recoil";
+import { LayoutProps } from "../../components/LayoutComponent/Layout.types";
 import { userState } from "../user/User.state";
 import { UserRole } from "../user/User.types";
 
@@ -10,10 +11,10 @@ import { UserRole } from "../user/User.types";
  * <<CAUTION>> THE ORDER OF THIS ENUMS DEFINES THE NAVIGATION <<CAUTION>>
  */
 export enum Page {
+  FEED = "FEED",
   MATCHING = "MATCHING",
   PROFILE = "PROFILE",
 }
-
 
 export interface NavigationPage {
   title: string;
@@ -21,18 +22,17 @@ export interface NavigationPage {
   route: string;
 }
 
+export interface NavigationHook extends LayoutProps {
+  onLocationChange(location: number, props?: any): void;
+  passedProps?: any;
+}
+
 /**
  * custom hook for navigation
  * @param location current Page
  * @returns
  */
-export const useNavigation = (
-  location?: Page
-): {
-  currentLocation?: number;
-  onLocationChange(location: number, props?: any): void;
-  passedProps?: any;
-} => {
+export const useNavigation = (location?: Page): NavigationHook => {
   const { t } = useTranslation();
   const [currentLocation, setCurrentLocation] = useState<number>();
   const user = useRecoilValue(userState);
@@ -41,12 +41,17 @@ export const useNavigation = (
   const history = useHistory();
   const allNavigationPages: NavigationPage[] = [
     {
-      title: t(`general.pages.matching`),
+      title: t(`general.navigation.feed`),
+      page: Page.FEED,
+      route: "/feed",
+    },
+    {
+      title: t(`general.navigation.matching`),
       page: Page.MATCHING,
       route: "/matching",
     },
     {
-      title: t(`general.pages.profile`),
+      title: t(`general.navigation.profile`),
       page: Page.PROFILE,
       route: "/profile",
     },
@@ -97,10 +102,14 @@ export const useNavigation = (
 
   return {
     currentLocation,
+    changeLocation: (location) => setCurrentLocation(location),
     onLocationChange: (location, props) => {
       props && setPassedProps(props);
       setCurrentLocation(location);
     },
+    navigationElements: allNavigationPages.map((page) => ({
+      title: page.title,
+    })),
     passedProps: history.location.state,
   };
 };

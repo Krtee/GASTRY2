@@ -3,10 +3,17 @@
   "general": {
     "buttons": {
       "logout": "Ausloggen",
-      "login": "Einloggen"
+      "login": "Einloggen",
+      "showmore":"Mehr anzeigen",
+      "showless":"Weniger anzeigen"
+    },
+    "navigation":{
+      "feed":"Feed",
+      "profile":"profile",
+      "matching":"Match"
     },
     "pages": {
-      "MATCHING": "Matchen",
+      "matching": "Matchen",
       "register": {
         "header": "Registriere dich",
         "email": "E-Mail",
@@ -18,7 +25,20 @@
         "REGISTER_ERROR": "Es ist ein Fehler beim Registrieren aufgetreten, bitte versuche es nochmal",
         "REGISTER_USER_EXISTS_MAIL": "Ein User mit dieser E-Mail existiert bereits",
         "REGISTER_USER_EXISTS_USERNAME": "Der Username ist bereits vergeben"
+      },
+      "matchfound":{
+        "title":"Hier sind deine 3 Matches:"
       }
+    }
+  },
+  "match":{
+    "button":{
+      "rematch":"Erneut matchen"
+    },
+    "loading":{
+      "top":"Es ist ein ...",
+      "center":"YUMMMMatch",
+      "bottom":"Und die besten Restaurants in deiner Nähe sind..."
     }
   }
 }

@@ -1,11 +1,10 @@
 import { useKeycloak } from "@react-keycloak/web";
 import { FC, useEffect } from "react";
-import { useTranslation } from "react-i18next/";
 import { useRecoilState } from "recoil";
 import { useAxios } from "../../utils/AxiosUtil";
 import { userState } from "../../utils/user/User.state";
 import { loadSingleUser } from "../../utils/user/User.util";
-import ButtonComponent from "../ButtonComponent/ButtonComponent";
+import IconButtonComponent from "../IconButtonComponent/IconButtonComponent";
 import { LayoutProps } from "./Layout.types";
 import "./LayoutStyles.scss";
 
@@ -15,13 +14,11 @@ const Layout: FC<LayoutProps> = ({
   changeLocation,
   currentLocation,
   header = "",
-  hideHeader = false,
   hideBar = false,
   className,
 }) => {
   const { axios } = useAxios();
   const [user, setUser] = useRecoilState(userState);
-  const { t } = useTranslation();
   const { keycloak, initialized } = useKeycloak();
 
   /**
@@ -44,20 +41,21 @@ const Layout: FC<LayoutProps> = ({
 
   return (
     <div id="layout-component">
-      {!hideHeader && (
+      {!!header && (
         <div id="layout-component-header">
-          <h1>{header}</h1>
-
-          <ButtonComponent
-            value={
-              user?.username
-                ? t("general.buttons.logout")
-                : t("general.buttons.login")
-            }
-            onClick={
-              user?.username ? () => keycloak.logout() : () => keycloak.login()
-            }
-          />
+          {typeof header !== "string" && header.leftIconButton ? (
+            <IconButtonComponent filled {...header.leftIconButton} />
+          ) : (
+            <span className="layout-component-header__button-placeholder" />
+          )}
+          <h1 className={"layout-component-header__title"}>
+            {typeof header === "string" ? header : header.title}
+          </h1>
+          {typeof header !== "string" && header.rightIconButton ? (
+            <IconButtonComponent filled {...header.rightIconButton} />
+          ) : (
+            <span className="layout-component-header__button-placeholder" />
+          )}
         </div>
       )}
 
@@ -68,11 +66,10 @@ const Layout: FC<LayoutProps> = ({
       {!hideBar && (
         <div id="layout-component-navigation-bar">
           {navigationElements &&
-            changeLocation &&
             navigationElements.map((navigation, index) => (
               <div
                 key={index}
-                onClick={() => changeLocation(index)}
+                onClick={() => changeLocation?.(index)}
                 className={
                   currentLocation === index
                     ? "navigation-wrapper disabled"

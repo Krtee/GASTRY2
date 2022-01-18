@@ -35,7 +35,7 @@ const RegisterPage: FC<RegisterPageProps> = () => {
   }, [keycloak, axios]);
 
   return (
-    <Layout hideBar hideHeader>
+    <Layout hideBar>
       <div className="register-page-wrapper">
         <div className="header-wrapper">
           <h2 className="header">yumatch</h2>

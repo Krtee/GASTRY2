@@ -15,7 +15,4 @@ export const fetchRandomMeals = (
   axios
     .get("/data/meal/random", { params: { count: count } })
     .then((res) => res.data as Meal[])
-    .catch(() => {
-      console.log("dang");
-      return [];
-    });
+    .catch(() => []);

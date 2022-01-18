@@ -15,8 +15,6 @@ import {
 export const latestMatchSelector = selector<Match>({
   key: "latestMatchSelector",
   get: async ({ get }) => {
-    console.log("get match");
-
     const { instance: axios } = get(axiosState);
     const user = get(userState);
     if (!axios || axios === null || !user) {
@@ -31,7 +29,6 @@ export const latestMatchSelector = selector<Match>({
         return newMatchResp;
       }
     }
-
     return createEmptyMatch("");
   },
 });

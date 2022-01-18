@@ -2,7 +2,7 @@ import gsap from "gsap";
 import { FC, useEffect, useRef } from "react";
 
 interface SwipableCardProps {
-  onSwipe?: Function;
+  onSwipe?(direction: "left" | "right" | "up" | "down" | "none"): void;
   className?: string;
   detectingSize?: number;
   throwLimit?: number;

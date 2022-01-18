@@ -1,6 +1,6 @@
 export enum UserRole {
   ADMIN = "ADMIN",
-  USER = "USER"
+  USER = "USER",
 }
 
 export interface User {
@@ -9,6 +9,6 @@ export interface User {
   lastName: string;
   username: string;
   email: string;
-  role: UserRole | string;
+  role: UserRole;
   password?: string;
 }

@@ -1,0 +1,125 @@
+.matching-page {
+  .swipeable-card-container {
+    position: relative;
+    .container {
+      top: 5%;
+      left: 0;
+      right: 0;
+      margin-left: auto;
+      margin-right: auto;
+      position: absolute;
+      text-align: center;
+      color: white;
+      width: 95%;
+      height: 80%;
+
+      img {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+        border-radius: 25px;
+      }
+    }
+    height: 75%;
+  }
+  .button-big {
+    height: 55px;
+    width: 55px;
+    background-color: #d67278;
+    border-radius: 50%;
+    display: inline-block;
+    margin: auto;
+  }
+
+  .button-small {
+    border: 2px solid #fca262;
+    height: 45px;
+    width: 45px;
+    border-radius: 50%;
+    display: inline-block;
+    margin: auto;
+  }
+
+  .matching-buttons {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .button-center {
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 17px;
+    display: block;
+    height: 40px;
+    width: 40px;
+  }
+
+  .button-small-style {
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 12px;
+    padding-bottom: 6px;
+    display: block;
+    height: 35px;
+    width: 35px;
+  }
+
+  .progressBar {
+    position: absolute;
+    width: 100%;
+    height: 30px;
+    background: rgba(242, 89, 75, 0.5);
+    overflow: hidden;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    bottom: 0px;
+    left: 0px;
+  }
+
+  .progressBarStyle {
+    position: absolute;
+    left: 0;
+    background-image: linear-gradient(
+      to right,
+      rgba(187, 0, 45, 1),
+      rgba(242, 89, 75, 1),
+      rgba(214, 54, 39, 1)
+    );
+    height: 100%;
+    border-bottom-right-radius: 25px;
+    border-top-right-radius: 25px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    transition: 0.5s ease;
+  }
+
+  .progressBarText {
+    line-height: 30px;
+    vertical-align: middle;
+    bottom: 0px;
+  }
+
+  .back-button {
+    top: -5px;
+    left: -5px;
+    position: absolute;
+    background-image: linear-gradient(
+      to right,
+      rgba(232, 106, 95, 1),
+      rgba(242, 89, 75, 1),
+      rgba(214, 54, 39, 1)
+    );
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+.matching-loading {
+  background-color: #f9eee1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

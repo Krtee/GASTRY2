@@ -6,6 +6,7 @@ export interface LayoutProps {
   header?: string;
   hideHeader?: boolean;
   hideBar?: boolean;
+  className?: string;
 }
 export interface NavigationElement {
   title: string;

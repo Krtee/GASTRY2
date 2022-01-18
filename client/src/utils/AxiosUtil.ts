@@ -1,6 +1,6 @@
 import { useKeycloak } from "@react-keycloak/web";
-import { useState, useEffect } from "react";
 import axios, { AxiosInstance } from "axios";
+import { useEffect, useState } from "react";
 
 /**
  * An enum containing different types of Responses
@@ -19,25 +19,30 @@ export enum ResponseTypes {
  * the keycloak instance.
  */
 export const useAxios = () => {
-  const { keycloak, initialized } = useKeycloak();
+  const { keycloak, initialized: authInitialized } = useKeycloak();
   const [axiosInstance, setAxiosInstance] = useState({});
   const baseURL = process.env.REACT_APP_SERVICE_URL;
-
+  const [initialized, setInitialized] = useState(false);
   useEffect(() => {
     const instance = axios.create({
       baseURL,
       headers: {
-        Authorization: initialized ? `Bearer ${keycloak.token}` : undefined,
+        Authorization: authInitialized ? `Bearer ${keycloak.token}` : undefined,
         "Content-Type": "application/json;charset=UTF-8",
       },
     });
 
     setAxiosInstance({ instance });
+    setInitialized(true);
 
     return () => {
       setAxiosInstance({});
+      setInitialized(false);
     };
-  }, [baseURL, initialized, keycloak, keycloak.token]);
+  }, [baseURL, authInitialized, keycloak, keycloak.token]);
 
-  return (axiosInstance as any).instance as AxiosInstance;
+  return {
+    axios: (axiosInstance as any).instance as AxiosInstance,
+    initialized: initialized,
+  };
 };

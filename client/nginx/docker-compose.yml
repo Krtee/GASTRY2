@@ -1,0 +1,27 @@
+version: "3.7"
+services:
+    nginx:
+        image: nginx:1.19.6-alpine
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - ./client:/client/
+            - ./bueffelundkoi:/bueffelundkoi/
+            - ./log:/log/
+            - ./well-known-folder/:/well-known-folder/
+            - /etc/letsencrypt/:/ssl/
+            - ./default.conf:/etc/nginx/conf.d/default.conf
+        restart: always
+        networks:
+            - yumatchnet
+            - yumatch-user-internal
+            - bueffelundkoi-next-network
+
+networks:
+    yumatchnet:
+        name: yumatch_network
+    yumatch-user-internal:
+        name: yumatch_user_int
+    bueffelundkoi-next-network:
+        name: bueffelundkoi-next-network

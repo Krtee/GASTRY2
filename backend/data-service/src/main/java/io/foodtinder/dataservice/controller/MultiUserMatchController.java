@@ -79,7 +79,7 @@ public class MultiUserMatchController {
      * @return 200 when match found, 404 when not found
      * @author Minh
      */
-    @GetMapping(value = "/id")
+    @GetMapping(value = "/singlematch/id")
     public ResponseEntity<MultiUserMatch> getMultiUserMatchBySingleMatchId(@RequestParam String matchId) {
         log.info("Looking for match with id: {}", matchId);
         MultiUserMatch multiUserMatch = multiUserMatchRepo.findByMatches(matchId).get(0);

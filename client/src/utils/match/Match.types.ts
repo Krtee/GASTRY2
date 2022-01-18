@@ -2,7 +2,7 @@ import { Meal } from "../meal/Meal.types";
 
 export interface Match {
   id?: string;
-  userId: string;
+  userId?: string;
   createdAt: Date;
   updatedAt: Date;
   matchedMeals: Meal[];

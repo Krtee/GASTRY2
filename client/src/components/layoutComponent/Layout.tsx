@@ -17,8 +17,9 @@ const Layout: FC<LayoutProps> = ({
   header = "",
   hideHeader = false,
   hideBar = false,
+  className,
 }) => {
-  const axios = useAxios();
+  const { axios } = useAxios();
   const [user, setUser] = useRecoilState(userState);
   const { t } = useTranslation();
   const { keycloak, initialized } = useKeycloak();
@@ -28,7 +29,7 @@ const Layout: FC<LayoutProps> = ({
    * @author Domenico Ferrari
    */
   useEffect(() => {
-    if (initialized && keycloak.authenticated && axios && !user.username)
+    if (initialized && keycloak.authenticated && axios && !user?.username) {
       keycloak
         .loadUserProfile()
         .then((profile) =>
@@ -36,6 +37,8 @@ const Layout: FC<LayoutProps> = ({
             (serverUser) => setUser(serverUser)
           )
         );
+    }
+
     // eslint-disable-next-line
   }, [keycloak, axios, user]);
 
@@ -47,18 +50,20 @@ const Layout: FC<LayoutProps> = ({
 
           <ButtonComponent
             value={
-              user.username
+              user?.username
                 ? t("general.buttons.logout")
                 : t("general.buttons.login")
             }
             onClick={
-              user.username ? () => keycloak.logout() : () => keycloak.login()
+              user?.username ? () => keycloak.logout() : () => keycloak.login()
             }
           />
         </div>
       )}
 
-      <div id="layout-component-content">{children}</div>
+      <div id="layout-component-content" className={className || ""}>
+        {children}
+      </div>
 
       {!hideBar && (
         <div id="layout-component-navigation-bar">

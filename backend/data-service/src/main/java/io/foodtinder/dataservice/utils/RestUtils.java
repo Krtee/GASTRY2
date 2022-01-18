@@ -111,9 +111,10 @@ public class RestUtils {
             log.info("About to save meals to repository");
 
             for (Meal meal : mealsForCategory.getMeals()) {
+                Meal foundMeal = mealrepository.getMealByIdMeal(meal.getIdMeal()).orElse(meal);
 
-                meal.setStrCategory(category);
-                allFetchedMeals.add(meal);
+                foundMeal.setStrCategory(category);
+                allFetchedMeals.add(foundMeal);
             }
             log.info("Finished saving all meals");
         }
@@ -135,9 +136,9 @@ public class RestUtils {
             log.info("About to save meals to repository");
 
             for (Meal meal : mealsForArea.getMeals()) {
-
-                meal.setStrArea(area);
-                allFetchedMeals.add(meal);
+                Meal foundMeal = mealrepository.getMealByIdMeal(meal.getIdMeal()).orElse(meal);
+                foundMeal.setStrArea(area);
+                allFetchedMeals.add(foundMeal);
             }
         }
         mealrepository.saveAll(allFetchedMeals);

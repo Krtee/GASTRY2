@@ -25,6 +25,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/group/match")
 @CrossOrigin(origins = { "*" })
 public class MultiUserMatchController {
+
+    
     @Autowired
     private MultiUserMatchRepository multiUserMatchRepo;
 
@@ -105,7 +107,6 @@ public class MultiUserMatchController {
             log.info("No match found for said id");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
         }
-
         return ResponseEntity.status(HttpStatus.OK)
                 .body(matchUtils.checkIfAllMatchesAreFinishedInsideMultiUserMatch(multiUserMatch));
     }

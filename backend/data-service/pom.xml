@@ -18,6 +18,11 @@
 	</properties>
 	<dependencies>
 		<dependency>
+    		<groupId>com.google.firebase</groupId>
+    		<artifactId>firebase-admin</artifactId>
+   		    <version>6.8.1</version>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-mongodb</artifactId>
 		</dependency>
@@ -56,6 +61,31 @@
 						</exclude>
 					</excludes>
 				</configuration>
+			</plugin>
+			<plugin>
+			<groupId>cz.habarta.typescript-generator</groupId>
+			<artifactId>typescript-generator-maven-plugin</artifactId>
+			<version>2.24.612</version>
+			<executions>
+				<execution>
+					<id>generate</id>
+					<goals>
+						<goal>generate</goal>
+					</goals>
+					<phase>process-classes</phase>
+				</execution>
+			</executions>
+			<configuration>
+				<jsonLibrary>jackson2</jsonLibrary>
+                <classPatterns>
+                    <pattern>io.foodtinder.dataservice.model.requests.google.*</pattern>
+                </classPatterns>
+				<outputKind>module</outputKind>
+				<outputFileType>implementationFile</outputFileType>
+				<mapEnum>asEnum</mapEnum>
+				<nonConstEnums>true</nonConstEnums>
+				<optionalProperties>useLibraryDefinition</optionalProperties>
+			</configuration>
 			</plugin>
 		</plugins>
 	</build>

@@ -21,6 +21,7 @@ import io.foodtinder.dataservice.model.requests.MatchRequestBody;
 import io.foodtinder.dataservice.repositories.MatchRepository;
 import io.foodtinder.dataservice.repositories.MultiUserMatchRepository;
 import io.foodtinder.dataservice.utils.MatchUtils;
+import io.foodtinder.dataservice.utils.RestUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -34,6 +35,9 @@ public class MatchController {
 
     @Autowired
     private MatchUtils matchUtils;
+
+    @Autowired
+    private RestUtils restUtils;
 
     @Autowired
     private MultiUserMatchRepository multiUserMatchRepo;
@@ -143,6 +147,7 @@ public class MatchController {
                     multiUserMatch.setMatchedRestaurants(
                             matchUtils.matchRestaurants(allMatchesInMultiUserMatch, requestBody.getLocation()));
                     multiUserMatch.setUpdatedAt(LocalDateTime.now());
+                    restUtils.sendMultiMatchFoundNotification(multiUserMatch.getUserIds());
                     multiUserMatchRepo.save(multiUserMatch);
                 }
             }

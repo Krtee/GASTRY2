@@ -17,7 +17,7 @@ export const latestMatchSelector = selector<Match>({
   get: async ({ get }) => {
     const { instance: axios } = get(axiosState);
     const user = get(userState);
-    if (!axios || axios === null || !user) {
+    if (!axios || axios === null || !user.id) {
       return createEmptyMatch("");
     }
     const latestMatchResp = await fetchLatestMatchForUser(axios, user.id);
@@ -36,4 +36,5 @@ export const latestMatchSelector = selector<Match>({
 export const currentMatchState: RecoilState<Match> = atom<Match>({
   key: "currentMatchState",
   default: latestMatchSelector,
+  dangerouslyAllowMutability: true,
 });

@@ -16,6 +16,7 @@ body {
   margin: 0px;
   padding: 0px;
   font-family: roboto;
+  color: white;
 }
 
 code {
@@ -27,4 +28,9 @@ h2 {
   font-size: 5rem;
   color: darkred;
   text-align: center;
+}
+
+a {
+  color: white;
+  text-decoration: none;
 }

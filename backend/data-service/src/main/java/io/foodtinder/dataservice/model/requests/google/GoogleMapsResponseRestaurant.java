@@ -24,4 +24,9 @@ public class GoogleMapsResponseRestaurant {
     private List<GoogleMapsReview> reviews;
     private String url;
     private List<GoogleMapsAddressComponents> address_components;
+    private String formatted_address;
+    private GoogleMapsGeometryWrapper geometry;
+    private String international_phone_number;
+    private String formatted_phone_number;
+
 }

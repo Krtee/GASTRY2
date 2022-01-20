@@ -50,11 +50,9 @@ public class KeyCloakService {
         log.info("Creating new user on keycloak!");
         RealmResource realmResource = keycloakInstance.realm(config.getKeycloak().getRealm());
         UsersResource userResource = realmResource.users();
-
         // String newPassword = generateRandomPassword();
         Response response = userResource.create(createNewKeycloakUser(newUser, newUser.getPassword()));
-        log.info("Thats the response, {}", response.getEntity().toString());
-        if (response.getStatus() == 201) {
+            if (response.getStatus() == 201) {
             log.info("New user successfully created on keycloak!");
             String userId = response.getLocation().getPath().replaceAll(".*/([^/]+)$", "$1");
             UserResource userResources = userResource.get(userId);
@@ -65,6 +63,7 @@ public class KeyCloakService {
             return response.getStatus();
         } else {
             log.warn("User could not be created on keycloak! Status: {}", response.getStatus());
+            log.warn("User could not be created on keycloak! Status: {}", response.readEntity(String.class));
             return response.getStatus();
         }
     }

@@ -1,12 +1,19 @@
 import { AxiosInstance } from "axios";
 import { Geolocation } from "../hooks/useGeoLocation";
-import { Match } from "./Match.types";
+import { GoogleMapsResponseRestaurant, Match } from "./Match.types";
+
+/**
+ * creates an empty match object
+ * @param userId id of user
+ * @returns {@link Match}
+ * @author Minh
+ */
 export const createEmptyMatch = (userId?: string): Match => ({
   userId: userId,
   createdAt: new Date(),
   updatedAt: new Date(),
   matchedMeals: [],
-  unMatchedMeals: [],
+  unmatchedMeals: [],
   matchedRestaurants: [],
 });
 
@@ -20,10 +27,28 @@ export const createEmptyMatch = (userId?: string): Match => ({
 export const fetchLatestMatchForUser = (
   axios: AxiosInstance,
   userId: string
-): Promise<Match> =>
+): Promise<Match | undefined> =>
   axios
     .get("/data/match/user/latest/id", {
       params: { userId: userId! },
+    })
+    .then(({ data }) => data)
+    .catch(() => undefined);
+
+/**
+ * GET API - to fetch a match for id
+ * @param axios axios instance
+ * @param userId id of the match
+ * @returns a match if successful, else returns undefined
+ * @author Minh
+ */
+export const fetchMatchForId = (
+  axios: AxiosInstance,
+  matchId: string
+): Promise<Match> =>
+  axios
+    .get("/data/match/id", {
+      params: { id: matchId },
     })
     .then(({ data }) => data)
     .catch(() => undefined);
@@ -38,7 +63,7 @@ export const fetchLatestMatchForUser = (
 export const postNewMatch = (
   axios: AxiosInstance,
   match: Match
-): Promise<Match> =>
+): Promise<Match | undefined> =>
   axios!
     .post("/data/match/", match)
     .then(({ data }) => data)
@@ -78,5 +103,21 @@ export const matchRestaurants = (
       match: newMatch,
       location: location.coordinates,
     })
+    .then((res) => res.data)
+    .catch(() => undefined);
+
+/**
+ * GET API - to fetch infos of a restaurant
+ * @param axios axios instance
+ * @param placeId id of restaurant
+ * @returns {@link GoogleMapsResponseRestaurant}
+ * @author Minh
+ */
+export const getRestaurantInfo = (
+  axios: AxiosInstance,
+  placeId: string
+): GoogleMapsResponseRestaurant =>
+  axios
+    .get("/data/restaurant/info", { params: { restaurantId: placeId } })
     .then((res) => res.data)
     .catch(() => undefined);

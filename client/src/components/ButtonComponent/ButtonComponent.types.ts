@@ -9,5 +9,5 @@ export interface ButtonComponentProps {
   color?: string;
   textColor?: string;
   gradient?: boolean;
-  size?: "default" | "big";
+  size?: "mini" | "default" | "big";
 }

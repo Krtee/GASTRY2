@@ -7,7 +7,7 @@
     color: white;
     font-weight: bold;
     border: 1px solid $button-default;
-    background: linear-gradient(
+    background-color: linear-gradient(
       90deg,
       $yumatch-red -7.87%,
       $button-default 52.42%,
@@ -39,6 +39,13 @@
       font-weight: 700;
       font-size: 20px;
       line-height: 25px;
+    }
+    &.mini {
+      font-style: normal;
+      font-weight: bold;
+      font-size: 14px;
+      line-height: 23px;
+      height: 28px;
     }
     &.border-white {
       background: transparent;

@@ -7,6 +7,7 @@ export interface LayoutProps {
   header?: Header | string;
   hideBar?: boolean;
   className?: string;
+  withBackgroundImage?: boolean;
 }
 export interface NavigationElement {
   title: string;

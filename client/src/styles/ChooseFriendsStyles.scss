@@ -1,0 +1,99 @@
+@import "./variables.scss";
+
+.choose-friends {
+  &__search-bar {
+    display: flex;
+    .input-component {
+      flex: 1;
+    }
+  }
+  &__chosen-friends {
+    height: 48px;
+    width: 48px;
+    border-radius: 50%;
+    border: 2px solid #f2594b;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin: 0 4px;
+    img {
+      height: 46px;
+      width: 46px;
+      border-radius: 50%;
+    }
+    &__wrapper {
+      display: flex;
+      margin: 12px 0;
+      gap: 16px;
+      p {
+        color: #f2594b;
+        width: 100%;
+        max-width: 54px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+    }
+    &__close {
+      position: absolute;
+      right: -3px;
+      top: -3px;
+      border-radius: 50%;
+      background-color: $button-default;
+      height: 14px;
+      width: 14px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      svg {
+        fill: white;
+        height: 12px;
+        width: 12px;
+      }
+    }
+  }
+  &__friend-item {
+    display: flex;
+
+    img {
+      height: 48px;
+      width: 48px;
+      border-radius: 50%;
+      margin: 0 12px;
+    }
+    &__wrapper {
+      padding: 12px;
+    }
+  }
+  &__infos {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    p {
+      display: inline-block;
+      font-size: 16px;
+      line-height: 20px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    &__name {
+      font-weight: 700;
+    }
+  }
+  &__letter-card {
+    &__wrapper > p {
+      font-style: normal;
+      font-weight: 900;
+      font-size: 24px;
+      line-height: 29px;
+      color: #f2594b;
+    }
+  }
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+}

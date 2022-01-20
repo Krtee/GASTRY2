@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory, useParams } from "react-router";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { ReactComponent as ArrowLeftIcon } from "../assets/icons/arrow_left.svg";
 import { ReactComponent as DoneIcon } from "../assets/icons/done.svg";
 import { ReactComponent as PeopleIcon } from "../assets/icons/people.svg";
@@ -20,7 +20,16 @@ import {
   Match,
   MatchRestaurantWrapper,
 } from "../utils/match/Match.types";
-import { fetchMatchForId, getRestaurantInfo } from "../utils/match/Match.Utils";
+import {
+  createEmptyMatch,
+  fetchMatchForId,
+  getRestaurantInfo,
+  postNewMatch,
+} from "../utils/match/Match.Utils";
+import { randomMealsState } from "../utils/meal/Meal.state";
+import { Meal } from "../utils/meal/Meal.types";
+import { fetchRandomMeals } from "../utils/meal/Meal.utils";
+import { userState } from "../utils/user/User.state";
 import "./../styles/MatchFoundPageStyles.scss";
 
 interface MatchFoundPageProps {}
@@ -35,6 +44,9 @@ const MatchFoundPage: FC<MatchFoundPageProps> = () => {
   const [matchToShow, setmatchToShow] = useState<Match>(matchInState);
   const params = useParams<{ id?: string }>();
   const history = useHistory();
+  const setCurrentMatch = useSetRecoilState<Match>(currentMatchState);
+  const setMealsToSwipe = useSetRecoilState<Meal[]>(randomMealsState);
+  const user = useRecoilValue(userState);
 
   /**
    * fetchs meal, if no currentmatch or currentmatch id is different that id in params
@@ -80,6 +92,22 @@ const MatchFoundPage: FC<MatchFoundPageProps> = () => {
     }
     setRestaurantToShow(fetchedRestaurant);
   };
+
+  /**
+   * resets meals and currentmatch
+   * @author Minh
+   */
+  const handleRematch = (): Promise<void> =>
+    fetchRandomMeals(
+      axios,
+      parseInt(process.env.REACT_APP_DEFAULT_MEAL_COUNT || "15")
+    ).then(setMealsToSwipe);
+  postNewMatch(axios, createEmptyMatch(user?.id)).then((res) => {
+    if (res) {
+      setCurrentMatch(res);
+      history.push("/matching");
+    }
+  });
 
   return (
     <Layout
@@ -129,7 +157,7 @@ const MatchFoundPage: FC<MatchFoundPageProps> = () => {
         <ButtonComponent
           value={t("match.button.rematch")}
           className="rematch-button"
-          onClick={() => history.push("/matching")}
+          onClick={() => handleRematch()}
         />
         <IconButtonComponent value={<PeopleIcon />} color="primary" />
         {restaurantToShow && (

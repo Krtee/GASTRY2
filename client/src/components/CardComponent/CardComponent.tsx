@@ -7,7 +7,7 @@ const CardComponent: React.FC<CardComponentProps> = ({
   children,
 }) => {
   return (
-    <div className={`"card-component__wrapper" ${className}`}>{children}</div>
+    <div className={`card-component__wrapper ${className}`}>{children}</div>
   );
 };
 

@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import io.foodtinder.dataservice.constants.MultiMatchRequestStatus;
 import io.foodtinder.dataservice.model.GeoLocation;
 import io.foodtinder.dataservice.model.GoogleRespSave;
 import io.foodtinder.dataservice.model.Match;
@@ -144,12 +145,13 @@ public class MatchUtils {
                 .map(matchId -> matchRepository.findById(matchId).orElse(null))
                 .filter(Objects::nonNull).collect(Collectors.toList());
 
-        if (multiUserMatch.getUserIds()
+        if (multiUserMatch.getUserList()
                 .parallelStream()
-                .filter((userId) -> {
+                .filter((userWrapper) -> {
                     Match foundMatch = matches
                             .stream()
-                            .filter(match -> match.getUserId() == userId)
+                            .filter(match -> userWrapper.getStatus() == MultiMatchRequestStatus.ACCEPTED
+                                    && match.getUserId() == userWrapper.getUserId())
                             .findFirst()
                             .orElse(null);
                     if (foundMatch == null

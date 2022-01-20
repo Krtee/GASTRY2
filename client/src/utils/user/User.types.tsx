@@ -10,5 +10,5 @@ export interface User {
   username: string;
   email: string;
   role: UserRole;
-  password?: string;
+  password?: string | null;
 }

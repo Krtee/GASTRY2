@@ -1,0 +1,46 @@
+[
+    {
+        "id": "61db4dd16a99e2473cd2d473",
+        "createDate": "2022-01-09T21:04:16.78",
+        "lastUpdated": "2022-01-14T17:23:23.224",
+        "firstName": "domenico",
+        "lastName": "ferrariich",
+        "username": "cloaky",
+        "email": "hdm.stuggi@dome.de",
+        "active": true,
+        "role": "ADMIN",
+        "token": null,
+        "buddies": [
+            {
+                "createDate": "2022-01-14T17:23:23.224",
+                "lastUpdated": null,
+                "notificationEnabled": false,
+                "buddyId": "61e1af81c5eab60abedf97b9",
+                "buddyType": "PENDING"
+            }
+        ],
+        "password": null
+    },
+    {
+        "id": "61e1af81c5eab60abedf97b9",
+        "createDate": "2022-01-14T17:14:40.001",
+        "lastUpdated": "2022-01-14T17:23:23.224",
+        "firstName": "Minh",
+        "lastName": "Nguy",
+        "username": "minhsissssss",
+        "email": "minh@ist.de",
+        "active": true,
+        "role": "ADMIN",
+        "token": "fO7E3Se_o0ANinA64vi1Sa:APA91bErOzyf_sYvx44tg3tC5-VqJ-EUYVG-sFL-YcLT9HTEHVyZ_dORU-_yh61CmOkLxgKZ-omu4M8bt4S0qu9DawL2myiwOiBMwMupivEo_hl9SBYFvtS9Y_SCloNQR0XWzUm63H0B",
+        "buddies": [
+            {
+                "createDate": "2022-01-14T17:23:23.224",
+                "lastUpdated": null,
+                "notificationEnabled": false,
+                "buddyId": "61db4dd16a99e2473cd2d473",
+                "buddyType": "INCOMING"
+            }
+        ],
+        "password": null
+    }
+]

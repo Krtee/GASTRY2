@@ -5,6 +5,9 @@ import { useRecoilValue } from "recoil";
 import { LayoutProps } from "../../components/LayoutComponent/Layout.types";
 import { userState } from "../user/User.state";
 import { UserRole } from "../user/User.types";
+import { ReactComponent as HomeIcon } from "./../../assets/icons/home.svg";
+import { ReactComponent as MatchIcon } from "./../../assets/icons/match.svg";
+import { ReactComponent as ProfileIcon } from "./../../assets/icons/profile.svg";
 
 /**
  * All Pages that can be navigvated to using Navigationbar
@@ -20,6 +23,7 @@ export interface NavigationPage {
   title: string;
   page: Page;
   route: string;
+  icon?: JSX.Element;
 }
 
 export interface NavigationHook extends LayoutProps {
@@ -44,16 +48,19 @@ export const useNavigation = (location?: Page): NavigationHook => {
       title: t(`general.navigation.feed`),
       page: Page.FEED,
       route: "/feed",
+      icon: <HomeIcon />,
     },
     {
       title: t(`general.navigation.matching`),
       page: Page.MATCHING,
       route: "/matching",
+      icon: <MatchIcon />,
     },
     {
       title: t(`general.navigation.profile`),
       page: Page.PROFILE,
       route: "/profile",
+      icon: <ProfileIcon />,
     },
   ];
 
@@ -65,7 +72,7 @@ export const useNavigation = (location?: Page): NavigationHook => {
       switch (user.role) {
         case UserRole.ADMIN:
         case UserRole.USER:
-          return [Page.MATCHING];
+          return [Page.FEED, Page.MATCHING, Page.PROFILE];
       }
     }
     return [];
@@ -109,6 +116,7 @@ export const useNavigation = (location?: Page): NavigationHook => {
     },
     navigationElements: allNavigationPages.map((page) => ({
       title: page.title,
+      icon: page.icon,
     })),
     passedProps: history.location.state,
   };

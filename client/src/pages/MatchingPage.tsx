@@ -3,7 +3,6 @@ import {
   FC,
   RefObject,
   Suspense,
-  useEffect,
   useMemo,
   useRef,
   useState,
@@ -19,6 +18,8 @@ import { ReactComponent as GroupAddIcon } from "../assets/icons/groupadd.svg";
 import { ReactComponent as LikeIcon } from "../assets/icons/like.svg";
 import { ReactComponent as ResetIcon } from "../assets/icons/reset.svg";
 import { ReactComponent as SettingIcon } from "../assets/icons/settings.svg";
+import { ReactComponent as WaitIcon } from "../assets/icons/wait.svg";
+import ButtonComponent from "../components/ButtonComponent/ButtonComponent";
 import Layout from "../components/LayoutComponent/Layout";
 import ModalComponent from "../components/ModalComponent/ModalComponent";
 import "../styles/MatchingPage.styles.scss";
@@ -35,14 +36,20 @@ import {
 import { randomMealsState } from "../utils/meal/Meal.state";
 import { Meal } from "../utils/meal/Meal.types";
 import { fetchRandomMeals } from "../utils/meal/Meal.utils";
+import { currentMultiMatchState } from "../utils/multimatch/MultiMatch.state";
+import { MultiUserMatch } from "../utils/multimatch/MultiMatch.types";
 import { userState } from "../utils/user/User.state";
+import { User } from "../utils/user/User.types";
 
 interface MatchingPageProps {}
 
 const MatchingPage: FC<MatchingPageProps> = () => {
-  const { currentLocation, onLocationChange } = useNavigation(Page.MATCHING);
+  const navProps = useNavigation(Page.MATCHING);
   const [currentMatch, setCurrentMatch] =
     useRecoilState<Match>(currentMatchState);
+  const [currentMultiMatch, setCurrentMultiMatch] = useRecoilState<
+    MultiUserMatch | undefined
+  >(currentMultiMatchState);
   const { t } = useTranslation();
   const user = useRecoilValue(userState);
   const [mealsToSwipe, setMealsToSwipe] =
@@ -57,11 +64,12 @@ const MatchingPage: FC<MatchingPageProps> = () => {
     useState<boolean>(false);
   const location = useGeoLocation();
   const { axios } = useAxios();
+  const [multiUserList, setMultiUserList] = useState<User[]>([]);
   const childRefs: RefObject<any>[] = useMemo(
     () =>
       Array(mealsToSwipe.length)
         .fill(0)
-        .map((i) => createRef()),
+        .map(() => createRef()),
     [mealsToSwipe.length]
   );
 
@@ -148,35 +156,25 @@ const MatchingPage: FC<MatchingPageProps> = () => {
     await childRefs[newIndex].current.restoreCard();
   };
 
-  /**
-   * resets meals and currentmatch
-   * @author Minh
-   */
-  useEffect(() => {
-    if (
-      currentMatch &&
-      currentMatch.matchedRestaurants.length > 0 &&
-      !showLoadingMatchModal &&
-      axios
-    ) {
-      fetchRandomMeals(
-        axios,
-        parseInt(process.env.REACT_APP_DEFAULT_MEAL_COUNT || "15")
-      ).then(setMealsToSwipe);
-      postNewMatch(axios, createEmptyMatch(user?.id)).then(
-        (res) => res && setCurrentMatch(res)
-      );
-    }
-    // eslint-disable-next-line
-  }, [currentMatch, axios, user?.id, setCurrentMatch, setMealsToSwipe]);
+  // /**
+  //  * resets meals and currentmatch
+  //  * @author Minh
+  //  */
+  // const handleRematch = (): Promise<void> =>
+  //   fetchRandomMeals(
+  //     axios,
+  //     parseInt(process.env.REACT_APP_DEFAULT_MEAL_COUNT || "15")
+  //   ).then(setMealsToSwipe);
+  // postNewMatch(axios, createEmptyMatch(user?.id)).then((res) => {
+  //   if (res) {
+  //     updateCurrentIndex(mealsToSwipe.length - 1);
+  //     setCurrentMatch(res);
+  //   }
+  // });
 
   return (
     <Layout
-      navigationElements={Object.entries(Page).map((page) => ({
-        title: page[1],
-      }))}
-      changeLocation={onLocationChange}
-      currentLocation={currentLocation}
+      {...navProps}
       className="matching-page"
       header={{
         leftIconButton: {
@@ -193,61 +191,88 @@ const MatchingPage: FC<MatchingPageProps> = () => {
           <div>{/** TODO implement loading component */}Loading...</div>
         }
       >
-        <div className="swipeable-card-container">
-          {mealsToSwipe.map((meal, index) => (
-            <TinderCard
-              ref={childRefs[index]}
-              key={meal.idMeal}
-              onSwipe={(dir) => swiped(dir as "left" | "right", meal, index)}
-              preventSwipe={["up", "down"]}
-              onCardLeftScreen={() => outOfFrame(index)}
-              className="container"
-            >
-              <img src={meal.strMealThumb} alt={meal.strMeal} />
-              <div className="progressBar">
-                <div
-                  className="progressBarStyle"
-                  style={{
-                    width: (((15 - currentIndex) / 15) * 100).toFixed(0) + "%",
-                  }}
+        {currentMultiMatch ? (
+          <div className={"multi-user-match-wait-screen"}>
+            <p className={"multi-user-match-wait-screen__top-big"}>
+              {t("match.multi-user.wait.top-text")}
+            </p>
+            <WaitIcon />
+            <p className={"multi-user-match-wait-screen__top-big"}>
+              {t("match.multi-user.wait.center-text")}
+            </p>
+            {multiUserList.map((friend) => (
+              <p key={friend.username}>{friend.username}</p>
+            ))}
+            {/* <ButtonComponent
+              value={t("match.buttons.rematch")}
+              onClick={() => handleRematch()}
+            /> */}
+          </div>
+        ) : (
+          <div>
+            <div className="swipeable-card-container">
+              {mealsToSwipe.map((meal, index) => (
+                <TinderCard
+                  ref={childRefs[index]}
+                  key={meal.idMeal}
+                  onSwipe={(dir) =>
+                    swiped(dir as "left" | "right", meal, index)
+                  }
+                  preventSwipe={["up", "down"]}
+                  onCardLeftScreen={() => outOfFrame(index)}
+                  className="container"
                 >
-                  <span className="progressBarText">
-                    {(((15 - currentIndex) / 15) * 100).toFixed(0) + "%"}
-                  </span>
-                </div>
-              </div>
-            </TinderCard>
-          ))}
-        </div>
+                  <img src={meal.strMealThumb} alt={meal.strMeal} />
+                  <div className="progressBar">
+                    <div
+                      className="progressBarStyle"
+                      style={{
+                        width:
+                          (((15 - currentIndex) / 15) * 100).toFixed(0) + "%",
+                      }}
+                    >
+                      <span className="progressBarText">
+                        {(((15 - currentIndex) / 15) * 100).toFixed(0) + "%"}
+                      </span>
+                    </div>
+                  </div>
+                </TinderCard>
+              ))}
+            </div>
 
-        <div className="matching-buttons">
-          <span className="button-small">
-            <SettingIcon className="button-small-style" />
-          </span>
-          <span onClick={() => swipe("left")} className="button-big">
-            <DislikeIcon className="button-center" />
-          </span>
-          <span
-            onClick={() => !disableGoBack && goBack()}
-            className="button-small"
-          >
-            <ResetIcon className="button-small-style" />
-          </span>
-          <span onClick={() => swipe("right")} className="button-big">
-            <LikeIcon className="button-center" />
-          </span>
-          <span className="button-small">
-            <GroupAddIcon className="button-small-style" />
-          </span>
-        </div>
-        {showLoadingMatchModal && (
-          <ModalComponent className="matching-loading">
-            {/** TODO implement image and translations */}
-            <p>{t("match.loading.top")}</p>
-            <p>{t("match.loading.center")}</p>
-            <EatableHart />
-            <p>{t("match.loading.bottom")}</p>
-          </ModalComponent>
+            <div className="matching-buttons">
+              <span className="button-small">
+                <SettingIcon className="button-small-style" />
+              </span>
+              <span onClick={() => swipe("left")} className="button-big">
+                <DislikeIcon className="button-center" />
+              </span>
+              <span
+                onClick={() => !disableGoBack && goBack()}
+                className="button-small"
+              >
+                <ResetIcon className="button-small-style" />
+              </span>
+              <span onClick={() => swipe("right")} className="button-big">
+                <LikeIcon className="button-center" />
+              </span>
+              <span className="button-small">
+                <GroupAddIcon
+                  className="button-small-style"
+                  onClick={() => history.push("/matching/addfriends")}
+                />
+              </span>
+            </div>
+            {showLoadingMatchModal && (
+              <ModalComponent className="matching-loading">
+                {/** TODO implement image and translations */}
+                <p>{t("match.loading.top")}</p>
+                <p>{t("match.loading.center")}</p>
+                <EatableHart />
+                <p>{t("match.loading.bottom")}</p>
+              </ModalComponent>
+            )}
+          </div>
         )}
       </Suspense>
     </Layout>

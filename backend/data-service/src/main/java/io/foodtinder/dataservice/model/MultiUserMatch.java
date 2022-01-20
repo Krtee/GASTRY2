@@ -11,7 +11,7 @@ import lombok.Data;
 public class MultiUserMatch {
     @Id
     private String id;
-    private List<String> userIds;
+    private List<MultiMatchUserWrapper> userList;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private List<String> matches;

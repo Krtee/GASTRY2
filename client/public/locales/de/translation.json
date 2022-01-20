@@ -28,6 +28,12 @@
       },
       "matchfound":{
         "title":"Hier sind deine 3 Matches:"
+      },
+      "addFriends":{
+        "title":"Freunde hinzufügen",
+        "button":{
+          "addFriend":"hinzufügen"
+        }
       }
     }
   },

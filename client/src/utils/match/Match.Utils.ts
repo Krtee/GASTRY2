@@ -64,7 +64,7 @@ export const postNewMatch = (
   axios: AxiosInstance,
   match: Match
 ): Promise<Match | undefined> =>
-  axios!
+  axios
     .post("/data/match/", match)
     .then(({ data }) => data)
     .catch(() => undefined);

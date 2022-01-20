@@ -105,8 +105,27 @@ public class MultiUserMatchController {
             log.info("No match found for said id");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
         }
-
         return ResponseEntity.status(HttpStatus.OK)
                 .body(matchUtils.checkIfAllMatchesAreFinishedInsideMultiUserMatch(multiUserMatch));
+    }
+
+    /**
+     * POST API to update a group match
+     * 
+     * @return true when successful, else returns false
+     * @author Minh
+     */
+    @PostMapping(value = "/update")
+    public ResponseEntity<Boolean> updateGroupMatch(@RequestBody MultiUserMatch multiUserMatch) {
+        log.info("Request to update group match received", multiUserMatch.getCreatorId());
+        multiUserMatch.setUpdatedAt(LocalDateTime.now());
+        MultiUserMatch multiUserMatchToUpdate = multiUserMatchRepo.findById(multiUserMatch.getId()).orElse(null);
+        if (multiUserMatchToUpdate != null) {
+            log.info("Successfully found match");
+            multiUserMatchRepo.save(multiUserMatch);
+            return ResponseEntity.status(HttpStatus.OK).body(true);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+
     }
 }

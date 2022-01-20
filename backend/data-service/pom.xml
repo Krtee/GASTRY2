@@ -73,7 +73,7 @@
 			<configuration>
 				<jsonLibrary>jackson2</jsonLibrary>
                 <classPatterns>
-                    <pattern>io.foodtinder.dataservice.model.requests.google.*</pattern>
+                    <pattern>io.foodtinder.dataservice.model.*</pattern>
                 </classPatterns>
 				<outputKind>module</outputKind>
 				<outputFileType>implementationFile</outputFileType>

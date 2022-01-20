@@ -16,6 +16,7 @@ const Layout: FC<LayoutProps> = ({
   header = "",
   hideBar = false,
   className,
+  withBackgroundImage = false,
 }) => {
   const { axios } = useAxios();
   const [user, setUser] = useRecoilState(userState);
@@ -40,7 +41,10 @@ const Layout: FC<LayoutProps> = ({
   }, [keycloak, axios, user]);
 
   return (
-    <div id="layout-component">
+    <div
+      id="layout-component"
+      className={withBackgroundImage ? "with-background-image" : ""}
+    >
       {!!header && (
         <div id="layout-component-header">
           {typeof header !== "string" && header.leftIconButton ? (
@@ -76,16 +80,15 @@ const Layout: FC<LayoutProps> = ({
                     : "navigation-wrapper"
                 }
               >
-                {navigation.icon}
-                <p
+                <div
                   className={
                     currentLocation === index
-                      ? "navigation-node selected"
-                      : "navigation-node"
+                      ? "navigation-item focused"
+                      : "navigation-item"
                   }
                 >
-                  {navigation.title}
-                </p>
+                  {navigation.icon}
+                </div>
               </div>
             ))}
         </div>

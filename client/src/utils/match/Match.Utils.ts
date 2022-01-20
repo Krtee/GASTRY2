@@ -78,10 +78,14 @@ export const postNewMatch = (
  */
 export const updateMatch = (
   axios: AxiosInstance,
-  newMatch: Match
+  newMatch: Match,
+  location: Geolocation
 ): Promise<Match> =>
   axios
-    .post("/data/match/update", newMatch)
+    .post("/data/match/update", {
+      match: newMatch,
+      location: location.coordinates,
+    })
     .then((res) => res.data)
     .catch(() => undefined);
 

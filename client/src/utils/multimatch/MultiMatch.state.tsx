@@ -4,10 +4,9 @@ import { User } from "../user/User.types";
 import { loadMultipleUser } from "../user/User.util";
 import { MultiMatchRequestStatus, MultiUserMatch } from "./MultiMatch.types";
 
-export const currentMultiMatchState = atom<MultiUserMatch | undefined>({
+export const currentMultiMatchState = atom<MultiUserMatch | null>({
   key: "currentMultiMatchState",
-  default: undefined,
-  dangerouslyAllowMutability: true,
+  default: null,
 });
 
 export const getUserForMultiMatch = selector<User[]>({

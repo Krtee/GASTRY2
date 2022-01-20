@@ -1,3 +1,4 @@
+import { useKeycloak } from "@react-keycloak/web";
 import {
   createRef,
   FC,
@@ -32,24 +33,33 @@ import {
   createEmptyMatch,
   matchRestaurants,
   postNewMatch,
+  updateMatch,
 } from "../utils/match/Match.Utils";
 import { randomMealsState } from "../utils/meal/Meal.state";
 import { Meal } from "../utils/meal/Meal.types";
 import { fetchRandomMeals } from "../utils/meal/Meal.utils";
-import { currentMultiMatchState } from "../utils/multimatch/MultiMatch.state";
+import {
+  currentMultiMatchState,
+  getUserForMultiMatch,
+} from "../utils/multimatch/MultiMatch.state";
 import { MultiUserMatch } from "../utils/multimatch/MultiMatch.types";
 import { userState } from "../utils/user/User.state";
 import { User } from "../utils/user/User.types";
 
 interface MatchingPageProps {}
 
+enum MatchType {
+  SINGLE_MATCH,
+  MULTI_MATCH,
+}
+
 const MatchingPage: FC<MatchingPageProps> = () => {
   const navProps = useNavigation(Page.MATCHING);
   const [currentMatch, setCurrentMatch] =
     useRecoilState<Match>(currentMatchState);
-  const [currentMultiMatch, setCurrentMultiMatch] = useRecoilState<
-    MultiUserMatch | undefined
-  >(currentMultiMatchState);
+  const currentMultiMatch = useRecoilValue<MultiUserMatch | null>(
+    currentMultiMatchState
+  );
   const { t } = useTranslation();
   const user = useRecoilValue(userState);
   const [mealsToSwipe, setMealsToSwipe] =
@@ -61,10 +71,12 @@ const MatchingPage: FC<MatchingPageProps> = () => {
   const [disableGoBack, setdisableGoBack] = useState(false);
   const history = useHistory();
   const [showLoadingMatchModal, setShowLoadingMatchModal] =
-    useState<boolean>(false);
+    useState<MatchType>();
   const location = useGeoLocation();
   const { axios } = useAxios();
-  const [multiUserList, setMultiUserList] = useState<User[]>([]);
+  const multiUserList = useRecoilValue<User[]>(getUserForMultiMatch);
+  const { keycloak } = useKeycloak();
+  const [showPopUp, setShowPopUp] = useState(false);
   const childRefs: RefObject<any>[] = useMemo(
     () =>
       Array(mealsToSwipe.length)
@@ -72,7 +84,6 @@ const MatchingPage: FC<MatchingPageProps> = () => {
         .map(() => createRef()),
     [mealsToSwipe.length]
   );
-
   /**
    * updates current index, and ref for index
    * @param val index
@@ -103,12 +114,26 @@ const MatchingPage: FC<MatchingPageProps> = () => {
     setdisableGoBack(false);
     updateCurrentIndex(index - 1);
     if (index === 0) {
-      setShowLoadingMatchModal(true);
-      matchRestaurants(axios, currentMatch, location).then((resultMatch) => {
+      setShowLoadingMatchModal(
+        currentMultiMatchState ? MatchType.MULTI_MATCH : MatchType.SINGLE_MATCH
+      );
+
+      let updateMatchPromise: Promise<Match>;
+      if (user?.id) {
+        updateMatchPromise = updateMatch(axios, currentMatch, location);
+      } else {
+        updateMatchPromise = matchRestaurants(axios, currentMatch, location);
+      }
+      updateMatchPromise.then((resultMatch) => {
+        if (!resultMatch) {
+          setShowLoadingMatchModal(undefined);
+
+          return;
+        }
         setCurrentMatch(resultMatch);
         setTimeout(() => {
           history.push(`/matching/result/${resultMatch.id}`);
-          setShowLoadingMatchModal(false);
+          setShowLoadingMatchModal(undefined);
         }, 1000);
       });
     }
@@ -156,21 +181,24 @@ const MatchingPage: FC<MatchingPageProps> = () => {
     await childRefs[newIndex].current.restoreCard();
   };
 
-  // /**
-  //  * resets meals and currentmatch
-  //  * @author Minh
-  //  */
-  // const handleRematch = (): Promise<void> =>
-  //   fetchRandomMeals(
-  //     axios,
-  //     parseInt(process.env.REACT_APP_DEFAULT_MEAL_COUNT || "15")
-  //   ).then(setMealsToSwipe);
-  // postNewMatch(axios, createEmptyMatch(user?.id)).then((res) => {
-  //   if (res) {
-  //     updateCurrentIndex(mealsToSwipe.length - 1);
-  //     setCurrentMatch(res);
-  //   }
-  // });
+  /**
+   * resets meals and currentmatch
+   * @author Minh
+   */
+  const handleRematch = (): void => {
+    if (axios && user?.id) {
+      fetchRandomMeals(
+        axios,
+        parseInt(process.env.REACT_APP_DEFAULT_MEAL_COUNT || "15")
+      ).then(setMealsToSwipe);
+      postNewMatch(axios, createEmptyMatch(user?.id)).then((res) => {
+        if (res) {
+          updateCurrentIndex(mealsToSwipe.length - 1);
+          setCurrentMatch(res);
+        }
+      });
+    }
+  };
 
   return (
     <Layout
@@ -191,7 +219,8 @@ const MatchingPage: FC<MatchingPageProps> = () => {
           <div>{/** TODO implement loading component */}Loading...</div>
         }
       >
-        {currentMultiMatch ? (
+        {currentMultiMatch &&
+        showLoadingMatchModal === MatchType.MULTI_MATCH ? (
           <div className={"multi-user-match-wait-screen"}>
             <p className={"multi-user-match-wait-screen__top-big"}>
               {t("match.multi-user.wait.top-text")}
@@ -203,13 +232,13 @@ const MatchingPage: FC<MatchingPageProps> = () => {
             {multiUserList.map((friend) => (
               <p key={friend.username}>{friend.username}</p>
             ))}
-            {/* <ButtonComponent
+            <ButtonComponent
               value={t("match.buttons.rematch")}
               onClick={() => handleRematch()}
-            /> */}
+            />
           </div>
         ) : (
-          <div>
+          <div className="matching-page__content-wrapper">
             <div className="swipeable-card-container">
               {mealsToSwipe.map((meal, index) => (
                 <TinderCard
@@ -259,11 +288,18 @@ const MatchingPage: FC<MatchingPageProps> = () => {
               <span className="button-small">
                 <GroupAddIcon
                   className="button-small-style"
-                  onClick={() => history.push("/matching/addfriends")}
+                  onClick={() =>
+                    currentMultiMatch
+                      ? history.push("/matching/addfriends")
+                      : keycloak.login()
+                  }
                 />
+                {multiUserList.length > 0 && (
+                  <span className="friend-badge">{multiUserList.length}</span>
+                )}
               </span>
             </div>
-            {showLoadingMatchModal && (
+            {showLoadingMatchModal === MatchType.SINGLE_MATCH && (
               <ModalComponent className="matching-loading">
                 {/** TODO implement image and translations */}
                 <p>{t("match.loading.top")}</p>
@@ -272,6 +308,7 @@ const MatchingPage: FC<MatchingPageProps> = () => {
                 <p>{t("match.loading.bottom")}</p>
               </ModalComponent>
             )}
+            {showPopUp && <ModalComponent></ModalComponent>}
           </div>
         )}
       </Suspense>

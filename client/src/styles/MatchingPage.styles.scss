@@ -1,4 +1,7 @@
 .matching-page {
+  &__content-wrapper {
+    height: 100%;
+  }
   .swipeable-card-container {
     position: relative;
     .container {
@@ -38,6 +41,12 @@
     border-radius: 50%;
     display: inline-block;
     margin: auto;
+    position: relative;
+    .friend-badge {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+    }
   }
 
   .matching-buttons {

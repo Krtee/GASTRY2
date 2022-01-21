@@ -17,6 +17,7 @@ export enum Page {
   FEED = "FEED",
   MATCHING = "MATCHING",
   PROFILE = "PROFILE",
+  MATCH_FOUND = "MATCH_FOUND",
 }
 
 export interface NavigationPage {
@@ -110,7 +111,7 @@ export const useNavigation = (location?: Page): NavigationHook => {
   return {
     currentLocation,
     changeLocation: (location) => setCurrentLocation(location),
-    onLocationChange: (location, props) => {
+    onLocationChange: (location: any, props: any) => {
       props && setPassedProps(props);
       setCurrentLocation(location);
     },

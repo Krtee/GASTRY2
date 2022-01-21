@@ -25,6 +25,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/group/match")
 @CrossOrigin(origins = { "*" })
 public class MultiUserMatchController {
+
+    
     @Autowired
     private MultiUserMatchRepository multiUserMatchRepo;
 

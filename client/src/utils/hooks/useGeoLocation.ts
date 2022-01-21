@@ -14,7 +14,10 @@ export interface Coordinates {
  * @returns {@link Geolocation}
  * @author Minh
  */
-const useGeoLocation = () => {
+const useGeoLocation = (): {
+  geolocation: Geolocation;
+  refreshGeolocation(): void;
+} => {
   const [location, setLocation] = useState<Geolocation>({
     loaded: false,
     coordinates: { latitude: "", longitude: "" },
@@ -40,7 +43,7 @@ const useGeoLocation = () => {
     });
   };
 
-  useEffect(() => {
+  const handleGeolocationChange = (): void => {
     if (!("geolocation" in navigator)) {
       onError({
         code: 0,
@@ -49,9 +52,14 @@ const useGeoLocation = () => {
     }
 
     navigator.geolocation.getCurrentPosition(onSuccess, onError);
-  }, []);
+  };
 
-  return location;
+  useEffect(() => handleGeolocationChange, []);
+
+  return {
+    geolocation: location,
+    refreshGeolocation: () => handleGeolocationChange(),
+  };
 };
 
 export default useGeoLocation;

@@ -13,7 +13,7 @@ export const createEmptyMatch = (userId?: string): Match => ({
   createdAt: new Date(),
   updatedAt: new Date(),
   matchedMeals: [],
-  unMatchedMeals: [],
+  unmatchedMeals: [],
   matchedRestaurants: [],
 });
 

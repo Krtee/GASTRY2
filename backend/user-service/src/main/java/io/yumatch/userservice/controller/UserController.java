@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequestMapping("/")
-@CrossOrigin(origins = { "*" })
+@CrossOrigin(origins = { "${yumatch.corsHeaderLocal}", "${yumatch.corsHeaderDev}", "${yumatch.corsHeaderProd}" })
 public class UserController {
 
     @Autowired
@@ -53,14 +53,20 @@ public class UserController {
 
         }
         UserDto savedUser = userRepo.save(newUser);
-
-        int responseStatus = keycloakUtil.createNewUser(savedUser);
-        if (responseStatus == 201) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(ResponseTypes.SUCCESSFUL);
+        try {
+            int responseStatus = keycloakUtil.createNewUser(savedUser);
+            if (responseStatus == 201) {
+                return ResponseEntity.status(HttpStatus.CREATED).body(ResponseTypes.SUCCESSFUL);
+            }
+            userRepo.delete(savedUser);
+            log.warn("User creation on keycloak was not successful!");
+            return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).body(ResponseTypes.REGISTER_ERROR);
+        } catch (Exception e) {
+            userRepo.delete(savedUser);
+            log.error("Error creating user on keycloak, error message: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).body(ResponseTypes.REGISTER_ERROR);
         }
-        log.warn("User creation on keycloak was not successful!");
-        userRepo.delete(savedUser);
-        return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).body(ResponseTypes.REGISTER_ERROR);
+
     }
 
     /**
@@ -129,20 +135,20 @@ public class UserController {
      *         in case the keycloak update failed
      */
     @PostMapping(value = "/update")
-    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto updatedUser) {
+    public ResponseEntity<Boolean> updateUser(@RequestBody UserDto updatedUser) {
         log.info("Request to update user {} received", updatedUser);
         UserDto loadedUser = userRepo.findById(updatedUser.getId()).orElse(null);
         if (loadedUser == null) {
             log.warn("User with id {} not found to update!", updatedUser.getId());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
         }
         if (keycloakUtil.updateKeycloakUser(updatedUser, loadedUser)) {
             loadedUser.update(updatedUser);
             userRepo.save(loadedUser);
-            return ResponseEntity.status(HttpStatus.OK).build();
+            return ResponseEntity.status(HttpStatus.OK).body(true);
         }
         log.warn("Keycloak user update was not successfull!");
-        return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).build();
+        return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).body(false);
     }
 
     /**

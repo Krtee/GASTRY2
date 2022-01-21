@@ -4,6 +4,7 @@ import {
   FC,
   RefObject,
   Suspense,
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -53,6 +54,10 @@ enum MatchType {
   MULTI_MATCH,
 }
 
+enum PopUpContent {
+  SENDING_MATCH_ERROR,
+  NO_LOCATION_ERROR,
+}
 const MatchingPage: FC<MatchingPageProps> = () => {
   const navProps = useNavigation(Page.MATCHING);
   const [currentMatch, setCurrentMatch] =
@@ -72,11 +77,11 @@ const MatchingPage: FC<MatchingPageProps> = () => {
   const history = useHistory();
   const [showLoadingMatchModal, setShowLoadingMatchModal] =
     useState<MatchType>();
-  const location = useGeoLocation();
+  const { geolocation: location, refreshGeolocation } = useGeoLocation();
   const { axios } = useAxios();
   const multiUserList = useRecoilValue<User[]>(getUserForMultiMatch);
   const { keycloak } = useKeycloak();
-  const [showPopUp, setShowPopUp] = useState(false);
+  const [showPopUp, setShowPopUp] = useState<PopUpContent>();
   const childRefs: RefObject<any>[] = useMemo(
     () =>
       Array(mealsToSwipe.length)
@@ -100,7 +105,7 @@ const MatchingPage: FC<MatchingPageProps> = () => {
       case "left":
         setCurrentMatch((lastMatchState) => ({
           ...lastMatchState,
-          unMatchedMeals: [...lastMatchState.unMatchedMeals, meal],
+          unmatchedMeals: [...lastMatchState.unmatchedMeals, meal],
         }));
         break;
       case "right":
@@ -117,6 +122,16 @@ const MatchingPage: FC<MatchingPageProps> = () => {
       setShowLoadingMatchModal(
         currentMultiMatchState ? MatchType.MULTI_MATCH : MatchType.SINGLE_MATCH
       );
+      if (!axios) {
+        setShowPopUp(PopUpContent.SENDING_MATCH_ERROR);
+        return;
+      }
+
+      if (location) {
+        setShowPopUp(PopUpContent.NO_LOCATION_ERROR);
+        refreshGeolocation();
+        return;
+      }
 
       let updateMatchPromise: Promise<Match>;
       if (user?.id) {
@@ -127,7 +142,7 @@ const MatchingPage: FC<MatchingPageProps> = () => {
       updateMatchPromise.then((resultMatch) => {
         if (!resultMatch) {
           setShowLoadingMatchModal(undefined);
-
+          setShowPopUp(PopUpContent.NO_LOCATION_ERROR);
           return;
         }
         setCurrentMatch(resultMatch);
@@ -170,7 +185,7 @@ const MatchingPage: FC<MatchingPageProps> = () => {
     updateCurrentIndex(newIndex);
     setCurrentMatch({
       ...currentMatch,
-      unMatchedMeals: currentMatch.unMatchedMeals.filter(
+      unmatchedMeals: currentMatch.unmatchedMeals.filter(
         (_, index) => index !== newIndex
       ),
       matchedMeals: currentMatch.matchedMeals.filter(
@@ -200,6 +215,28 @@ const MatchingPage: FC<MatchingPageProps> = () => {
     }
   };
 
+  /**
+   * resets meals and currentmatch
+   * @author Minh
+   */
+  useEffect(() => {
+    if (
+      currentMatch &&
+      currentMatch.matchedRestaurants.length > 0 &&
+      !showLoadingMatchModal &&
+      axios
+    ) {
+      fetchRandomMeals(
+        axios,
+        parseInt(process.env.REACT_APP_DEFAULT_MEAL_COUNT || "15")
+      ).then(setMealsToSwipe);
+      postNewMatch(axios, createEmptyMatch(user?.id)).then(
+        (res) => res && setCurrentMatch(res)
+      );
+    }
+    // eslint-disable-next-line
+  }, [currentMatch, axios, user?.id, setCurrentMatch, setMealsToSwipe]);
+
   return (
     <Layout
       {...navProps}
@@ -207,9 +244,7 @@ const MatchingPage: FC<MatchingPageProps> = () => {
       header={{
         leftIconButton: {
           value: <ArrowIcon />,
-          onClick: () => {
-            /**TODO where to go ? */
-          },
+          onClick: () => history.goBack(),
         },
         title: t("general.pages.matching"),
       }}

@@ -10,5 +10,6 @@ export interface User {
   username: string;
   email: string;
   role: UserRole;
+  token: string | null;
   password?: string | null;
 }

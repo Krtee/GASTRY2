@@ -16,6 +16,7 @@ export const createEmptyUser = (): User => {
     lastName: "",
     email: "",
     role: UserRole.USER,
+    token: "",
   };
 };
 
@@ -76,3 +77,21 @@ export const loadMultipleUser = async (
       return [];
     });
 };
+
+/*
+ * API method to create a new user {@link User}
+ * @param axios
+ * @returns boolean for either successful creation or failed one
+ * @author Domenico Ferrari
+ */
+export const updateUser = async (
+  axios: AxiosInstance,
+  updatedUser: User
+): Promise<boolean> =>
+  axios
+    .post("user/update/", updatedUser)
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error while updating user!");
+      console.log(error);
+    });

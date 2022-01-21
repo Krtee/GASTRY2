@@ -6,7 +6,7 @@ export interface Match {
   createdAt: Date;
   updatedAt: Date;
   matchedMeals: Meal[];
-  unMatchedMeals: Meal[];
+  unmatchedMeals: Meal[];
   matchedRestaurants: MatchRestaurantWrapper[];
 }
 

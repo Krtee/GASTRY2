@@ -3,7 +3,9 @@ import { useTranslation } from "react-i18next";
 import Layout from "../components/LayoutComponent/Layout";
 import { Page, useNavigation } from "../utils/hooks/useNavigation";
 import "../styles/SearchPage.styles.scss";
+import { ReactComponent as ArrowIcon } from "../assets/icons/arrow_left.svg";
 import { Result } from "../utils/search/Search.types";
+import { useHistory } from "react-router";
 
 const results: Result[] = [
   {
@@ -61,6 +63,7 @@ const friends = [
 
 const SearchPage: FC<{}> = () => {
   const { t } = useTranslation();
+  const history = useHistory();
   const { currentLocation, onLocationChange } = useNavigation();
   const [searchValue, setSearchValue] = useState<string>("");
   const [focused, setFocused] = useState(false);
@@ -79,6 +82,15 @@ const SearchPage: FC<{}> = () => {
       }))}
       changeLocation={onLocationChange}
       currentLocation={currentLocation}
+      header={{
+        leftIconButton: {
+          value: <ArrowIcon />,
+          onClick: () => {
+            history.goBack();
+          },
+        },
+        title: t("general.pages.profile.searchFriends"),
+      }}
     >
       <div className="search-page">
         <div className="search-page-search">

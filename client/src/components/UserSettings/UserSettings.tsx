@@ -120,7 +120,7 @@ const UserSettings = () => {
       </div>
 
       <h3 className="user-settings-subheading">
-        {t("general.pages.preferences.selectFlavors")}
+        {t("general.pages.preferences.selectCuisine")}
       </h3>
       <div className="switch-inputs-wrapper-1-col">
         {Object.values(CUISINES).map((cuisine) => (
@@ -139,9 +139,6 @@ const UserSettings = () => {
           />
         ))}
       </div>
-      <h3 className="user-settings-subheading">
-        {t("general.pages.preferences.location")}
-      </h3>
     </div>
   );
 };

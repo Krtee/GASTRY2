@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useHistory } from "react-router";
 import { useAxios } from "../../utils/AxiosUtil";
 import { Page, useNavigation } from "../../utils/hooks/useNavigation";
 import { User } from "../../utils/user/User.types";
-// import { updateUserInfo } from "../../utils/user/User.util";
+import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow_left.svg";
 import Layout from "../LayoutComponent/Layout";
 import PictureEditable from "../PictureEditable/PictureEditable";
 import "./ProfileFormStyles.scss";
@@ -15,6 +16,7 @@ const ProfileForm: React.FC<{}> = () => {
   const { t } = useTranslation();
   const { currentLocation, onLocationChange } = useNavigation();
   const [formData, setFormData] = useState<any>({});
+  const history = useHistory();
 
   const onUpload = () => {};
 
@@ -27,6 +29,15 @@ const ProfileForm: React.FC<{}> = () => {
       }))}
       changeLocation={onLocationChange}
       currentLocation={currentLocation}
+      header={{
+        leftIconButton: {
+          value: <ArrowIcon />,
+          onClick: () => {
+            history.goBack();
+          },
+        },
+        title: t("general.pages.profile.editProfile"),
+      }}
     >
       <div className="profile-form">
         <div className="profile-form-wrapper">

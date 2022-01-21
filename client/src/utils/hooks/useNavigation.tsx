@@ -66,7 +66,7 @@ export const useNavigation = (location?: Page): NavigationHook => {
       switch (user.role) {
         case UserRole.ADMIN:
         case UserRole.USER:
-          return [Page.MATCHING, Page.PROFILE];
+          return [Page.FEED, Page.MATCHING, Page.PROFILE];
       }
     }
     return [];

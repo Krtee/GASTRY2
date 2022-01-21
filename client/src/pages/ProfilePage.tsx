@@ -3,6 +3,7 @@ import UserInfo from "../components/UserInfo/UserInfo";
 import UserStats from "../components/UserStats/UserStats";
 import { Page, useNavigation } from "../utils/hooks/useNavigation";
 import "../styles/ProfilePage.styles.scss";
+import { ReactComponent as ArrowIcon } from "../assets/icons/arrow_left.svg";
 import ProfileNav from "../components/ProfileNav/ProfileNav";
 import { Switch, Route, useRouteMatch } from "react-router";
 import { useRecoilState } from "recoil";
@@ -11,9 +12,11 @@ import UserSettings from "../components/UserSettings/UserSettings";
 import Posts from "../components/Posts/Posts";
 import Favorites from "../components/Favorites/Favorites";
 import Layout from "../components/LayoutComponent/Layout";
+import { useTranslation } from "react-i18next";
 
 const ProfilePage: FC<{}> = () => {
   const { currentLocation, onLocationChange } = useNavigation(Page.PROFILE);
+  const { t } = useTranslation();
   const [user, setUser] = useRecoilState(userState);
 
   let { url } = useRouteMatch();
@@ -25,6 +28,9 @@ const ProfilePage: FC<{}> = () => {
       }))}
       changeLocation={onLocationChange}
       currentLocation={currentLocation}
+      header={{
+        title: `${user?.firstName} ${user?.lastName}`,
+      }}
     >
       <div className="profile">
         <UserInfo />

@@ -23,15 +23,13 @@ const data = {
 
 const ProfilePage: FC<{}> = () => {
   const { t } = useTranslation();
-  const { currentLocation, onLocationChange } = useNavigation(Page.PROFILE);
+  const { currentLocation, onLocationChange, navItems } = useNavigation(Page.PROFILE);
   const [selectedPage, setSelectedPage] = useState(nav_elements[0]);
   let { url } = useRouteMatch();
 
   return (
     <Layout
-      navigationElements={Object.entries(Page).map((page) => ({
-        title: page[1],
-      }))}
+      navigationElements={navItems}
       changeLocation={onLocationChange}
       currentLocation={currentLocation}
     >

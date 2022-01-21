@@ -42,9 +42,12 @@ const Layout: FC<LayoutProps> = ({
             navigationElements.map((navigation, index) => (
               <div
                 key={index}
-                onClick={() => changeLocation?.(index)}
+                onClick={() => {
+                  console.log(navigation.page);
+                  changeLocation?.(navigation.page);
+                }}
                 className={
-                  currentLocation === index
+                  currentLocation === navigation.page
                     ? "navigation-wrapper disabled"
                     : "navigation-wrapper"
                 }
@@ -52,7 +55,7 @@ const Layout: FC<LayoutProps> = ({
                 {navigation.icon}
                 <p
                   className={
-                    currentLocation === index
+                    currentLocation === navigation.page
                       ? "navigation-node selected"
                       : "navigation-node"
                   }

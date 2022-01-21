@@ -40,7 +40,9 @@ import { userState } from "../utils/user/User.state";
 interface MatchingPageProps {}
 
 const MatchingPage: FC<MatchingPageProps> = () => {
-  const { currentLocation, onLocationChange } = useNavigation(Page.MATCHING);
+  const { currentLocation, onLocationChange, navItems } = useNavigation(
+    Page.MATCHING
+  );
   const [currentMatch, setCurrentMatch] =
     useRecoilState<Match>(currentMatchState);
   const { t } = useTranslation();
@@ -172,9 +174,7 @@ const MatchingPage: FC<MatchingPageProps> = () => {
 
   return (
     <Layout
-      navigationElements={Object.entries(Page).map((page) => ({
-        title: page[1],
-      }))}
+      navigationElements={navItems}
       changeLocation={onLocationChange}
       currentLocation={currentLocation}
       className="matching-page"

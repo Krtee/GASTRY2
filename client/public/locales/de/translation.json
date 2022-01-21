@@ -4,13 +4,13 @@
     "buttons": {
       "logout": "Ausloggen",
       "login": "Einloggen",
-      "showmore":"Mehr anzeigen",
-      "showless":"Weniger anzeigen"
+      "showmore": "Mehr anzeigen",
+      "showless": "Weniger anzeigen"
     },
-    "navigation":{
-      "feed":"Feed",
-      "profile":"profile",
-      "matching":"Match"
+    "navigation": {
+      "FEED": "Feed",
+      "PROFILE": "Profil",
+      "MATCHING": "Matching"
     },
     "pages": {
       "matching": "Matchen",
@@ -26,19 +26,19 @@
         "REGISTER_USER_EXISTS_MAIL": "Ein User mit dieser E-Mail existiert bereits",
         "REGISTER_USER_EXISTS_USERNAME": "Der Username ist bereits vergeben"
       },
-      "matchfound":{
-        "title":"Hier sind deine 3 Matches:"
+      "matchfound": {
+        "title": "Hier sind deine 3 Matches:"
       }
     }
   },
-  "match":{
-    "button":{
-      "rematch":"Erneut matchen"
+  "match": {
+    "button": {
+      "rematch": "Erneut matchen"
     },
-    "loading":{
-      "top":"Es ist ein ...",
-      "center":"YUMMMMatch",
-      "bottom":"Und die besten Restaurants in deiner Nähe sind..."
+    "loading": {
+      "top": "Es ist ein ...",
+      "center": "YUMMMMatch",
+      "bottom": "Und die besten Restaurants in deiner Nähe sind..."
     }
   }
 }

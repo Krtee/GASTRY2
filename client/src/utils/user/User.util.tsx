@@ -68,18 +68,20 @@ export const loadSingleUser = async (
 };
 
 /**
- * API method to update an {@link User} by its id
- * @param axios The axios instance
- * @param data The updated user info
- * @returns Either the loaded user or undefined in case of an error
- * @author Fadel Kaadan
+ * API method to create a new user {@link User}
+ * @param axios
+ * @returns boolean for either successful creation or failed one
+ * @author Domenico Ferrari
  */
-export const updateUserInfo = async (
+export const updateUser = async (
   axios: AxiosInstance,
-  data: any
-): Promise<User> => {
+  updatedUser: User
+): Promise<boolean> => {
   return axios
-    .post("/user/update/", data)
-    .then((resp) => resp.data)
-    .catch((exc) => console.error("Error during user load!", exc));
+    .post("user/update/", updatedUser)
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error while updating user!");
+      console.log(error);
+    });
 };

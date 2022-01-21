@@ -21,6 +21,7 @@ import io.foodtinder.dataservice.model.requests.google.GoogleMapsResponseRestaur
 import io.foodtinder.dataservice.model.requests.google.GoogleMapsResponseWrapper;
 import io.foodtinder.dataservice.repositories.GoogleRepository;
 import io.foodtinder.dataservice.repositories.MatchRepository;
+import io.foodtinder.dataservice.repositories.RestaurantRepository;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -32,6 +33,9 @@ public class MatchUtils {
 
     @Autowired
     private GoogleRepository googleRepo;
+
+    @Autowired
+    private RestaurantRepository restaurantRepo;
 
     @Autowired
     private RestUtils restUtils;
@@ -50,6 +54,7 @@ public class MatchUtils {
         Map<String, Integer> area = new HashMap<>();
         Map<String, Integer> category = new HashMap<>();
         Map<String, Integer> tags = new HashMap<>();
+        log.info("matches:{}", matches.size());
 
         /**
          * loops through all matched meals and adds area, category and tags to a
@@ -57,9 +62,10 @@ public class MatchUtils {
          */
         for (Match match : matches) {
             for (Meal matchedMeal : match.getMatchedMeals()) {
-
-                String matchedArea = matchedMeal.getStrArea().name().toLowerCase();
+                log.info("check meal {}, from {}, which is {}, tags: {}", matchedMeal.getStrMeal(),
+                        matchedMeal.getStrArea(), matchedMeal.getStrCategory(), matchedMeal.getStrTags());
                 if (matchedMeal.getStrArea() != null) {
+                    String matchedArea = matchedMeal.getStrArea().name().toLowerCase();
                     Integer indexOfArea = area.get(matchedArea);
                     if (indexOfArea == null) {
                         area.put(matchedArea, 1);
@@ -69,9 +75,8 @@ public class MatchUtils {
                 }
 
                 if (matchedMeal.getStrCategory() != null) {
-
                     String matchedCategory = matchedMeal.getStrCategory().name().toLowerCase();
-                    Integer indexOfCategory = area.get(matchedCategory);
+                    Integer indexOfCategory = category.get(matchedCategory);
                     if (indexOfCategory == null) {
                         category.put(matchedCategory, 1);
                     } else {
@@ -82,7 +87,7 @@ public class MatchUtils {
                 if (matchedMeal.getStrTags() != null) {
                     String[] matchedTags = matchedMeal.getStrTags().toLowerCase().split(",");
                     for (String matchedTag : matchedTags) {
-                        Integer indexOfTags = area.get(matchedTag);
+                        Integer indexOfTags = tags.get(matchedTag);
                         if (indexOfTags == null) {
                             tags.put(matchedTag, 1);
                         } else {
@@ -96,45 +101,32 @@ public class MatchUtils {
         /**
          * gets all max Value in Key-Value Map
          */
-        Map.Entry<String, Integer> maxAreaEntry = null;
+        Map.Entry<String, Integer> maxAreaEntry = new AbstractMap.SimpleEntry<String, Integer>("", 0);
         for (Map.Entry<String, Integer> entry : area.entrySet()) {
             if (maxAreaEntry == null || entry.getValue().compareTo(maxAreaEntry.getValue()) > 0) {
                 maxAreaEntry = entry;
             }
         }
 
-        if (maxAreaEntry == null) {
-            log.warn("no maxCategoryEntry");
-            maxAreaEntry = new AbstractMap.SimpleEntry<String, Integer>("", 0);
-        }
-
-        Map.Entry<String, Integer> maxCategoryEntry = null;
+        Map.Entry<String, Integer> maxCategoryEntry = new AbstractMap.SimpleEntry<String, Integer>("", 0);
         for (Map.Entry<String, Integer> entry : category.entrySet()) {
             if (maxCategoryEntry == null || entry.getValue().compareTo(maxCategoryEntry.getValue()) > 0) {
                 maxCategoryEntry = entry;
             }
         }
-        if (maxCategoryEntry == null) {
-            log.warn("no maxCategoryEntry");
-            maxCategoryEntry = new AbstractMap.SimpleEntry<String, Integer>("", 0);
-        }
 
-        Map.Entry<String, Integer> maxTagEntry = null;
+        Map.Entry<String, Integer> maxTagEntry = new AbstractMap.SimpleEntry<String, Integer>("", 0);
         for (Map.Entry<String, Integer> entry : tags.entrySet()) {
             if (maxTagEntry == null || entry.getValue().compareTo(maxTagEntry.getValue()) > 0) {
                 maxTagEntry = entry;
             }
-        }
-        if (maxTagEntry == null) {
-            log.warn("no maxTag");
-            maxTagEntry = new AbstractMap.SimpleEntry<String, Integer>("", 0);
         }
 
         Map<String, String> result = new HashMap<>();
         result.put("area", maxAreaEntry.getKey());
         result.put("category", maxCategoryEntry.getKey());
         result.put("tag", maxTagEntry.getKey());
-
+        log.info("found keywords, {}, {}, {}", maxAreaEntry.getKey(), maxCategoryEntry.getKey(), maxTagEntry.getKey());
         return result;
 
     }
@@ -187,17 +179,29 @@ public class MatchUtils {
          */
         List<GoogleRespSave> googleRespSaveList = googleRepo.findFirstByAreaAndCategoryAndTag(maxValues.get("area"),
                 maxValues.get("category"), maxValues.get("tag"));
+
         if (googleRespSaveList.size() < 0
                 && googleRespSaveList.get(0) != null
-                && googleRespSaveList.get(0).getGoogleResp() != null
-                && googleRespSaveList.get(0).getGoogleResp().getResults() != null) {
+                && googleRespSaveList.get(0).getRestaurants() != null) {
             for (GoogleRespSave save : googleRespSaveList) {
                 if (generalUtils.distance(save.getLocation().getLatitude(), location.getLatitude(),
                         save.getLocation().getLongitude(), location.getLongitude()) > 2000) {
-                    return mapGoogleRestaurantsToWrapper(save.getGoogleResp().getResults()
-                            .stream()
-                            .limit(3)
-                            .collect(Collectors.toList()));
+                    log.info("found saved response");
+
+                    List<GoogleMapsResponseRestaurant> restaurantsToReturn = new ArrayList<GoogleMapsResponseRestaurant>();
+
+                    int indexOfRestaurantId = 0;
+                    while (restaurantsToReturn.size() <= 10) {
+                        GoogleMapsResponseRestaurant tempRestaurant = restaurantRepo
+                                .findByPlaceId(save.getRestaurants().get(indexOfRestaurantId)).orElse(null);
+
+                        if (tempRestaurant != null) {
+                            restaurantsToReturn
+                                    .add(tempRestaurant);
+                        }
+                        indexOfRestaurantId++;
+                    }
+                    return mapGoogleRestaurantsToWrapper(restaurantsToReturn);
                 }
             }
         }
@@ -210,18 +214,33 @@ public class MatchUtils {
                 maxValues.get("area") + " " + maxValues.get("category") + " " + maxValues.get("tag"));
 
         googleRespSave = new GoogleRespSave();
-        googleRespSave.setGoogleResp(newGoogleResp);
+        googleRespSave.setRestaurants(newGoogleResp.getResults()
+                .stream()
+                .map(GoogleMapsResponseRestaurant::getPlace_id)
+                .collect(Collectors.toList()));
         googleRespSave.setArea(maxValues.get("area"));
         googleRespSave.setCategory(maxValues.get("category"));
         googleRespSave.setTag(maxValues.get("tag"));
         googleRespSave.setLocation(location);
-
         googleRepo.save(googleRespSave);
 
+        List<GoogleMapsResponseRestaurant> restaurantsToSave = new ArrayList<GoogleMapsResponseRestaurant>();
+
+        for (GoogleMapsResponseRestaurant restaurantToSave : newGoogleResp.getResults()) {
+            GoogleMapsResponseRestaurant foundRestaurant = restaurantRepo.findByPlaceId(restaurantToSave.getPlace_id())
+                    .orElse(null);
+            if (foundRestaurant == null) {
+                log.info("saving restaurant {}", restaurantToSave.getName());
+                restaurantsToSave.add(restaurantToSave);
+            }
+            ;
+        }
+        restaurantRepo.saveAll(restaurantsToSave);
+
         return mapGoogleRestaurantsToWrapper(
-                googleRespSave.getGoogleResp().getResults()
+                newGoogleResp.getResults()
                         .stream()
-                        .limit(3)
+                        .limit(10)
                         .collect(Collectors.toList()));
 
     }

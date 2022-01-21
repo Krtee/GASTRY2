@@ -8,6 +8,7 @@ import reportWebVitals from "./reportWebVitals";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import "./styles/index.scss";
 import keycloakInstance from "./utils/Keycloak";
+import "./utils/FirebaseUtil";
 
 ReactDOM.render(
   <ReactKeycloakProvider

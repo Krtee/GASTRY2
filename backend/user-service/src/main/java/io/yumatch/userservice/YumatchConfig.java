@@ -14,6 +14,14 @@ public class YumatchConfig {
   private String corsHeaderProd;
   private String adminMail;
   private Keycloak keycloak = new Keycloak();
+  private Notification notification = new Notification();
+
+
+  @Data
+  public class Notification {
+    private String buddyRequestTitle;
+    private String buddyRequestText;
+  }
 
   @Data
   public class Keycloak {

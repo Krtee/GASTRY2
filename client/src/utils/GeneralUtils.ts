@@ -20,3 +20,7 @@ export const convertObjToArr = (obj: any): string[] =>
   Object.keys(obj).filter((key: string) => {
     if (obj[key] === true) return key as string;
   }) as string[];
+export const openInNewTab = (url: string): void => {
+  const newWindow = window.open(url, "_blank", "noopener,noreferrer");
+  if (newWindow) newWindow.opener = null;
+};

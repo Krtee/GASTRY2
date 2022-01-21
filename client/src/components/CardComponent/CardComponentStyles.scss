@@ -1,0 +1,8 @@
+@import "./../../styles/variables.scss";
+
+.card-component {
+  &__wrapper {
+    border-radius: 24px;
+    background: $primary-background-color;
+  }
+}

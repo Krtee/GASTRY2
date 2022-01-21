@@ -1,14 +1,14 @@
+import { useKeycloak } from "@react-keycloak/web";
 import { FC, useEffect, useState } from "react";
 import Layout from "../components/layoutComponent/Layout";
 import InputComponent from "../components/InputComponent/InputComponent";
 import { useTranslation } from "react-i18next";
-import "../styles/RegisterPage.styles.scss";
-import { createEmptyUser, createNewUser } from "../utils/user/User.util";
-import { User } from "../utils/user/User.types";
-import { ResponseTypes, useAxios } from "../utils/AxiosUtil";
-import { useKeycloak } from "@react-keycloak/web";
-import ButtonComponent from "../components/ButtonComponent/ButtonComponent";
 import { useHistory } from "react-router";
+import ButtonComponent from "../components/ButtonComponent/ButtonComponent";
+import "../styles/RegisterPage.styles.scss";
+import { ResponseTypes, useAxios } from "../utils/AxiosUtil";
+import { User } from "../utils/user/User.types";
+import { createEmptyUser, createNewUser } from "../utils/user/User.util";
 
 interface RegisterPageProps {}
 
@@ -21,7 +21,7 @@ const RegisterPage: FC<RegisterPageProps> = () => {
     error: false,
     value: "",
   });
-  const axios = useAxios();
+  const { axios } = useAxios();
   const [registerError, setRegisterError] = useState<ResponseTypes>();
   const history = useHistory();
 
@@ -35,7 +35,7 @@ const RegisterPage: FC<RegisterPageProps> = () => {
   }, [keycloak, axios]);
 
   return (
-    <Layout hideBar hideHeader>
+    <Layout hideBar>
       <div className="register-page-wrapper">
         <div className="header-wrapper">
           <h2 className="header">yumatch</h2>

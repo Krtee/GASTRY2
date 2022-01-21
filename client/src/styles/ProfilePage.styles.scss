@@ -1,2 +1,18 @@
 .profile {
+  &-interactions {
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+
+    &-element {
+      height: 34px;
+      margin-bottom: 12px;
+    }
+  }
+
+  &-edit-btn {
+    background-color: white;
+    border: 1px solid black;
+    outline: none;
+  }
 }

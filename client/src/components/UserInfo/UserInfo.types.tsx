@@ -3,4 +3,7 @@ export interface UserInfoComponentProps {
   lastName: string;
   username: string;
   setIsEditing: any;
+  photo: any;
+  name: string;
+  fav_restaurant?: string;
 }

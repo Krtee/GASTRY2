@@ -45,8 +45,9 @@ export interface User {
   city: string;
   lat: string;
   long: string;
-  role: UserRole | string;
+  role: UserRole;
   password?: string;
+  token?: string;
   posts: [];
   diets: DIETS[];
   intolerances: INTOLERANCES[];

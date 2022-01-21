@@ -1,6 +1,6 @@
+import "./ButtonComponent.style.scss";
 import { ButtonComponentProps } from "./ButtonComponent.types";
 
-import "./ButtonComponent.style.scss";
 const ButtonComponent: React.FC<ButtonComponentProps> = ({
   className,
   disabled,
@@ -11,18 +11,22 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
   color,
   textColor,
   gradient,
+  size = "default",
 }) => (
   <div
     data-testid="ButtonComponent"
     className={className ? `button-component ${className}` : "button-component"}
   >
     <button
-      className={gradient ? "gradient" : ""}
+      className={`
+        ${gradient ? "gradient " : " "} ${size} ${
+        color === "transparent" ? "border-white" : ""
+      }`}
       disabled={disabled}
       type={type}
       onClick={onClick}
       form={form}
-      style={{ backgroundColor: color, borderColor: color, color: textColor }}
+      style={{ backgroundColor: color, color: textColor }}
     >
       {value}
     </button>

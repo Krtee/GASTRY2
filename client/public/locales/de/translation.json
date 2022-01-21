@@ -5,10 +5,17 @@
       "logout": "Ausloggen",
       "login": "Einloggen",
       "add": "Hinzufügen",
-      "added": "Hinzugefügt"
+      "added": "Hinzugefügt",
+      "showmore": "Mehr anzeigen",
+      "showless": "Weniger anzeigen"
+    },
+    "navigation": {
+      "feed": "Feed",
+      "profile": "profile",
+      "matching": "Match"
     },
     "pages": {
-      "MATCHING": "Matchen",
+      "matching": "Matchen",
       "register": {
         "header": "Registriere dich",
         "email": "E-Mail",
@@ -71,7 +78,20 @@
         "enterCity": "PLZ oder Stadt eingeben",
         "useLiveLocation": "Live Standort verwenden",
         "recentLocations": "Vergangene Standorte"
+      },
+      "matchfound": {
+        "title": "Hier sind deine 3 Matches:"
       }
+    }
+  },
+  "match": {
+    "button": {
+      "rematch": "Erneut matchen"
+    },
+    "loading": {
+      "top": "Es ist ein ...",
+      "center": "YUMMMMatch",
+      "bottom": "Und die besten Restaurants in deiner Nähe sind..."
     }
   }
 }

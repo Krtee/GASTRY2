@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.foodtinder.dataservice.model.Match;
-import io.foodtinder.dataservice.model.MatchRestaurantWrapper;
 import io.foodtinder.dataservice.model.MultiUserMatch;
 import io.foodtinder.dataservice.model.requests.MatchRequestBody;
 import io.foodtinder.dataservice.repositories.MatchRepository;
 import io.foodtinder.dataservice.repositories.MultiUserMatchRepository;
 import io.foodtinder.dataservice.utils.MatchUtils;
+import io.foodtinder.dataservice.utils.RestUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -35,6 +35,9 @@ public class MatchController {
 
     @Autowired
     private MatchUtils matchUtils;
+
+    @Autowired
+    private RestUtils restUtils;
 
     @Autowired
     private MultiUserMatchRepository multiUserMatchRepo;
@@ -144,6 +147,7 @@ public class MatchController {
                     multiUserMatch.setMatchedRestaurants(
                             matchUtils.matchRestaurants(allMatchesInMultiUserMatch, requestBody.getLocation()));
                     multiUserMatch.setUpdatedAt(LocalDateTime.now());
+                    restUtils.sendMultiMatchFoundNotification(multiUserMatch.getUserIds());
                     multiUserMatchRepo.save(multiUserMatch);
                 }
             }
@@ -165,25 +169,20 @@ public class MatchController {
      * @author minh
      */
     @PostMapping(value = "/restaurant")
-    public ResponseEntity<List<MatchRestaurantWrapper>> matchRestaurants(
+    public ResponseEntity<Match> matchRestaurants(
             @RequestBody MatchRequestBody requestBody) {
         String matchId = requestBody.getMatch().getId();
         log.info("Request to  match restaurants for match {} received", matchId);
-        Match foundMatch = matchRepository.findById(matchId).orElse(null);
-        if (foundMatch == null) {
-            log.warn("Match with id {} not found to update!", matchId);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
-        foundMatch.update(requestBody.getMatch());
-        if (foundMatch.getMatchedRestaurants().size() >= 3) {
+        Match match = requestBody.getMatch();
+        match.update(requestBody.getMatch());
+        if (match.getMatchedRestaurants().size() >= 3) {
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(foundMatch.getMatchedRestaurants());
+                    .body(match);
         }
-        foundMatch.setMatchedRestaurants(matchUtils.matchRestaurants(List.of(foundMatch), requestBody.getLocation()));
-        foundMatch.setUpdatedAt(LocalDateTime.now());
+        match.setMatchedRestaurants(matchUtils.matchRestaurants(List.of(match), requestBody.getLocation()));
+        match.setUpdatedAt(LocalDateTime.now());
         return ResponseEntity.status(HttpStatus.OK)
-                .body(matchRepository.save(foundMatch).getMatchedRestaurants());
+                .body(matchRepository.save(match));
     }
 
 }

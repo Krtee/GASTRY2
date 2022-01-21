@@ -3,8 +3,8 @@ import { useTranslation } from "react-i18next";
 import { useAxios } from "../../utils/AxiosUtil";
 import { Page, useNavigation } from "../../utils/hooks/useNavigation";
 import { User } from "../../utils/user/User.types";
-import { updateUserInfo } from "../../utils/user/User.util";
-import Layout from "../layoutComponent/Layout";
+// import { updateUserInfo } from "../../utils/user/User.util";
+import Layout from "../LayoutComponent/Layout";
 import PictureEditable from "../PictureEditable/PictureEditable";
 import "./ProfileFormStyles.scss";
 

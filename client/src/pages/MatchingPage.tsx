@@ -19,7 +19,7 @@ import { ReactComponent as GroupAddIcon } from "../assets/icons/groupadd.svg";
 import { ReactComponent as LikeIcon } from "../assets/icons/like.svg";
 import { ReactComponent as ResetIcon } from "../assets/icons/reset.svg";
 import { ReactComponent as SettingIcon } from "../assets/icons/settings.svg";
-import Layout from "../components/layoutComponent/Layout";
+import Layout from "../components/LayoutComponent/Layout";
 import ModalComponent from "../components/ModalComponent/ModalComponent";
 import "../styles/MatchingPage.styles.scss";
 import { useAxios } from "../utils/AxiosUtil";

@@ -1,4 +1,4 @@
-import Layout from "../components/layoutComponent/Layout";
+import Layout from "../components/LayoutComponent/Layout";
 import List from "../components/List/List";
 import { dummyData } from "../components/List/List.types";
 import { Page, useNavigation } from "../utils/hooks/useNavigation";

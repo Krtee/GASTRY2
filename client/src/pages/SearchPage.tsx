@@ -1,6 +1,6 @@
 import { ChangeEvent, FC, useState } from "react";
 import { useTranslation } from "react-i18next";
-import Layout from "../components/layoutComponent/Layout";
+import Layout from "../components/LayoutComponent/Layout";
 import { Page, useNavigation } from "../utils/hooks/useNavigation";
 import "../styles/SearchPage.styles.scss";
 import { Result } from "../utils/search/Search.types";

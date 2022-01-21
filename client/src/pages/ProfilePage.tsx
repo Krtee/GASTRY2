@@ -1,5 +1,4 @@
 import { FC } from "react";
-import Layout from "../components/layoutComponent/Layout";
 import UserInfo from "../components/UserInfo/UserInfo";
 import UserStats from "../components/UserStats/UserStats";
 import { Page, useNavigation } from "../utils/hooks/useNavigation";
@@ -11,6 +10,7 @@ import { userState } from "../utils/user/User.state";
 import UserSettings from "../components/UserSettings/UserSettings";
 import Posts from "../components/Posts/Posts";
 import Favorites from "../components/Favorites/Favorites";
+import Layout from "../components/LayoutComponent/Layout";
 
 const ProfilePage: FC<{}> = () => {
   const { currentLocation, onLocationChange } = useNavigation(Page.PROFILE);

@@ -4,7 +4,7 @@ import Switch from "../Switch/Switch";
 import { convertObjToArr } from "../../utils/GeneralUtils";
 import "./UserSettings.styles.scss";
 import { useAxios } from "../../utils/AxiosUtil";
-import { updateUserInfo } from "../../utils/user/User.util";
+import { updateUser } from "../../utils/user/User.util";
 import { useRecoilState } from "recoil";
 import { userState } from "../../utils/user/User.state";
 import { CUISINES, DIETS, TYPES } from "../../utils/user/User.types";
@@ -27,17 +27,17 @@ const UserSettings = () => {
   const [user, setUser] = useRecoilState(userState);
 
   const submit = async () => {
-    try {
-      const result = await updateUserInfo(axios, {
-        ...user,
-        diets: convertObjToArr(diets),
-        types: convertObjToArr(types),
-        cuisines: convertObjToArr(cuisines),
-      });
-      console.log(result);
-    } catch (err) {
-      console.log(err);
-    }
+    // try {
+    //   const result = await updateUser(axios, {
+    //     ...user,
+    //     diets: convertObjToArr(diets),
+    //     types: convertObjToArr(types),
+    //     cuisines: convertObjToArr(cuisines),
+    //   });
+    //   console.log(result);
+    // } catch (err) {
+    //   console.log(err);
+    // }
   };
 
   // save coords in recoil

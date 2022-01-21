@@ -1,6 +1,6 @@
 import { useKeycloak } from "@react-keycloak/web";
 import { FC, useEffect, useState } from "react";
-import Layout from "../components/layoutComponent/Layout";
+import Layout from "../components/LayoutComponent/Layout";
 import InputComponent from "../components/InputComponent/InputComponent";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router";

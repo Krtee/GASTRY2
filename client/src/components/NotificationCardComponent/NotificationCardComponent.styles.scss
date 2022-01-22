@@ -2,6 +2,15 @@
 
 $animatiom-duration: "0.5s";
 
+.in-app-notification {
+  position: absolute;
+  top: 4%;
+  right: 6%;
+  animation-name: moveOpen;
+  animation-duration: 4s;
+  animation-fill-mode: forwards;
+}
+
 .notification-card {
   &--wrapper {
     display: flex;
@@ -17,8 +26,13 @@ $animatiom-duration: "0.5s";
     animation-name: grow;
     animation-duration: 1s;
     max-height: 48px;
-    width: 0%;
+    width: 86%;
     animation-fill-mode: forwards;
+    min-width: 260px;
+  }
+
+  &--wrapper.disable {
+    animation: none;
   }
 
   &--icon-container {
@@ -41,6 +55,10 @@ $animatiom-duration: "0.5s";
     margin-left: 8px;
     animation-name: appear;
     animation-duration: 1s;
+  }
+
+  &--text.disable {
+    animation: none;
   }
 
   &--title {
@@ -93,5 +111,35 @@ $animatiom-duration: "0.5s";
   to {
     width: fit-content;
     opacity: 1;
+  }
+}
+
+@keyframes moveOpen {
+  from {
+    -webkit-transform: translate(0, -120px);
+    transform: translate(0, -120px);
+  }
+  10% {
+    -webkit-transform: translate(0, 20px);
+    transform: translate(0, 20px);
+  }
+  12% {
+    -webkit-transform: translate(0, 22px);
+    transform: translate(0, 22px);
+  }
+  16% {
+    -webkit-transform: translate(0, 20px);
+    transform: translate(0, 20px);
+  }
+  80% {
+    -webkit-transform: translate(0, 20px);
+    transform: translate(0, 20px);
+  }
+  85% {
+    -webkit-transform: translate(0, 22px);
+    transform: translate(0, 22px);
+  }
+  to {
+    -webkit-transform: translate(0, -400px);
   }
 }

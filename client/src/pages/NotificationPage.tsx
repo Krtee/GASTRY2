@@ -2,7 +2,9 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { useRecoilValue } from "recoil";
 import Layout from "../components/LayoutComponent/Layout";
-import NotificationCardComponent, {
+import {
+  generateNotification,
+  NotificationCardComponent,
   NotificationCardComponentProps,
 } from "../components/NotificationCardComponent/NotificationCardComponent";
 import { Page, useNavigation } from "../utils/hooks/useNavigation";
@@ -37,11 +39,13 @@ const NotificationPage: React.FC<NotificationPageProps> = () => {
       title: "TestNoti",
       message: "This is a test noti",
       notificationType: NotificationType.BUDDY_REQUEST,
+      disableAnimation: true,
     },
     {
       title: "TestNoti",
       message: "This is a test noti",
       notificationType: NotificationType.MULTI_MATCH,
+      disableAnimation: true,
     },
     {
       title: "TestNoti",

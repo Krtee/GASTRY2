@@ -8,6 +8,7 @@ export interface Match {
   matchedMeals: Meal[];
   unmatchedMeals: Meal[];
   matchedRestaurants: MatchRestaurantWrapper[];
+  partOfGroup?: boolean;
 }
 
 export interface MatchRestaurantWrapper {

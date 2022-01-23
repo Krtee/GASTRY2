@@ -36,15 +36,16 @@ interface MatchFoundPageProps {}
 
 const MatchFoundPage: FC<MatchFoundPageProps> = () => {
   const [matchInState, setMatchInState] = useRecoilState(currentMatchState);
-  const navProps = useNavigation(Page.MATCHING);
+  const navProps = useNavigation(Page.MATCH_FOUND, Page.MATCHING);
   const { t } = useTranslation();
   const [restaurantToShow, setRestaurantToShow] =
     useState<GoogleMapsResponseRestaurant>();
   const { axios } = useAxios();
-  const [matchToShow, setmatchToShow] = useState<Match>(matchInState);
+  const [matchToShow, setmatchToShow] = useState<Match | undefined>(
+    matchInState
+  );
   const params = useParams<{ id?: string }>();
   const history = useHistory();
-  const setCurrentMatch = useSetRecoilState<Match>(currentMatchState);
   const setMealsToSwipe = useSetRecoilState<Meal[]>(randomMealsState);
   const user = useRecoilValue(userState);
 
@@ -56,7 +57,7 @@ const MatchFoundPage: FC<MatchFoundPageProps> = () => {
     if (
       !!axios &&
       params.id &&
-      (!matchToShow || matchInState.id !== params.id)
+      (!matchToShow || !matchInState || matchInState.id !== params.id)
     ) {
       fetchMatchForId(axios, params.id).then(setmatchToShow);
     }
@@ -74,10 +75,10 @@ const MatchFoundPage: FC<MatchFoundPageProps> = () => {
     if (!axios) return;
     const fetchedRestaurant: GoogleMapsResponseRestaurant =
       await getRestaurantInfo(axios, restaurant.place_id!);
-    if (fetchedRestaurant && matchInState.id === params.id) {
+    if (fetchedRestaurant && matchInState?.id === params.id) {
       setMatchInState((outdatedMatch) => ({
-        ...outdatedMatch,
-        matchedRestaurants: outdatedMatch.matchedRestaurants.map(
+        ...outdatedMatch!,
+        matchedRestaurants: outdatedMatch!.matchedRestaurants.map(
           (restaurantToUpdate) => {
             if (
               restaurantToUpdate.restaurant.place_id ===
@@ -97,17 +98,18 @@ const MatchFoundPage: FC<MatchFoundPageProps> = () => {
    * resets meals and currentmatch
    * @author Minh
    */
-  const handleRematch = (): Promise<void> =>
+  const handleRematch = (): void => {
     fetchRandomMeals(
       axios,
       parseInt(process.env.REACT_APP_DEFAULT_MEAL_COUNT || "15")
     ).then(setMealsToSwipe);
-  postNewMatch(axios, createEmptyMatch(user?.id)).then((res) => {
-    if (res) {
-      setCurrentMatch(res);
-      history.push("/matching");
-    }
-  });
+    postNewMatch(axios, createEmptyMatch(user?.id)).then((res) => {
+      if (res) {
+        setMatchInState(res);
+        history.push("/matching");
+      }
+    });
+  };
 
   return (
     <Layout
@@ -134,20 +136,22 @@ const MatchFoundPage: FC<MatchFoundPageProps> = () => {
       {restaurantToShow ? (
         <RestaurantInfoComponent restaurantToShow={restaurantToShow} />
       ) : (
-        <MatchFoundCardContent
-          restaurants={matchToShow.matchedRestaurants.map(
-            (restaurantWrapper) => {
-              return Object.keys(restaurantWrapper).reduce((newObj, key) => {
-                const value = (restaurantWrapper as any)[key];
-                if (value !== null) {
-                  (newObj as any)[key] = value;
-                }
-                return newObj;
-              }, {}) as MatchRestaurantWrapper;
-            }
-          )}
-          onClick={handleRestaurantClick}
-        />
+        matchToShow && (
+          <MatchFoundCardContent
+            restaurants={matchToShow!.matchedRestaurants.map(
+              (restaurantWrapper) => {
+                return Object.keys(restaurantWrapper).reduce((newObj, key) => {
+                  const value = (restaurantWrapper as any)[key];
+                  if (value !== null) {
+                    (newObj as any)[key] = value;
+                  }
+                  return newObj;
+                }, {}) as MatchRestaurantWrapper;
+              }
+            )}
+            onClick={handleRestaurantClick}
+          />
+        )
       )}
       <div className={"center-content"}></div>
       <div className={"bottom-buttons"}>

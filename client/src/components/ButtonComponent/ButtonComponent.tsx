@@ -26,7 +26,7 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
       type={type}
       onClick={onClick}
       form={form}
-      style={{ backgroundColor: color, color: textColor }}
+      style={{ background: color, color: textColor }}
     >
       {value}
     </button>

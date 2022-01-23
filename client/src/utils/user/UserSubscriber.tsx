@@ -5,17 +5,17 @@
 import { useKeycloak } from "@react-keycloak/web";
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
-import { token } from "../FirebaseUtil";
 import { useAxios } from "../AxiosUtil";
+import { token } from "../FirebaseUtil";
 import { userState } from "./User.state";
 import { User } from "./User.types";
-import { createEmptyUser, loadSingleUser, updateUser } from "./User.util";
+import { loadSingleUser, updateUser } from "./User.util";
 
 // mount this component under your application's root
 // needed to use axios in selectors
 // @author Domenico Ferrari
 export const UserSubscriber: React.FC<{}> = () => {
-  const [user, setUser] = useRecoilState<User>(userState);
+  const [user, setUser] = useRecoilState<User | undefined>(userState);
   const { keycloak, initialized } = useKeycloak();
   //When merged replace with recoil axios state;
   const { axios } = useAxios();
@@ -24,7 +24,7 @@ export const UserSubscriber: React.FC<{}> = () => {
    * Loads user from backend when authenticated via keycloak and
    */
   useEffect(() => {
-    if (initialized && keycloak.authenticated && axios && !user.username)
+    if (initialized && keycloak.authenticated && axios && !user)
       keycloak.loadUserProfile().then((profile) => {
         loadSingleUser((profile as any).attributes.serviceId[0], axios).then(
           (serverUser) => {
@@ -34,7 +34,7 @@ export const UserSubscriber: React.FC<{}> = () => {
       });
 
     return () => {
-      setUser(createEmptyUser());
+      setUser(undefined);
     };
   }, [keycloak, axios, initialized, setUser]);
 
@@ -42,12 +42,12 @@ export const UserSubscriber: React.FC<{}> = () => {
    * Updating firebase token on backend user in case it changes
    */
   useEffect(() => {
-    if (user.token === token || !axios || !token || !user.id) return;
+    if (!user || user.token === token || !axios || !token || !user.id) return;
     updateUser(axios, { ...user, token: token }).then((result) => {
       if (!result) return;
       setUser({ ...user, token: token });
     });
-  }, [user.token, axios]);
+  }, [user?.token, axios]);
 
   return <></>;
 };

@@ -27,6 +27,7 @@ public class UserDto implements Serializable {
     private UserRole role;
     private String token;
     private List<Buddy> buddies = new ArrayList<Buddy>();
+    private String activeMatch;
 
     @Transient
     private String password;
@@ -44,9 +45,10 @@ public class UserDto implements Serializable {
         this.lastName = updatedUser.getLastName();
         this.email = updatedUser.getEmail();
         this.token = updatedUser.getToken();
+        this.activeMatch = updatedUser.getActiveMatch();
     }
 
-     /**
+    /**
      * Helper method to add new {@link Buddy} instance to {@link User}
      * 
      * @param buddyId    to id of the buddy to be added
@@ -91,6 +93,7 @@ public class UserDto implements Serializable {
 
     /**
      * Helper method to set a buddy instance to rejected
+     * 
      * @param buddyId the id of the buddy to be rejected
      */
     public void rejectBuddy(String buddyId) {
@@ -105,6 +108,7 @@ public class UserDto implements Serializable {
 
     /**
      * Helper method to set a buddy instance to accepted
+     * 
      * @param buddyId the id of the buddy to be accepted
      */
     public void acceptBuddy(String buddyId) {
@@ -119,11 +123,12 @@ public class UserDto implements Serializable {
 
     /**
      * Helper method to get a buddy from a given list of buddies
+     * 
      * @param buddyList a list containing buddies
-     * @param buddyId the id of buddy to be found
+     * @param buddyId   the id of buddy to be found
      * @return a buddy instance if search successful otherwise null
      */
-    public Buddy getBuddyFromList( String buddyId) {
+    public Buddy getBuddyFromList(String buddyId) {
         return this.buddies.stream().filter(buddy -> buddy.getBuddyId().equals(buddyId)).findFirst()
                 .orElse(null);
     }

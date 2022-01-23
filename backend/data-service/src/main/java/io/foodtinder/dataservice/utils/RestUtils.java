@@ -205,6 +205,18 @@ public class RestUtils {
          * @param userIds
          */
         public void sendMultiMatchFoundNotification(List<String> userIds) {
+                userServiceWebClient.post().uri("/notifications/multi/match/finished").bodyValue(userIds)
+                                .retrieve()
+                                .toBodilessEntity()
+                                .block();
+        }
+
+        /**
+         * Internal API to send notifications to all users that are part of the match
+         * 
+         * @param userIds
+         */
+        public void sendMultiMatchRequestNotification(List<String> userIds) {
                 userServiceWebClient.post().uri("/notifications/multi/match").bodyValue(userIds)
                                 .retrieve()
                                 .toBodilessEntity()

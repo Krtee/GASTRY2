@@ -46,16 +46,17 @@ const Layout: FC<LayoutProps> = ({
             navigationElements.map((navigation, index) => (
               <div
                 key={index}
-                onClick={() => changeLocation?.(index)}
+                onClick={() => changeLocation?.(navigation.page)}
                 className={
-                  currentLocation === index
+                  navigation.highlighted || currentLocation === navigation.page
                     ? "navigation-wrapper disabled"
                     : "navigation-wrapper"
                 }
               >
                 <div
                   className={
-                    currentLocation === index
+                    navigation.highlighted ||
+                    currentLocation === navigation.page
                       ? "navigation-item focused"
                       : "navigation-item"
                   }

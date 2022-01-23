@@ -11,7 +11,7 @@
     background-image: url("./../../assets/images/backgroundImage.svg");
   }
   &-header {
-    flex: 1 0 8%;
+    flex: 1 0 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -33,7 +33,7 @@
   }
 
   &-navigation-bar {
-    flex: 1 0 8%;
+    flex: 1 0 0;
     display: flex;
     justify-content: center;
     align-items: center;

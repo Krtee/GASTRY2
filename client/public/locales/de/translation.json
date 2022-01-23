@@ -4,13 +4,16 @@
     "buttons": {
       "logout": "Ausloggen",
       "login": "Einloggen",
-      "showmore":"Mehr anzeigen",
-      "showless":"Weniger anzeigen"
+      "retry":"Erneut versuchen",
+      "canel":"Abbrechen",
+      "showmore": "Mehr anzeigen",
+      "showless": "Weniger anzeigen",
+      "start":"Los geht`s!"
     },
-    "navigation":{
-      "feed":"Feed",
-      "profile":"profile",
-      "matching":"Match"
+    "navigation": {
+      "FEED": "Feed",
+      "PROFILE": "Profil",
+      "MATCHING": "Matching"
     },
     "pages": {
       "matching": "Matchen",
@@ -37,14 +40,25 @@
       }
     }
   },
-  "match":{
-    "button":{
-      "rematch":"Erneut matchen"
+  "match": {
+
+    "start":{
+      "title":"Matching starten!"
     },
-    "loading":{
-      "top":"Es ist ein ...",
-      "center":"YUMMMMatch",
-      "bottom":"Und die besten Restaurants in deiner Nähe sind..."
+    "button": {
+      "rematch": "Erneut matchen",
+      "cancelMatching":"Matching abbrechen",
+      "continueMatching":"Matching fortsetzen"
+    },
+    "loading": {
+      "top": "Es ist ein ...",
+      "center": "YUMMMMatch",
+      "bottom": "Und die besten Restaurants in deiner Nähe sind..."
+    },
+    "error":{
+      "nolocation":"Du musst deinen Standort zulassen um matchen zu können.",
+      "default":"Es ist ein Fehler beim matchen aufgetreten. Versuche es noch einmal.",
+      "cancelMatching":"Möchtest du das Matching wirklich abbrechen?"
     }
   }
 }

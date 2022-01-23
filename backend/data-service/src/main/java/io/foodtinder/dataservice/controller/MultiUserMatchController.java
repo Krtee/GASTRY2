@@ -1,6 +1,7 @@
 package io.foodtinder.dataservice.controller;
 
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,11 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.foodtinder.dataservice.constants.MultiMatchRequestStatus;
 import io.foodtinder.dataservice.model.Match;
+import io.foodtinder.dataservice.model.MultiMatchUserWrapper;
 import io.foodtinder.dataservice.model.MultiUserMatch;
 import io.foodtinder.dataservice.repositories.MatchRepository;
 import io.foodtinder.dataservice.repositories.MultiUserMatchRepository;
 import io.foodtinder.dataservice.utils.MatchUtils;
+import io.foodtinder.dataservice.utils.RestUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -26,7 +30,6 @@ import lombok.extern.slf4j.Slf4j;
 @CrossOrigin(origins = { "*" })
 public class MultiUserMatchController {
 
-    
     @Autowired
     private MultiUserMatchRepository multiUserMatchRepo;
 
@@ -35,6 +38,9 @@ public class MultiUserMatchController {
 
     @Autowired
     private MatchUtils matchUtils;
+
+    @Autowired
+    private RestUtils restUtils;
 
     /**
      * POST API to create a match
@@ -52,6 +58,12 @@ public class MultiUserMatchController {
             foundMatch.setPartOfGroup(true);
             matchRepository.save(foundMatch);
         }
+        restUtils.sendMultiMatchFoundNotification(
+                newMultiUserMatch.getUserList().stream()
+                        .filter(userWrapper -> userWrapper.getStatus() == MultiMatchRequestStatus.ACCEPTED
+                                && userWrapper.getUserId() != newMultiUserMatch.getCreatorId())
+                        .map(MultiMatchUserWrapper::getUserId)
+                        .collect(Collectors.toList()));
         return ResponseEntity.status(HttpStatus.OK).body(multiUserMatchRepo.save(newMultiUserMatch));
     }
 

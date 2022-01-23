@@ -1,0 +1,19 @@
+.matching-start-page {
+  background: url("./../assets/images/startScreenBackground.png") no-repeat
+    center / cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  & > p {
+    font-style: normal;
+    font-weight: 900;
+    font-size: 28px;
+    line-height: 34px;
+    text-align: center;
+    color: #f2594b;
+    max-width: 150px;
+    margin-bottom: 24px;
+  }
+}

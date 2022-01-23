@@ -12,4 +12,5 @@ export interface User {
   role: UserRole;
   token: string | null;
   password?: string | null;
+  activeMatch?: string;
 }

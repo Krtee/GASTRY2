@@ -7,7 +7,7 @@ export interface MultiUserMatch {
   updatedAt: Date;
   matches: string[];
   creatorId: string;
-  matchedRestaurants?: MatchRestaurantWrapper[];
+  matchedRestaurants: MatchRestaurantWrapper[];
   active?: boolean;
 }
 

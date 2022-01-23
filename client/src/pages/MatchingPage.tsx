@@ -22,6 +22,7 @@ import { ReactComponent as ResetIcon } from "../assets/icons/reset.svg";
 import { ReactComponent as SettingIcon } from "../assets/icons/settings.svg";
 import { ReactComponent as WaitIcon } from "../assets/icons/wait.svg";
 import ButtonComponent from "../components/ButtonComponent/ButtonComponent";
+import CardComponent from "../components/CardComponent/CardComponent";
 import Layout from "../components/LayoutComponent/Layout";
 import ModalComponent from "../components/ModalComponent/ModalComponent";
 import "../styles/MatchingPage.styles.scss";
@@ -44,6 +45,7 @@ import {
   getUserForMultiMatch,
 } from "../utils/multimatch/MultiMatch.state";
 import { MultiUserMatch } from "../utils/multimatch/MultiMatch.types";
+import { checkIfMultiMatchisFinished } from "../utils/multimatch/MultiMatch.Utils";
 import { userState } from "../utils/user/User.state";
 import { User } from "../utils/user/User.types";
 
@@ -57,12 +59,14 @@ enum MatchType {
 enum PopUpContent {
   SENDING_MATCH_ERROR,
   NO_LOCATION_ERROR,
+  CANCEL_MATCHING,
 }
 const MatchingPage: FC<MatchingPageProps> = () => {
   const navProps = useNavigation(Page.MATCHING);
-  const [currentMatch, setCurrentMatch] =
-    useRecoilState<Match>(currentMatchState);
-  const currentMultiMatch = useRecoilValue<MultiUserMatch | null>(
+  const [currentMatch, setCurrentMatch] = useRecoilState<Match | undefined>(
+    currentMatchState
+  );
+  const currentMultiMatch = useRecoilValue<MultiUserMatch | undefined>(
     currentMultiMatchState
   );
   const { t } = useTranslation();
@@ -104,14 +108,14 @@ const MatchingPage: FC<MatchingPageProps> = () => {
     switch (direction) {
       case "left":
         setCurrentMatch((lastMatchState) => ({
-          ...lastMatchState,
-          unmatchedMeals: [...lastMatchState.unmatchedMeals, meal],
+          ...lastMatchState!,
+          unmatchedMeals: [...lastMatchState!.unmatchedMeals, meal],
         }));
         break;
       case "right":
         setCurrentMatch((lastMatchState) => ({
-          ...lastMatchState,
-          matchedMeals: [...lastMatchState.matchedMeals, meal],
+          ...lastMatchState!,
+          matchedMeals: [...lastMatchState!.matchedMeals, meal],
         }));
         break;
       default:
@@ -119,38 +123,52 @@ const MatchingPage: FC<MatchingPageProps> = () => {
     setdisableGoBack(false);
     updateCurrentIndex(index - 1);
     if (index === 0) {
-      setShowLoadingMatchModal(
-        currentMultiMatchState ? MatchType.MULTI_MATCH : MatchType.SINGLE_MATCH
-      );
-      if (!axios) {
-        setShowPopUp(PopUpContent.SENDING_MATCH_ERROR);
-        return;
-      }
+      handleSubmitMatch();
+    }
+  };
 
-      if (location) {
-        setShowPopUp(PopUpContent.NO_LOCATION_ERROR);
-        refreshGeolocation();
-        return;
-      }
+  /**
+   * handles submit of current match
+   */
+  const handleSubmitMatch = async (): Promise<void> => {
+    setShowLoadingMatchModal(MatchType.SINGLE_MATCH);
 
-      let updateMatchPromise: Promise<Match>;
-      if (user?.id) {
-        updateMatchPromise = updateMatch(axios, currentMatch, location);
-      } else {
-        updateMatchPromise = matchRestaurants(axios, currentMatch, location);
-      }
-      updateMatchPromise.then((resultMatch) => {
-        if (!resultMatch) {
-          setShowLoadingMatchModal(undefined);
-          setShowPopUp(PopUpContent.NO_LOCATION_ERROR);
-          return;
-        }
-        setCurrentMatch(resultMatch);
-        setTimeout(() => {
-          history.push(`/matching/result/${resultMatch.id}`);
-          setShowLoadingMatchModal(undefined);
-        }, 1000);
-      });
+    if (!axios) {
+      setShowPopUp(PopUpContent.SENDING_MATCH_ERROR);
+      return;
+    }
+
+    if (!location) {
+      setShowPopUp(PopUpContent.NO_LOCATION_ERROR);
+      refreshGeolocation();
+      return;
+    }
+
+    let updatedMatch: Match;
+    if (user?.id) {
+      updatedMatch = await updateMatch(axios, currentMatch!, location);
+    } else {
+      updatedMatch = await matchRestaurants(axios, currentMatch!, location);
+    }
+    if (!updatedMatch) {
+      setShowLoadingMatchModal(undefined);
+      setShowPopUp(PopUpContent.SENDING_MATCH_ERROR);
+      return;
+    }
+    setCurrentMatch(updatedMatch);
+
+    if (
+      updatedMatch.partOfGroup &&
+      currentMultiMatch &&
+      currentMultiMatch.id &&
+      !(await checkIfMultiMatchisFinished(axios, currentMultiMatch.id))
+    ) {
+      setShowLoadingMatchModal(MatchType.MULTI_MATCH);
+    } else {
+      setTimeout(() => {
+        history.push(`/matching/result/${updatedMatch.id}`);
+        setShowLoadingMatchModal(undefined);
+      }, 1000);
     }
   };
 
@@ -184,11 +202,11 @@ const MatchingPage: FC<MatchingPageProps> = () => {
     const newIndex = currentIndex + 1;
     updateCurrentIndex(newIndex);
     setCurrentMatch({
-      ...currentMatch,
-      unmatchedMeals: currentMatch.unmatchedMeals.filter(
+      ...currentMatch!,
+      unmatchedMeals: currentMatch!.unmatchedMeals.filter(
         (_, index) => index !== newIndex
       ),
-      matchedMeals: currentMatch.matchedMeals.filter(
+      matchedMeals: currentMatch!.matchedMeals.filter(
         (_, index) => index !== newIndex
       ),
     });
@@ -215,27 +233,70 @@ const MatchingPage: FC<MatchingPageProps> = () => {
     }
   };
 
+  const getErrorPopUpContent = () => {
+    switch (showPopUp) {
+      case PopUpContent.NO_LOCATION_ERROR:
+        return (
+          <CardComponent>
+            <p>{t(`match.error.nolocation`)}</p>
+            <div>
+              <ButtonComponent
+                value={t("match.button.rematch")}
+                onClick={() => handleRematch()}
+                color="transparent"
+              />
+              <ButtonComponent
+                value={t("general.buttons.retry")}
+                onClick={() => handleSubmitMatch()}
+              />
+            </div>
+          </CardComponent>
+        );
+      case PopUpContent.CANCEL_MATCHING:
+        return (
+          <CardComponent>
+            <p>{t(`match.error.cancelMatching`)}</p>
+            <div>
+              <ButtonComponent
+                value={t("match.button.continueMatching")}
+                onClick={() => setShowPopUp(undefined)}
+              />
+              <ButtonComponent
+                value={t("match.button.cancelMatching")}
+                onClick={() => history.goBack()}
+              />
+            </div>
+          </CardComponent>
+        );
+      case PopUpContent.SENDING_MATCH_ERROR:
+        return (
+          <CardComponent>
+            <p>{t(`match.error.default`)}</p>
+            <div>
+              <ButtonComponent
+                value={t("general.buttons.retry")}
+                onClick={() => handleSubmitMatch()}
+              />
+              <ButtonComponent
+                value={t("match.button.rematch")}
+                onClick={() => handleRematch()}
+              />
+            </div>
+          </CardComponent>
+        );
+      default:
+        break;
+    }
+  };
+
   /**
-   * resets meals and currentmatch
-   * @author Minh
+   * returns to the starting screen, if no match exist
    */
   useEffect(() => {
-    if (
-      currentMatch &&
-      currentMatch.matchedRestaurants.length > 0 &&
-      !showLoadingMatchModal &&
-      axios
-    ) {
-      fetchRandomMeals(
-        axios,
-        parseInt(process.env.REACT_APP_DEFAULT_MEAL_COUNT || "15")
-      ).then(setMealsToSwipe);
-      postNewMatch(axios, createEmptyMatch(user?.id)).then(
-        (res) => res && setCurrentMatch(res)
-      );
+    if (!currentMatch) {
+      history.push("/matching/start");
     }
-    // eslint-disable-next-line
-  }, [currentMatch, axios, user?.id, setCurrentMatch, setMealsToSwipe]);
+  }, []);
 
   return (
     <Layout
@@ -255,7 +316,8 @@ const MatchingPage: FC<MatchingPageProps> = () => {
         }
       >
         {currentMultiMatch &&
-        showLoadingMatchModal === MatchType.MULTI_MATCH ? (
+        showLoadingMatchModal === MatchType.MULTI_MATCH &&
+        currentMultiMatch!.matchedRestaurants.length === 0 ? (
           <div className={"multi-user-match-wait-screen"}>
             <p className={"multi-user-match-wait-screen__top-big"}>
               {t("match.multi-user.wait.top-text")}
@@ -272,7 +334,7 @@ const MatchingPage: FC<MatchingPageProps> = () => {
               onClick={() => handleRematch()}
             />
           </div>
-        ) : (
+        ) : currentMatch ? (
           <div className="matching-page__content-wrapper">
             <div className="swipeable-card-container">
               {mealsToSwipe.map((meal, index) => (
@@ -324,7 +386,7 @@ const MatchingPage: FC<MatchingPageProps> = () => {
                 <GroupAddIcon
                   className="button-small-style"
                   onClick={() =>
-                    currentMultiMatch
+                    user
                       ? history.push("/matching/addfriends")
                       : keycloak.login()
                   }
@@ -343,8 +405,14 @@ const MatchingPage: FC<MatchingPageProps> = () => {
                 <p>{t("match.loading.bottom")}</p>
               </ModalComponent>
             )}
-            {showPopUp && <ModalComponent></ModalComponent>}
+            {showPopUp && (
+              <ModalComponent className="matching-page__error-pop-up">
+                {getErrorPopUpContent()}
+              </ModalComponent>
+            )}
           </div>
+        ) : (
+          <div>Loading</div>
         )}
       </Suspense>
     </Layout>

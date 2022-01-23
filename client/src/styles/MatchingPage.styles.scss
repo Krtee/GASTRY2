@@ -2,6 +2,36 @@
   &__content-wrapper {
     height: 100%;
   }
+  &__error-pop-up {
+    background-color: rgba(104, 104, 104, 0.95);
+    display: flex;
+    align-items: center;
+    padding: 12px;
+
+    .card-component {
+      &__wrapper {
+        max-width: 90%;
+        margin: auto;
+        padding: 20px;
+        & > p {
+          margin-bottom: 20px;
+          font-weight: 900;
+          font-size: 20px;
+          line-height: 24px;
+        }
+        & > div {
+          display: flex;
+        }
+      }
+    }
+  }
+  @supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
+    &__error-pop-up {
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      background-color: rgba(138, 138, 138, 0.5);
+    }
+  }
   .swipeable-card-container {
     position: relative;
     .container {

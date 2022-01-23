@@ -1,12 +1,21 @@
 package io.yumatch.userservice.controller;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import io.yumatch.userservice.constants.ResponseTypes;
 import io.yumatch.userservice.constants.UserRole;
@@ -28,10 +37,10 @@ public class UserController {
     private KeyCloakService keycloakUtil;
 
     /**
-     * CREATE API to create a new {@link User}
+     * CREATE API to create a new {@link UserDTO}
      * 
      * @param newUser The clientside created instance
-     * @return 200 in case of success, 412 in case the {@link User} could not be
+     * @return 200 in case of success, 412 in case the {@link UserDTO} could not be
      *         created on keycloak
      */
     @PostMapping(value = "/")
@@ -70,7 +79,7 @@ public class UserController {
     }
 
     /**
-     * READ API to load all {@link User} instances
+     * READ API to load all {@link UserDTO} instances
      * 
      * @return 200 with a list of all instances which can be empty
      */
@@ -81,7 +90,7 @@ public class UserController {
     }
 
     /**
-     * READ API to load all {@link User} instances
+     * READ API to load all {@link UserDTO} instances
      * 
      * @return 200 with a list of all instances which can be empty
      */
@@ -92,10 +101,10 @@ public class UserController {
     }
 
     /**
-     * READ API to load a single {@link User} instance by its id
+     * READ API to load a single {@link UserDTO} instance by its id
      * 
      * @param userId the id of the instance to fetch
-     * @return 200 with a loaded {@link User} instance which can be null
+     * @return 200 with a loaded {@link UserDTO} instance which can be null
      */
     @GetMapping(value = "/id")
     public ResponseEntity<UserDto> getUserById(@RequestParam String userId) {
@@ -104,31 +113,51 @@ public class UserController {
     }
 
     /**
-     * READ API to load a single {@link User} instance by its username
+     * READ API to load a list of {@link UserDTO} instance by its id
+     * 
+     * @param userIds list of ids to fetch
+     * @return 200 with a loaded {@link UserDTO} instance which can be null
+     */
+    @GetMapping(value = "/id/many")
+    public ResponseEntity<List<UserDto>> getMultipleSimpleUsersById(@RequestParam List<String> userIds) {
+        log.info("Request to load list of users received");
+
+        List<UserDto> listOfUsers = new ArrayList<UserDto>();
+
+        for (String userId : userIds) {
+            listOfUsers.add(userRepo.findSimpleUserById(userId).orElse(null));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(listOfUsers.parallelStream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList()));
+    }
+
+    /**
+     * READ API to load a single {@link UserDTO} instance by its username
      * 
      * @param username the username of the instance to fetch
-     * @return 200 with a loaded {@link User} instance which can be null
+     * @return 200 with a loaded {@link UserDTO} instance which can be null
      */
     @GetMapping(value = "/username")
     public ResponseEntity<UserDto> getUserByUsername(@RequestParam String username) {
-        log.info("Request to load user by username {} received", username);
+        log.info("Request to load UserDTO by username {} received", username);
         return ResponseEntity.status(HttpStatus.OK).body(userRepo.findByUsername(username).orElse(null));
     }
 
     /**
-     * READ API to load all {@link User} instances in a specific role
+     * READ API to load all {@link UserDTO} instances in a specific role
      * 
      * @param role the role of the instance to fetch
-     * @return 200 with loaded {@link User} instances which can be empty
+     * @return 200 with loaded {@link UserDTO} instances which can be empty
      */
     @GetMapping(value = "/role")
     public ResponseEntity<List<UserDto>> getAllUserByRole(@RequestParam UserRole role) {
-        log.info("Request to load all user for role {} received", role);
+        log.info("Request to load all UserDTO for role {} received", role);
         return ResponseEntity.status(HttpStatus.OK).body(userRepo.findAllByRole(role));
     }
 
     /**
-     * UPDATE API to update a single {@link User} instance
+     * UPDATE API to update a single {@link UserDTO} instance
      * 
      * @param updatedUser The clientside updated instance
      * @return 200 in case of success, 404 in case the instance was not found, 419
@@ -136,10 +165,10 @@ public class UserController {
      */
     @PostMapping(value = "/update")
     public ResponseEntity<Boolean> updateUser(@RequestBody UserDto updatedUser) {
-        log.info("Request to update user {} received", updatedUser);
+        log.info("Request to update UserDTO {} received", updatedUser);
         UserDto loadedUser = userRepo.findById(updatedUser.getId()).orElse(null);
         if (loadedUser == null) {
-            log.warn("User with id {} not found to update!", updatedUser.getId());
+            log.warn("UserDTO with id {} not found to update!", updatedUser.getId());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
         }
         if (keycloakUtil.updateKeycloakUser(updatedUser, loadedUser)) {
@@ -147,12 +176,12 @@ public class UserController {
             userRepo.save(loadedUser);
             return ResponseEntity.status(HttpStatus.OK).body(true);
         }
-        log.warn("Keycloak user update was not successfull!");
+        log.warn("Keycloak UserDTO update was not successfull!");
         return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).body(false);
     }
 
     /**
-     * DELETE API to delete a single {@link User} instance by its id
+     * DELETE API to delete a single {@link UserDTO} instance by its id
      * 
      * @param userId The id of the instance to delete
      * @return 200 in case of success, 404 in case the instance was not found, 419
@@ -160,17 +189,17 @@ public class UserController {
      */
     @GetMapping(value = "/delete")
     public ResponseEntity<UserDto> deleteUser(@RequestParam String userId) {
-        log.info("Request to delete user {} received", userId);
+        log.info("Request to delete UserDTO {} received", userId);
         UserDto loadedUser = userRepo.findById(userId).orElse(null);
         if (loadedUser == null) {
-            log.warn("User with id {} not found to delete!", userId);
+            log.warn("UserDTO with id {} not found to delete!", userId);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         if (keycloakUtil.deleteUserOnKeycloak(loadedUser)) {
             userRepo.deleteById(userId);
             return ResponseEntity.status(HttpStatus.OK).build();
         }
-        log.warn("User was not deleted on keycloak!");
+        log.warn("UserDTO was not deleted on keycloak!");
         return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).build();
     }
 

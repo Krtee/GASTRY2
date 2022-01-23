@@ -3,6 +3,7 @@ package io.foodtinder.dataservice.controller;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.foodtinder.dataservice.constants.MultiMatchRequestStatus;
 import io.foodtinder.dataservice.model.Match;
+import io.foodtinder.dataservice.model.MultiMatchUserWrapper;
 import io.foodtinder.dataservice.model.MultiUserMatch;
 import io.foodtinder.dataservice.model.requests.MatchRequestBody;
 import io.foodtinder.dataservice.repositories.MatchRepository;
@@ -147,7 +150,11 @@ public class MatchController {
                     multiUserMatch.setMatchedRestaurants(
                             matchUtils.matchRestaurants(allMatchesInMultiUserMatch, requestBody.getLocation()));
                     multiUserMatch.setUpdatedAt(LocalDateTime.now());
-                    restUtils.sendMultiMatchFoundNotification(multiUserMatch.getUserIds());
+                    restUtils.sendMultiMatchFoundNotification(
+                            multiUserMatch.getUserList().stream()
+                                    .filter(userWrapper -> userWrapper.getStatus() == MultiMatchRequestStatus.ACCEPTED)
+                                    .map(MultiMatchUserWrapper::getUserId)
+                                    .collect(Collectors.toList()));
                     multiUserMatchRepo.save(multiUserMatch);
                 }
             }

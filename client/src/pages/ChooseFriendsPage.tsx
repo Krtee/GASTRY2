@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { ReactComponent as ArrowLeftIcon } from "../assets/icons/arrow_left.svg";
 import { ReactComponent as CloseIcon } from "../assets/icons/close.svg";
 import { ReactComponent as DoneIcon } from "../assets/icons/done.svg";
@@ -30,7 +30,7 @@ import testUser from "./../utils/tests/testUsers.json";
 interface ChooseFriendsPageProps {}
 
 const ChooseFriendsPage: React.FC<ChooseFriendsPageProps> = ({}) => {
-  const navProps = useNavigation(Page.MATCHING);
+  const navProps = useNavigation(Page.CHOOSE_FRIENDS, Page.MATCHING);
   const history = useHistory();
   const { t } = useTranslation();
   const [searchText, setSearchText] = useState("");
@@ -44,7 +44,7 @@ const ChooseFriendsPage: React.FC<ChooseFriendsPageProps> = ({}) => {
       role: userToMap.role as UserRole,
     }))
   );
-  const currentMatch = useRecoilValue(currentMatchState);
+  const [currentMatch, setCurrentMatch] = useRecoilState(currentMatchState);
   const { axios } = useAxios();
   const user = useRecoilValue(userState);
 
@@ -57,15 +57,16 @@ const ChooseFriendsPage: React.FC<ChooseFriendsPageProps> = ({}) => {
         }))
         .filter(
           (userToFilter) =>
-            userToFilter.email.includes(searchText) ||
-            userToFilter.firstName.includes(searchText) ||
-            userToFilter.lastName.includes(searchText)
+            userToFilter.id !== user!.id &&
+            (userToFilter.email.includes(searchText) ||
+              userToFilter.firstName.includes(searchText) ||
+              userToFilter.lastName.includes(searchText))
         )
     );
   }, [searchText]);
 
   const handleSubmitMultiMatch = () => {
-    if (user && currentMatch && currentMatch.id) {
+    if (user && user.id && currentMatch && currentMatch.id) {
       postNewMultiUserMatch(
         axios,
         createEmptyMultiUserMatch(
@@ -78,6 +79,10 @@ const ChooseFriendsPage: React.FC<ChooseFriendsPageProps> = ({}) => {
         )
       ).then((mulitUserMatch) => {
         setMultiUserMatch(mulitUserMatch);
+        setCurrentMatch((matchToUpdate) => ({
+          ...matchToUpdate!,
+          partOfGroup: true,
+        }));
         history.push("/matching");
       });
     }

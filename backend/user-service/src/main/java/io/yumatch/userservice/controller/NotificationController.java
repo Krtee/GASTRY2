@@ -1,22 +1,17 @@
 package io.yumatch.userservice.controller;
 
-import lombok.extern.slf4j.Slf4j;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import com.google.api.services.storage.model.Notification;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.yumatch.userservice.constants.NotificationType;
@@ -29,6 +24,7 @@ import io.yumatch.userservice.model.requests.SubscriptionRequest;
 import io.yumatch.userservice.repositories.NotificationRepository;
 import io.yumatch.userservice.repositories.UserRepository;
 import io.yumatch.userservice.utils.FirebaseService;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @Slf4j
@@ -58,7 +54,6 @@ public class NotificationController {
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
-
 
     /**
      * POST API to send notification to a user, if he has token
@@ -175,7 +170,39 @@ public class NotificationController {
      */
     @PostMapping(value = "/multi/match")
     public ResponseEntity<Boolean> sendMultiMatchNotification(@RequestBody List<String> userIds) {
-        log.info("Request to send notifications to users in match group");
+        log.info("Request to send notifications to users to request group match");
+        List<DirectNotification> notifications = new ArrayList<DirectNotification>();
+        userIds.forEach(userId -> {
+            UserDto loadedUser = userRepo.findById(userId).orElse(null);
+            if (loadedUser == null) {
+                log.warn("User with id {} not found!", userId);
+            } else {
+                log.info("Creating both notification and persistent notification for page");
+                String title = "DU hast eine neue Match Anfrage!";
+                String message = "Deine Freunde haben dich zu einem Gruppenmatch eingeladen.";
+                DirectNotification newNotification = new DirectNotification(loadedUser.getToken(), title, message);
+                notifications.add(newNotification);
+                PersistedNotification persistNotification = new PersistedNotification();
+                persistNotification.setTitle(title);
+                persistNotification.setMessage(message);
+                persistNotification.setUserId(loadedUser.getId());
+                persistNotification.setNotificationType(NotificationType.REQUEST_MULTI_MATCH);
+                notiRepo.save(persistNotification);
+            }
+        });
+        firebaseService.sendMultipleNotification(notifications);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    /**
+     * POST API to send notification to all users part of the matching group
+     * 
+     * @param notification
+     * @return 200
+     */
+    @PostMapping(value = "/multi/match/finished")
+    public ResponseEntity<Boolean> sendMultiMatchFinishedNotification(@RequestBody List<String> userIds) {
+        log.info("Request to send notifications to users in match group, saying that matching finished");
         List<DirectNotification> notifications = new ArrayList<DirectNotification>();
         userIds.forEach(userId -> {
             UserDto loadedUser = userRepo.findById(userId).orElse(null);

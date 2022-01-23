@@ -23,18 +23,12 @@ const data = {
 
 const ProfilePage: FC<{}> = () => {
   const { t } = useTranslation();
-  const { currentLocation, onLocationChange } = useNavigation(Page.PROFILE);
+  const navProps = useNavigation(Page.PROFILE);
   const [selectedPage, setSelectedPage] = useState(nav_elements[0]);
   let { url } = useRouteMatch();
 
   return (
-    <Layout
-      navigationElements={Object.entries(Page).map((page) => ({
-        title: page[1],
-      }))}
-      changeLocation={onLocationChange}
-      currentLocation={currentLocation}
-    >
+    <Layout {...navProps}>
       <div className="profile">
         <UserInfo
           photo={data.photo}

@@ -13,7 +13,8 @@
     "navigation": {
       "FEED": "Feed",
       "PROFILE": "Profil",
-      "MATCHING": "Matching"
+      "MATCHING": "Matching",
+      "NOTIFICATION": "Notifications"
     },
     "pages": {
       "matching": "Matchen",

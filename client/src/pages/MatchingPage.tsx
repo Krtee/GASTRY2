@@ -1,3 +1,4 @@
+import { useKeycloak } from "@react-keycloak/web";
 import {
   createRef,
   FC,
@@ -59,6 +60,7 @@ const MatchingPage: FC<MatchingPageProps> = () => {
     useState<boolean>(false);
   const location = useGeoLocation();
   const { axios } = useAxios();
+  const { keycloak, initialized } = useKeycloak();
   const childRefs: RefObject<any>[] = useMemo(
     () =>
       Array(mealsToSwipe.length)
@@ -218,6 +220,7 @@ const MatchingPage: FC<MatchingPageProps> = () => {
               </div>
             </TinderCard>
           ))}
+          <button onClick={() => keycloak.login()}>Login</button>
         </div>
 
         <div className="matching-buttons">

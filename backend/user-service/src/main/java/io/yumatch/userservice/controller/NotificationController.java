@@ -155,7 +155,7 @@ public class NotificationController {
      */
     @PostMapping(value = "/persistent/update")
     public ResponseEntity<?> updatePersistentNotificationSeen(@RequestBody String userId) {
-        log.info("Request to get all persistent notis belonging to a user by seen, {}, {}", userId);
+        log.info("Request to update all persistent notis to be seen, {}, {}", userId);
         UserDto loadedUser = userRepo.findById(userId).orElse(null);
         if (loadedUser == null) {
             log.warn("User with id {} not found!", userId);
@@ -163,6 +163,7 @@ public class NotificationController {
         }
         List<PersistedNotification> notSeenNotifications = notiRepo.findByUserIdAndSeen(userId, false);
         PersistedNotification.updateManySeen(notSeenNotifications);
+        notiRepo.saveAll(notSeenNotifications);
         return ResponseEntity.status(HttpStatus.OK).build();
 
     }

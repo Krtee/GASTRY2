@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useRecoilValue } from "recoil";
 import Layout from "../components/LayoutComponent/Layout";
@@ -10,12 +10,18 @@ import {
 import { Page, useNavigation } from "../utils/hooks/useNavigation";
 import { ReactComponent as ArrowLeftIcon } from "../assets/icons/arrow_left.svg";
 import {
+  Notification,
   NotificationPageProps,
   NotificationType,
 } from "../utils/notification/Notification.types";
 import { userState } from "../utils/user/User.state";
 import "../styles/NotificationPage.styles.scss";
 import { useHistory } from "react-router";
+import { useAxios } from "../utils/AxiosUtil";
+import {
+  loadAllNotifications,
+  persistentNotificationHaveBeenSeen,
+} from "../utils/notification/Notification.util";
 
 const NotificationPage: React.FC<NotificationPageProps> = () => {
   const { t } = useTranslation();
@@ -23,7 +29,11 @@ const NotificationPage: React.FC<NotificationPageProps> = () => {
   const { currentLocation, onLocationChange, navItems } = useNavigation(
     Page.NOTIFICATION
   );
+  const { axios } = useAxios();
   const user = useRecoilValue(userState);
+
+  const [peristentNotifcationList, setPeristentNotifcationList] =
+    useState<Notification[]>();
   const demoNoti: NotificationCardComponentProps[] = [
     {
       title: "TestNoti",
@@ -54,6 +64,17 @@ const NotificationPage: React.FC<NotificationPageProps> = () => {
       seen: true,
     },
   ];
+
+  useEffect(() => {
+    if (!axios || !user || !user.id) return;
+    loadAllNotifications(user!.id, axios).then((notifications) => {
+      setPeristentNotifcationList(notifications);
+    });
+
+    return () => {
+      persistentNotificationHaveBeenSeen(user!.id, axios);
+    };
+  }, [axios, user]);
   return (
     <Layout
       navigationElements={navItems}
@@ -70,6 +91,9 @@ const NotificationPage: React.FC<NotificationPageProps> = () => {
       <div className="notification-page--wrapper">
         {demoNoti.map((noti, index) => (
           <NotificationCardComponent {...noti} index={index} />
+        ))}
+        {peristentNotifcationList?.map((noti, index) => (
+          <NotificationCardComponent {...noti} index={index} key={index} />
         ))}
       </div>
     </Layout>

@@ -67,7 +67,7 @@ export const NotificationCardComponent: React.FC<NotificationCardComponentProps>
         className={[
           "notification-card--wrapper ",
           className,
-          disableAnimation || duration ? " disable" : "",
+          disableAnimation ? " disable" : "",
         ].join("")}
         onClick={onClick}
         style={{
@@ -80,7 +80,7 @@ export const NotificationCardComponent: React.FC<NotificationCardComponentProps>
         <div
           className={[
             "notification-card--text ",
-            disableAnimation || duration ? " disable" : "",
+            disableAnimation ? " disable" : "",
           ].join("")}
           style={{
             animation: disableAnimation ? "none" : "",

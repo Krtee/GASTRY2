@@ -2,6 +2,7 @@ import "leaflet/dist/leaflet.css";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import { RecoilRoot } from "recoil";
 import { AxiosSubscriber } from "../utils/Axios.state";
+import { UserSubscriber } from "../utils/user/UserSubscriber";
 import MatchFoundPage from "./MatchFoundPage";
 import MatchingPage from "./MatchingPage";
 import NotificationPage from "./NotificationPage";
@@ -14,6 +15,7 @@ const App = () => {
     <BrowserRouter>
       <RecoilRoot>
         <AxiosSubscriber />
+        <UserSubscriber />
         <Switch>
           <Route path="/" exact>
             <Redirect to="/matching" />

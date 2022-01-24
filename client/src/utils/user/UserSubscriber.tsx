@@ -15,7 +15,7 @@ import { createEmptyUser, loadSingleUser, updateUser } from "./User.util";
 // needed to use axios in selectors
 // @author Domenico Ferrari
 export const UserSubscriber: React.FC<{}> = () => {
-  const [user, setUser] = useRecoilState<User>(userState);
+  const [user, setUser] = useRecoilState<User | undefined>(userState);
   const { keycloak, initialized } = useKeycloak();
   //When merged replace with recoil axios state;
   const { axios } = useAxios();
@@ -24,7 +24,8 @@ export const UserSubscriber: React.FC<{}> = () => {
    * Loads user from backend when authenticated via keycloak and
    */
   useEffect(() => {
-    if (initialized && keycloak.authenticated && axios && !user.username)
+    console.log(user);
+    if (initialized && keycloak.authenticated && axios && !user?.username)
       keycloak.loadUserProfile().then((profile) => {
         loadSingleUser((profile as any).attributes.serviceId[0], axios).then(
           (serverUser) => {
@@ -42,12 +43,12 @@ export const UserSubscriber: React.FC<{}> = () => {
    * Updating firebase token on backend user in case it changes
    */
   useEffect(() => {
-    if (user.token === token || !axios || !token || !user.id) return;
+    if (user?.token === token || !axios || !token || !user?.id) return;
     updateUser(axios, { ...user, token: token }).then((result) => {
       if (!result) return;
       setUser({ ...user, token: token });
     });
-  }, [user.token, axios]);
+  }, [user?.token, axios]);
 
   return <></>;
 };

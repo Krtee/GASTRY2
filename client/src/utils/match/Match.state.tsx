@@ -17,7 +17,7 @@ export const latestMatchSelector = selector<Match>({
   get: async ({ get }) => {
     const { instance: axios } = get(axiosState);
     const user = get(userState);
-    if (!axios || axios === null || !user.id) {
+    if (!axios || axios === null || !user?.id) {
       return createEmptyMatch("");
     }
     const latestMatchResp = await fetchLatestMatchForUser(axios, user.id);

@@ -25,7 +25,7 @@ $animatiom-duration: "0.5s";
     align-items: center;
     animation-name: grow;
     animation-duration: 1s;
-    max-height: 48px;
+    max-height: 120px;
     width: 86%;
     animation-fill-mode: forwards;
     min-width: 260px;
@@ -55,6 +55,7 @@ $animatiom-duration: "0.5s";
     margin-left: 8px;
     animation-name: appear;
     animation-duration: 1s;
+    flex-basis: 50%;
   }
 
   &--text.disable {
@@ -62,9 +63,12 @@ $animatiom-duration: "0.5s";
   }
 
   &--title {
+    font-weight: bold;
   }
 
   &--message {
+    max-width: 200px;
+    word-break: break-word;
   }
 
   &--dot {

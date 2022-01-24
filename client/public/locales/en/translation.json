@@ -5,7 +5,8 @@
       "logout": "Logout",
       "login": "Login",
       "add": "Add",
-      "added": "Added"
+      "added": "Added",
+      "save": "Save"
     },
     "pages": {
       "MATCHING": "Matching",
@@ -18,10 +19,12 @@
       },
       "profile": {
         "favRestaurant": "Favorite restaurant",
-        "restaurants": "Restaurants",
-        "posts": "Posts",
+        "posts": "My posts",
         "followers": "Followers",
         "followings": "Followings",
+        "friends": "My Foodies",
+        "visitedRestaurants": "Visited restaurants",
+        "subscribedRestaurants": "Subscribed restaurants",
         "editProfile": "Edit profile",
         "searchFriends": "Search friends",
         "firstName": "First name",
@@ -38,6 +41,7 @@
         "yourFriends": "Your friends"
       },
       "preferences": {
+        "filterPresets": "Filter Presets",
         "diet": "Diet",
         "type": "Type",
         "intolerances": "Your intolerances",

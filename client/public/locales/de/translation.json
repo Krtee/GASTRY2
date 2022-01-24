@@ -7,7 +7,8 @@
       "add": "Hinzufügen",
       "added": "Hinzugefügt",
       "showmore": "Mehr anzeigen",
-      "showless": "Weniger anzeigen"
+      "showless": "Weniger anzeigen",
+      "save": "Speichern"
     },
     "navigation": {
       "feed": "Feed",
@@ -30,10 +31,12 @@
       },
       "profile": {
         "favRestaurant": "Lieblingsrestaurant",
-        "restaurants": "Restaurants",
-        "posts": "Beiträge",
         "followers": "Abonennten",
         "followings": "Abonniert",
+        "posts": "Meine Beiträge",
+        "friends": "Meine Foodies",
+        "visitedRestaurants": "Besuchte Restaurants",
+        "subscribedRestaurants": "Subscribed restaurants",
         "editProfile": "Profil bearbeiten",
         "searchFriends": "Freunde suchen",
         "firstName": "Vorname",
@@ -50,6 +53,7 @@
         "yourFriends": "Deine Freunde"
       },
       "preferences": {
+        "filterPresets": "Filter Voreinstellungen",
         "diet": "Ernährungsweise",
         "type": "Art",
         "intolerances": "Deine Unverträglichkeiten",

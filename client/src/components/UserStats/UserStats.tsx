@@ -15,19 +15,20 @@ const UserStats: FC<UserStatsComponentProps> = ({
     <div className="user-stats">
       <div className="user-stats-box">
         <p className="user-stats-number">{visitedRestaurants}</p>
-        <p>{t("general.pages.profile.restaurants")}</p>
+        <p>{t("general.pages.profile.visitedRestaurants")}</p>
       </div>
       <div className="user-stats-box">
         <p className="user-stats-number">{posts}</p>
         <p>{t("general.pages.profile.posts")}</p>
       </div>
-      <Link to={`/followers`} className="user-stats-box">
+      {/* TODO: add the right path when this feature is ready */}
+      <Link to={`/profile`} className="user-stats-box">
         <p className="user-stats-number">{followings}</p>
-        <p>{t("general.pages.profile.followers")}</p>
+        <p>{t("general.pages.profile.subscribedRestaurants")}</p>
       </Link>
-      <Link to={`/followings`} className="user-stats-box">
+      <Link to={`/buddies`} className="user-stats-box">
         <p className="user-stats-number">{followers}</p>
-        <p>{t("general.pages.profile.followings")}</p>
+        <p>{t("general.pages.profile.friends")}</p>
       </Link>
     </div>
   );

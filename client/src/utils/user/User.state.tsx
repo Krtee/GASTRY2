@@ -28,7 +28,8 @@ export const userState: RecoilState<User> = atom<User>({
     types: [] as TYPES[],
     cuisines: [] as CUISINES[],
     favoriteRestaurants: [],
-    followers: [],
-    followings: [],
+    visitedRestaurants: [],
+    subscribedRestaurants: [],
+    buddies: [],
   },
 });

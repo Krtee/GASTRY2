@@ -14,18 +14,20 @@ const List: React.FC<ListProps> = ({
   return (
     <div className="list">
       <Searchbar value={searchValue} onChange={setSearchValue} placeholder="" />
-      <div className="list-items-wrapper">
-        {data
-          ?.filter((result: any) =>
-            result[column].toLowerCase().includes(searchValue)
-          )
-          .map((item: any) => (
-            <div key={item._id} className="list-item">
-              <p>{item[column]}</p>
-              <button onClick={onDeleteItem}>{deleteBtnLabel}</button>
-            </div>
-          ))}
-      </div>
+      {data?.length > 0 && (
+        <div className="list-items-wrapper">
+          {data
+            ?.filter((result: any) =>
+              result[column].toLowerCase().includes(searchValue)
+            )
+            .map((item: any) => (
+              <div key={item._id} className="list-item">
+                <p>{item[column]}</p>
+                <button onClick={onDeleteItem}>{deleteBtnLabel}</button>
+              </div>
+            ))}
+        </div>
+      )}
     </div>
   );
 };

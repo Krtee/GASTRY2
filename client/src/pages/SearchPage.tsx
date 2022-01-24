@@ -1,78 +1,61 @@
-import { ChangeEvent, FC, useState } from "react";
+import { ChangeEvent, FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Layout from "../components/LayoutComponent/Layout";
 import { Page, useNavigation } from "../utils/hooks/useNavigation";
 import "../styles/SearchPage.styles.scss";
 import { ReactComponent as ArrowIcon } from "../assets/icons/arrow_left.svg";
-import { Result } from "../utils/search/Search.types";
 import { useHistory } from "react-router";
-
-const results: Result[] = [
-  {
-    _id: "1",
-    email: "minh@email.com",
-  },
-  {
-    _id: "2",
-    email: "domenico@email.com",
-  },
-  {
-    _id: "3",
-    email: "nathalie@email.com",
-  },
-  {
-    _id: "4",
-    email: "bassam@email.com",
-  },
-  {
-    _id: "5",
-    email: "ines@email.com",
-  },
-  {
-    _id: "6",
-    email: "katharina@email.com",
-  },
-];
-
-const friends = [
-  {
-    _id: 2,
-    name: "Minh Vu Nguyen",
-  },
-  {
-    _id: 3,
-    name: "Domenico Ferrari",
-  },
-  {
-    _id: 4,
-    name: "Nathalie Fischer",
-  },
-  {
-    _id: 5,
-    name: "Katharina Böhm",
-  },
-  {
-    _id: 6,
-    name: "Bassam Mednini",
-  },
-  {
-    _id: 7,
-    name: "Ines Novak",
-  },
-];
+import { useAxios } from "../utils/AxiosUtil";
+import {
+  addBuddy,
+  fetchAllUsers,
+  getFriendRequestStatus,
+} from "../utils/user/User.util";
+import { BUDDY_REQUEST, User } from "../utils/user/User.types";
+import { useRecoilValue } from "recoil";
+import { userState } from "../utils/user/User.state";
 
 const SearchPage: FC<{}> = () => {
   const { t } = useTranslation();
   const history = useHistory();
+  const { axios } = useAxios();
+  const user = useRecoilValue(userState);
   const { currentLocation, onLocationChange } = useNavigation();
   const [searchValue, setSearchValue] = useState<string>("");
-  const [focused, setFocused] = useState(false);
+  const [users, setUsers] = useState<User[]>([]);
 
-  const onFocus = () => setFocused(true);
-  const onBlur = () => setFocused(false);
+  useEffect(() => {
+    const fetchUsers = async () => {
+      if (axios) {
+        const allUsers = await fetchAllUsers(axios);
+        if (allUsers) {
+          setUsers(allUsers);
+        }
+        console.log(allUsers);
+      }
+    };
+    fetchUsers();
+  }, [axios]);
 
-  const onSearch = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value);
+  const handleAddBuddy = async (buddyId: string) => {
+    await addBuddy(axios, { userId: user.id, buddyId });
+  };
+
+  const renderButton = (userId: string) => {
+    const status: BUDDY_REQUEST = getFriendRequestStatus(user, userId);
+    if (status === BUDDY_REQUEST.PENDING) {
+      return (
+        <button className="button-inactive">
+          {t("general.pages.search.added")}
+        </button>
+      );
+    }
+
+    return (
+      <button className="button-active" onClick={() => handleAddBuddy(userId)}>
+        {t("general.pages.search.add")}
+      </button>
+    );
   };
 
   return (
@@ -100,42 +83,33 @@ const SearchPage: FC<{}> = () => {
               className="search-page-search-input-element"
               placeholder={t("general.pages.search.findNameOrEmail")}
               value={searchValue}
-              onChange={onSearch}
-              onFocus={onFocus}
-              onBlur={onBlur}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setSearchValue(e.target.value)
+              }
+              autoFocus
             />
           </div>
           <div className="search-page-search-results">
-            {searchValue.length > 2 &&
-              results
-                .filter((result: any) =>
-                  result.email.toLowerCase().includes(searchValue)
-                )
-                ?.map((result: any) => (
+            {searchValue.length > 0 &&
+              users
+                ?.filter((result) => {
+                  return (
+                    result.email.toLowerCase().includes(searchValue) ||
+                    result.firstName.toLowerCase().includes(searchValue) ||
+                    result.lastName.toLowerCase().includes(searchValue)
+                  );
+                })
+                ?.map((result) => (
                   <div
-                    key={result._id}
+                    key={result.id}
                     className="search-page-search-results-item"
                   >
-                    <p className="search-page-search-results-item-label">
-                      {result.email}
-                    </p>
+                    <p>{result.email}</p>
+                    {renderButton(result.id)}
                   </div>
                 ))}
           </div>
         </div>
-        {!focused && (
-          <div className="search-page-block">
-            <h3>{t("general.pages.search.yourFriends")}</h3>
-            {friends.map((item: any) => (
-              <div key={item._id} className="search-page-search-results-item">
-                <div className="search-page-search-results-item-pic"></div>
-                <p className="search-page-search-results-item-label">
-                  {item.name}
-                </p>
-              </div>
-            ))}
-          </div>
-        )}
       </div>
     </Layout>
   );

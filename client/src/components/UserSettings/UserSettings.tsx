@@ -81,6 +81,12 @@ const UserSettings = () => {
 
   return (
     <div className="user-settings">
+      <div className="switch-inputs-wrapper">
+        <p>{t("general.pages.preferences.filterPresets")}</p>
+        <button className="user-settings-save-btn">
+          {t("general.buttons.save")}
+        </button>
+      </div>
       <h3 className="user-settings-subheading">
         {t("general.pages.preferences.type")}
       </h3>

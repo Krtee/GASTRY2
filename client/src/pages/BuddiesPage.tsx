@@ -1,15 +1,17 @@
 import Layout from "../components/LayoutComponent/Layout";
 import List from "../components/List/List";
 import { ReactComponent as ArrowIcon } from "../assets/icons/arrow_left.svg";
-import { dummyData } from "../components/List/List.types";
 import { Page, useNavigation } from "../utils/hooks/useNavigation";
 import { useHistory } from "react-router";
 import { useTranslation } from "react-i18next";
+import { useRecoilState } from "recoil";
+import { userState } from "../utils/user/User.state";
 
-const FollowersPage: React.FC<{}> = () => {
+const BuddiesPage: React.FC<{}> = () => {
   const { currentLocation, onLocationChange } = useNavigation();
   const history = useHistory();
   const { t } = useTranslation();
+  const [user, setUser] = useRecoilState(userState);
 
   return (
     <Layout
@@ -25,17 +27,17 @@ const FollowersPage: React.FC<{}> = () => {
             history.goBack();
           },
         },
-        title: t("general.pages.profile.followers"),
+        title: t("general.pages.profile.friends"),
       }}
     >
       <List
         onDeleteItem={() => {}}
         deleteBtnLabel="Unfollow"
-        data={dummyData}
-        column="name"
+        data={user?.buddies}
+        column="firstName"
       />
     </Layout>
   );
 };
 
-export default FollowersPage;
+export default BuddiesPage;

@@ -1,6 +1,5 @@
 import Layout from "../components/LayoutComponent/Layout";
 import List from "../components/List/List";
-import { dummyData } from "../components/List/List.types";
 import { Page, useNavigation } from "../utils/hooks/useNavigation";
 import { ReactComponent as ArrowIcon } from "../assets/icons/arrow_left.svg";
 import { useHistory } from "react-router";
@@ -25,13 +24,13 @@ const FollowingsPage: React.FC<{}> = () => {
             history.goBack();
           },
         },
-        title: t("general.pages.profile.followings"),
+        title: t("general.pages.profile.subscribedRestaurants"),
       }}
     >
       <List
         onDeleteItem={() => {}}
         deleteBtnLabel="Unfollow"
-        data={dummyData}
+        data={[]}
         column="name"
       />
     </Layout>

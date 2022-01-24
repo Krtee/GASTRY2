@@ -5,13 +5,6 @@ import camera from "../../assets/icons/camera.svg";
 import star from "../../assets/icons/star.svg";
 import settings from "../../assets/icons/settings.svg";
 
-export const nav_elements: string[] = [
-  "posts",
-  "settings",
-  "favorites",
-  "mail",
-];
-
 const ProfileNav = () => {
   let { url } = useRouteMatch();
 

@@ -2,7 +2,7 @@ import "leaflet/dist/leaflet.css";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import { RecoilRoot } from "recoil";
 import ProfileForm from "../components/ProfileForm/ProfileForm";
-import FollowersPage from "./FollowersPage";
+import Buddies from "./BuddiesPage";
 import FollowingsPage from "./FollowingsPage";
 import { AxiosSubscriber } from "../utils/Axios.state";
 import MatchFoundPage from "./MatchFoundPage";
@@ -29,7 +29,7 @@ const App = () => {
           <Route path="/search" component={SearchPage} />
           <Route path="/edit" component={ProfileForm} />
           <Route path="/followings" component={FollowingsPage} />
-          <Route path="/followers" component={FollowersPage} />
+          <Route path="/buddies" component={Buddies} />
         </Switch>
       </RecoilRoot>
     </BrowserRouter>

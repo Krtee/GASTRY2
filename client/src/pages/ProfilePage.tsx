@@ -29,17 +29,18 @@ const ProfilePage: FC<{}> = () => {
       changeLocation={onLocationChange}
       currentLocation={currentLocation}
       header={{
-        title: `${user?.firstName} ${user?.lastName}`,
+        // title: `${user?.firstName} ${user?.lastName}`,
+        title: `Fadel Kaadan`,
       }}
     >
       <div className="profile">
         <UserInfo />
         <UserStats
-          posts={user.posts ? user.posts.length : 0}
+          posts={user?.posts?.length || 0}
           // TODO: get real data when added to the api
-          visitedRestaurants={0}
-          followers={user.followers ? user.followers.length : 0}
-          followings={user.followings ? user.followings.length : 0}
+          visitedRestaurants={user?.visitedRestaurants?.length || 0}
+          followers={user?.subscribedRestaurants?.length || 0}
+          followings={user?.buddies?.length || 0}
         />
         <ProfileNav />
         <Switch>

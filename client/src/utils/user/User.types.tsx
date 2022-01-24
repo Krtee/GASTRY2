@@ -46,8 +46,10 @@ export interface Buddy {
   buddyId: string;
   buddyType: BUDDY_REQUEST;
   email?: string;
+  username?: string;
   firstName?: string;
   lastName?: string;
+  bio?: string;
 }
 
 export interface User {
@@ -60,6 +62,7 @@ export interface User {
   city?: string;
   lat?: string;
   long?: string;
+  bio?: string;
   role?: UserRole;
   password?: string;
   token?: string;

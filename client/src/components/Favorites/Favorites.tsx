@@ -7,7 +7,6 @@ const Favorites: React.FC<{}> = () => {
 
   const removeFavorite = (id: string) => {
     // TODO: remove fav from database
-    console.log(id);
   };
 
   return (

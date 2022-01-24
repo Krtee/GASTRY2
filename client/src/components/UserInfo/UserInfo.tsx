@@ -1,9 +1,10 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import PictureEditable from "../PictureEditable/PictureEditable";
+import { UserInfoProps } from "./UserInfo.types";
 import "./UserInfoStyles.scss";
 
-const UserInfo: React.FC<{}> = () => {
+const UserInfo: React.FC<UserInfoProps> = ({ user }) => {
   const { t } = useTranslation();
   const onUpload = () => {};
 
@@ -31,8 +32,8 @@ const UserInfo: React.FC<{}> = () => {
         </Link>
       </div>
       <div className="user-info-wrapper">
-        <p className="user-info-username">@fadeleus</p>
-        <p>0711/Lieblingsrestaurant: Büffel & Koi</p>
+        <p className="user-info-username">@{user?.username}</p>
+        <p>{user?.bio}</p>
       </div>
     </div>
   );

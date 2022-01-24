@@ -6,6 +6,7 @@
       "login": "Einloggen",
       "add": "Hinzufügen",
       "added": "Hinzugefügt",
+      "pending": "Pending",
       "showmore": "Mehr anzeigen",
       "showless": "Weniger anzeigen",
       "save": "Speichern"
@@ -44,7 +45,8 @@
         "username": "Benutzername",
         "bio": "Biografie",
         "editPic": "Profilbild bearbeiten",
-        "saveChanges": "Änderungen speichern"
+        "saveChanges": "Änderungen speichern",
+        "match": "Matchen"
       },
       "search": {
         "findNameOrEmail": "Name oder E-Mail suchen",

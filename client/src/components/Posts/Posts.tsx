@@ -1,34 +1,12 @@
 import { PostsProps } from "./Posts.types";
 import "./PostsStyles.scss";
 import { ReactComponent as AddIcon } from "../../assets/icons/add.svg";
-
-// TODO: fetch real data from backend
-const dummyData = [
-  {
-    image: "",
-  },
-  {
-    image: "",
-  },
-  {
-    image: "",
-  },
-  {
-    image: "",
-  },
-  {
-    image: "",
-  },
-  {
-    image: "",
-  },
-  {
-    image: "",
-  },
-];
+import { useRecoilState } from "recoil";
+import { userState } from "../../utils/user/User.state";
 
 const Posts: React.FC<PostsProps> = ({ posts }) => {
   const addPost = () => {};
+  const [user, setUser] = useRecoilState(userState);
 
   return (
     <div className="posts">
@@ -37,8 +15,8 @@ const Posts: React.FC<PostsProps> = ({ posts }) => {
           <AddIcon />
         </span>
       </button>
-      {dummyData.map((post, index) => (
-        <img className="posts-item" src={post.image} alt="" key={index} />
+      {user?.posts?.map((post, index) => (
+        <img className="posts-item" src={post} alt="" key={index} />
       ))}
     </div>
   );

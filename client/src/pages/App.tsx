@@ -11,6 +11,7 @@ import ProfilePage from "./ProfilePage";
 import RegisterPage from "./RegisterPage";
 import SearchPage from "./SearchPage";
 import TutorialPage from "./TutorialPage";
+import BuddyProfilePage from "./BuddyProfilePage";
 
 const App = () => {
   return (
@@ -26,6 +27,7 @@ const App = () => {
           <Route path="/tutorial" component={TutorialPage} />
           <Route path="/register" component={RegisterPage} />
           <Route path="/profile" component={ProfilePage} />
+          <Route path="/user/:id" component={BuddyProfilePage} />
           <Route path="/search" component={SearchPage} />
           <Route path="/edit" component={ProfileForm} />
           <Route path="/followings" component={FollowingsPage} />

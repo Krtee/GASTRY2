@@ -37,6 +37,7 @@ public class UserDto implements Serializable {
     private String city = "";
     private String latitude = "";
     private String longitude = "";
+    private String bio = "";
     private Diets diets;
     private Intolerances intolerances;
     private Set<String> favoriteRestaurantIds;
@@ -59,6 +60,7 @@ public class UserDto implements Serializable {
         this.city = updatedUser.getCity();
         this.latitude = updatedUser.getLatitude();
         this.longitude = updatedUser.getLongitude();
+        this.bio = updatedUser.getBio();
         this.diets = updatedUser.getDiets();
         this.intolerances = updatedUser.getIntolerances();
         this.favoriteRestaurantIds = updatedUser.getFavoriteRestaurantIds();
@@ -66,7 +68,7 @@ public class UserDto implements Serializable {
         this.followingUserIds = updatedUser.getFollowingUserIds();
     }
 
-     /**
+    /**
      * Helper method to add new {@link Buddy} instance to {@link User}
      * 
      * @param buddyId    to id of the buddy to be added
@@ -111,6 +113,7 @@ public class UserDto implements Serializable {
 
     /**
      * Helper method to set a buddy instance to rejected
+     * 
      * @param buddyId the id of the buddy to be rejected
      */
     public void rejectBuddy(String buddyId) {
@@ -125,6 +128,7 @@ public class UserDto implements Serializable {
 
     /**
      * Helper method to set a buddy instance to accepted
+     * 
      * @param buddyId the id of the buddy to be accepted
      */
     public void acceptBuddy(String buddyId) {
@@ -139,11 +143,12 @@ public class UserDto implements Serializable {
 
     /**
      * Helper method to get a buddy from a given list of buddies
+     * 
      * @param buddyList a list containing buddies
-     * @param buddyId the id of buddy to be found
+     * @param buddyId   the id of buddy to be found
      * @return a buddy instance if search successful otherwise null
      */
-    public Buddy getBuddyFromList( String buddyId) {
+    public Buddy getBuddyFromList(String buddyId) {
         return this.buddies.stream().filter(buddy -> buddy.getBuddyId().equals(buddyId)).findFirst()
                 .orElse(null);
     }

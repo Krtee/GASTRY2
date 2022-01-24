@@ -4,15 +4,19 @@ import "./ProfileNavStyles.scss";
 import camera from "../../assets/icons/camera.svg";
 import star from "../../assets/icons/star.svg";
 import settings from "../../assets/icons/settings.svg";
+import { FC } from "react";
+import { ProfileNavProps } from "./ProfileNav.types";
 
-const ProfileNav = () => {
+const ProfileNav: FC<ProfileNavProps> = ({ ownsProfile }) => {
   let { url } = useRouteMatch();
 
   return (
     <div className="profile-nav">
       <NavLink label={""} to={`${url}`} icon={camera} />
       <NavLink label={""} to={`${url}/favorites`} icon={star} />
-      <NavLink label={""} to={`${url}/settings`} icon={settings} />
+      {ownsProfile && (
+        <NavLink label={""} to={`${url}/settings`} icon={settings} />
+      )}
     </div>
   );
 };

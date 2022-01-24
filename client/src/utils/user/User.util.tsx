@@ -98,7 +98,7 @@ export const fetchAllUsers = async (axios: AxiosInstance): Promise<User[]> => {
   return axios
     .get("/user/all/")
     .then((resp) => resp.data)
-    .catch((exc) => console.error("Error during user load!", exc));
+    .catch((exc) => console.error("Error fetching all users!", exc));
 };
 
 /**
@@ -106,6 +106,7 @@ export const fetchAllUsers = async (axios: AxiosInstance): Promise<User[]> => {
  *
  * @param axios The axios instance
  * @returns Either the updated user or undefined in case of an error
+ * @author Fadel Kaadan
  */
 export const addBuddy = async (
   axios: AxiosInstance,
@@ -114,13 +115,31 @@ export const addBuddy = async (
   return axios
     .post("/user/buddy/", bodyRequest)
     .then((resp) => resp.data)
-    .catch((exc) => console.error("Error during user load!", exc));
+    .catch((exc) => console.error("Error while adding a buddy!", exc));
+};
+
+/**
+ * API method to a buddy to {@link User}
+ *
+ * @param axios The axios instance
+ * @returns Either the updated user or undefined in case of an error
+ * @author Fadel Kaadan
+ */
+export const removeBuddy = async (
+  axios: AxiosInstance,
+  bodyRequest: { userId: string; buddyId: string }
+): Promise<boolean> => {
+  return axios
+    .post("/user/buddy/remove", bodyRequest)
+    .then((resp) => resp.data)
+    .catch((exc) => console.error("Error while removing a buddy!", exc));
 };
 
 /**
  * Helper method to get friend request status
  *
- * @param axios The axios instance
+ * @param user current user {@link User}
+ * @param buddyId buddy id
  * @returns friend request status
  * @author Fadel Kaadan
  */

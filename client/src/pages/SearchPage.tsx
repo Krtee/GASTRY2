@@ -14,6 +14,7 @@ import {
 import { BUDDY_REQUEST, User } from "../utils/user/User.types";
 import { useRecoilValue } from "recoil";
 import { userState } from "../utils/user/User.state";
+import { Link } from "react-router-dom";
 
 const SearchPage: FC<{}> = () => {
   const { t } = useTranslation();
@@ -31,7 +32,6 @@ const SearchPage: FC<{}> = () => {
         if (allUsers) {
           setUsers(allUsers);
         }
-        console.log(allUsers);
       }
     };
     fetchUsers();
@@ -100,13 +100,14 @@ const SearchPage: FC<{}> = () => {
                   );
                 })
                 ?.map((result) => (
-                  <div
+                  <Link
                     key={result.id}
+                    to={`/user/${result.id}`}
                     className="search-page-search-results-item"
                   >
                     <p>{result.email}</p>
                     {renderButton(result.id)}
-                  </div>
+                  </Link>
                 ))}
           </div>
         </div>

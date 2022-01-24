@@ -22,6 +22,7 @@ export const userState: RecoilState<User> = atom<User>({
     city: "",
     lat: "",
     long: "",
+    bio: "",
     posts: [],
     diets: [] as DIETS[],
     intolerances: [] as INTOLERANCES[],

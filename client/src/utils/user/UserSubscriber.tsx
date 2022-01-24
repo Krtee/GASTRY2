@@ -36,6 +36,7 @@ export const UserSubscriber: React.FC<{}> = () => {
     return () => {
       setUser(undefined);
     };
+    // eslint-disable-next-line
   }, [keycloak, axios, initialized, setUser]);
 
   /**
@@ -47,6 +48,7 @@ export const UserSubscriber: React.FC<{}> = () => {
       if (!result) return;
       setUser({ ...user, token: token });
     });
+    // eslint-disable-next-line
   }, [user?.token, axios]);
 
   return <></>;

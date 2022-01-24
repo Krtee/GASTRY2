@@ -1,10 +1,9 @@
-import { ReactElement, useEffect } from "react";
-import { ReactComponent as MatchIcon } from "../../assets/icons/Match.svg";
+import React, { ReactElement, useEffect } from "react";
+import ReactDOM from "react-dom";
 import { ReactComponent as FriendIcon } from "../../assets/icons/friend-plus.svg";
+import { ReactComponent as MatchIcon } from "../../assets/icons/match.svg";
 import { NotificationType } from "../../utils/notification/Notification.types";
 import "./NotificationCardComponent.styles.scss";
-import React from "react";
-import ReactDOM from "react-dom";
 
 export interface NotificationCardComponentProps {
   className?: string;
@@ -41,6 +40,7 @@ export const NotificationCardComponent: React.FC<NotificationCardComponentProps>
         const destroyTimer = setTimeout(() => onDestroy(), duration);
         return () => clearTimeout(destroyTimer);
       }
+      // eslint-disable-next-line
     }, []);
 
     /**

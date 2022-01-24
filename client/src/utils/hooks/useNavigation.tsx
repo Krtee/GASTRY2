@@ -9,9 +9,8 @@ import {
 import { currentMatchState } from "../match/Match.state";
 import { Match } from "../match/Match.types";
 import { ReactComponent as HomeIcon } from "./../../assets/icons/home.svg";
-import { ReactComponent as MatchIcon } from "./../../assets/icons/match.svg";
+import { ReactComponent as MatchIcon } from "./../../assets/icons/matching_page_icon.svg";
 import { ReactComponent as ProfileIcon } from "./../../assets/icons/profile.svg";
-
 /**
  * All Pages that can be navigated to using Navigationbar
  * <<CAUTION>> THE ORDER OF THIS ENUMS DEFINES THE NAVIGATION <<CAUTION>>
@@ -87,7 +86,8 @@ export const useNavigation = (
         break;
       default:
     }
-  }, [currentLocation]);
+    // eslint-disable-next-line
+  }, [currentLocation, history]);
   return {
     currentLocation,
     changeLocation: (newLocation) => {

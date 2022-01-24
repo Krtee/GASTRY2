@@ -22,14 +22,13 @@ import {
   createEmptyMultiUserMatch,
   postNewMultiUserMatch,
 } from "../utils/multimatch/MultiMatch.Utils";
-import { userState } from "../utils/user/User.state";
+import { getUserForBuddiesSelector, userState } from "../utils/user/User.state";
 import { User, UserRole } from "../utils/user/User.types";
 import "./../styles/ChooseFriendsStyles.scss";
-import testUser from "./../utils/tests/testUsers.json";
 
 interface ChooseFriendsPageProps {}
 
-const ChooseFriendsPage: React.FC<ChooseFriendsPageProps> = ({}) => {
+const ChooseFriendsPage: React.FC<ChooseFriendsPageProps> = () => {
   const navProps = useNavigation(Page.CHOOSE_FRIENDS, Page.MATCHING);
   const history = useHistory();
   const { t } = useTranslation();
@@ -38,19 +37,24 @@ const ChooseFriendsPage: React.FC<ChooseFriendsPageProps> = ({}) => {
   const addedUsers = useRecoilValue(getUserForMultiMatch);
   const alphabet: string[] = Array.from("abcdefghijklmnopqrstuvwxyz");
   const [chosenFriends, setChosenFriends] = useState<User[]>(addedUsers);
+  const user = useRecoilValue(userState);
+  const buddyList = useRecoilValue(getUserForBuddiesSelector);
   const [filteredFriendlist, setFilteredFriendlist] = useState<User[]>(
-    testUser.map((userToMap) => ({
+    buddyList.map((userToMap) => ({
       ...userToMap,
       role: userToMap.role as UserRole,
     }))
   );
   const [currentMatch, setCurrentMatch] = useRecoilState(currentMatchState);
   const { axios } = useAxios();
-  const user = useRecoilValue(userState);
 
+  /**
+   *sets  userlist, filtering the current user and all users, that do not have given searchstring included in their name
+   @author Minh
+   */
   useEffect(() => {
     setFilteredFriendlist(
-      testUser
+      buddyList
         .map((userToMap) => ({
           ...userToMap,
           role: userToMap.role as UserRole,
@@ -63,8 +67,11 @@ const ChooseFriendsPage: React.FC<ChooseFriendsPageProps> = ({}) => {
               userToFilter.lastName.includes(searchText))
         )
     );
-  }, [searchText]);
+  }, [searchText, user]);
 
+  /**
+   * creates new multiusermatch, and routes to the matching page
+   */
   const handleSubmitMultiMatch = () => {
     if (user && user.id && currentMatch && currentMatch.id) {
       postNewMultiUserMatch(
@@ -79,6 +86,8 @@ const ChooseFriendsPage: React.FC<ChooseFriendsPageProps> = ({}) => {
         )
       ).then((mulitUserMatch) => {
         setMultiUserMatch(mulitUserMatch);
+        console.log(currentMatch);
+
         setCurrentMatch((matchToUpdate) => ({
           ...matchToUpdate!,
           partOfGroup: true,
@@ -118,7 +127,10 @@ const ChooseFriendsPage: React.FC<ChooseFriendsPageProps> = ({}) => {
                 )
               }
             >
-              <img src={userPlaceHolder} />
+              <img
+                src={userPlaceHolder}
+                alt={user.username + " profile picture"}
+              />
               <div className={"choose-friends__chosen-friends__close"}>
                 <CloseIcon />
               </div>
@@ -142,7 +154,10 @@ const ChooseFriendsPage: React.FC<ChooseFriendsPageProps> = ({}) => {
                 >
                   {usersToRender.map((user) => (
                     <div className={"choose-friends__friend-item"}>
-                      <img src={userPlaceHolder} />
+                      <img
+                        src={userPlaceHolder}
+                        alt={user.username + " profile picture"}
+                      />
                       <div className={"choose-friends__infos"}>
                         <p
                           className={"choose-friends__infos__name"}

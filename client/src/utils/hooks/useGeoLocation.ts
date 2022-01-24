@@ -43,6 +43,9 @@ const useGeoLocation = (): {
     });
   };
 
+  /**
+   * ask for location
+   */
   const handleGeolocationChange = (): void => {
     if (!("geolocation" in navigator)) {
       onError({
@@ -50,11 +53,10 @@ const useGeoLocation = (): {
         message: "Geolocation not supported",
       });
     }
-
     navigator.geolocation.getCurrentPosition(onSuccess, onError);
   };
-
-  useEffect(() => handleGeolocationChange, []);
+  // eslint-disable-next-line
+  useEffect(() => handleGeolocationChange(), []);
 
   return {
     geolocation: location,

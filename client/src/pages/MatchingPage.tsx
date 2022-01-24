@@ -73,8 +73,8 @@ const MatchingPage: FC<MatchingPageProps> = () => {
   const user = useRecoilValue(userState);
   const [mealsToSwipe, setMealsToSwipe] =
     useRecoilState<Meal[]>(randomMealsState);
-  const [currentIndex, setCurrentIndex] = useState(mealsToSwipe.length - 1);
-  const currentIndexRef = useRef(currentIndex);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const currentIndexRef = useRef<number>(currentIndex);
   const canGoBack = currentIndex < mealsToSwipe.length - 1;
   const canSwipe = currentIndex >= 0;
   const [disableGoBack, setdisableGoBack] = useState(false);
@@ -121,8 +121,8 @@ const MatchingPage: FC<MatchingPageProps> = () => {
       default:
     }
     setdisableGoBack(false);
-    updateCurrentIndex(index - 1);
-    if (index === 0) {
+    updateCurrentIndex(index + 1);
+    if (index === mealsToSwipe.length - 1) {
       handleSubmitMatch();
     }
   };
@@ -131,6 +131,7 @@ const MatchingPage: FC<MatchingPageProps> = () => {
    * handles submit of current match
    */
   const handleSubmitMatch = async (): Promise<void> => {
+    setShowPopUp(undefined);
     setShowLoadingMatchModal(MatchType.SINGLE_MATCH);
 
     if (!axios) {
@@ -138,7 +139,7 @@ const MatchingPage: FC<MatchingPageProps> = () => {
       return;
     }
 
-    if (!location) {
+    if (!location || !location.coordinates || !location.loaded) {
       setShowPopUp(PopUpContent.NO_LOCATION_ERROR);
       refreshGeolocation();
       return;
@@ -179,7 +180,8 @@ const MatchingPage: FC<MatchingPageProps> = () => {
    */
   const outOfFrame = (idx: number) => {
     // handle the case in which go back is pressed before card goes outOfFrame
-    currentIndexRef.current >= idx && childRefs[idx].current.restoreCard();
+    currentIndexRef.current <= idx &&
+      childRefs[currentIndexRef.current].current.restoreCard();
     // TODO: when quickly swipe and restore multiple times the same card,
     // it happens multiple outOfFrame events are queued and the card disappear
     // during latest swipes. Only the last outOfFrame event should be considered valid
@@ -199,7 +201,7 @@ const MatchingPage: FC<MatchingPageProps> = () => {
   // increase current index and show card
   const goBack = async () => {
     if (!canGoBack) return;
-    const newIndex = currentIndex + 1;
+    const newIndex = currentIndex - 1;
     updateCurrentIndex(newIndex);
     setCurrentMatch({
       ...currentMatch!,
@@ -226,8 +228,9 @@ const MatchingPage: FC<MatchingPageProps> = () => {
       ).then(setMealsToSwipe);
       postNewMatch(axios, createEmptyMatch(user?.id)).then((res) => {
         if (res) {
-          updateCurrentIndex(mealsToSwipe.length - 1);
+          updateCurrentIndex(0);
           setCurrentMatch(res);
+          setShowPopUp(undefined);
         }
       });
     }
@@ -291,12 +294,14 @@ const MatchingPage: FC<MatchingPageProps> = () => {
 
   /**
    * returns to the starting screen, if no match exist
+   * @author Minh
    */
   useEffect(() => {
     if (!currentMatch) {
       history.push("/matching/start");
     }
-  }, []);
+    // eslint-disable-next-line
+  }, [history]);
 
   return (
     <Layout
@@ -346,19 +351,18 @@ const MatchingPage: FC<MatchingPageProps> = () => {
                   }
                   preventSwipe={["up", "down"]}
                   onCardLeftScreen={() => outOfFrame(index)}
-                  className="container"
+                  className={`container container--${index}`}
                 >
                   <img src={meal.strMealThumb} alt={meal.strMeal} />
                   <div className="progressBar">
                     <div
                       className="progressBarStyle"
                       style={{
-                        width:
-                          (((15 - currentIndex) / 15) * 100).toFixed(0) + "%",
+                        width: ((currentIndex / 15) * 100).toFixed(0) + "%",
                       }}
                     >
                       <span className="progressBarText">
-                        {(((15 - currentIndex) / 15) * 100).toFixed(0) + "%"}
+                        {((currentIndex / 15) * 100).toFixed(0) + "%"}
                       </span>
                     </div>
                   </div>

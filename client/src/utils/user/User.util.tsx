@@ -17,6 +17,7 @@ export const createEmptyUser = (): User => {
     email: "",
     role: UserRole.USER,
     token: "",
+    buddies: [],
   };
 };
 

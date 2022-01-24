@@ -46,6 +46,12 @@
       width: 95%;
       height: 80%;
 
+      @for $i from 0 through 14 {
+        &--#{$i} {
+          z-index: 14 - $i;
+        }
+      }
+
       img {
         object-fit: cover;
         width: 100%;

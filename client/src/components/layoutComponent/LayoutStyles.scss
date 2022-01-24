@@ -72,13 +72,11 @@
   align-items: center;
   & > * {
     color: white;
-    fill: white;
   }
   &.focused {
     background-color: white;
     & > * {
       color: #fca262;
-      fill: #fca262;
     }
   }
 }

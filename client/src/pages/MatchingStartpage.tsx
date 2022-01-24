@@ -21,6 +21,10 @@ const MatchingStartpage: React.FC<{}> = () => {
   const setCurrentMatch = useSetRecoilState(currentMatchState);
   const history = useHistory();
 
+  /**
+   *sets current match and routes to the matching page
+   *@author Minh
+   */
   const handleNewMatch = () => {
     if (axios) {
       fetchRandomMeals(

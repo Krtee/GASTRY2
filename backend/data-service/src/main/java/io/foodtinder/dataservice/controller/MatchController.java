@@ -134,6 +134,11 @@ public class MatchController {
             log.warn("match with id {} not found to update!", matchId);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+        if (requestBody.getLocation() == null || requestBody.getLocation().getLatitude() == 0.0
+                || requestBody.getLocation().getLongitude() == 0.0) {
+            log.warn("no location!");
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).build();
+        }
 
         foundMatch.update(requestBody.getMatch());
         if (foundMatch.isPartOfGroup()) {

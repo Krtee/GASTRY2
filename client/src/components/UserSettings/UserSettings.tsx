@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import Switch from "../Switch/Switch";
-import { convertObjToArr } from "../../utils/GeneralUtils";
-import "./UserSettings.styles.scss";
-import { useAxios } from "../../utils/AxiosUtil";
-import { updateUser } from "../../utils/user/User.util";
 import { useRecoilState } from "recoil";
+import { useAxios } from "../../utils/AxiosUtil";
+import { convertObjToArr } from "../../utils/GeneralUtils";
+import useGeoLocation from "../../utils/hooks/useGeoLocation";
 import { userState } from "../../utils/user/User.state";
 import { CUISINES, DIETS, TYPES } from "../../utils/user/User.types";
+import { updateUser } from "../../utils/user/User.util";
+import Switch from "../Switch/Switch";
+import "./UserSettings.styles.scss";
 
 const UserSettings = () => {
   const { axios } = useAxios();
@@ -22,10 +23,12 @@ const UserSettings = () => {
   const [diets, setDiets] = useState<any>({});
   const [types, setTypes] = useState<any>({});
   const [cuisines, setCuisines] = useState<any>({});
-  const [liveLocation, setLiveLocation] = useState<boolean>(false);
   const [user, setUser] = useRecoilState(userState);
+  const { geolocation } = useGeoLocation();
 
   const onSubmit = async () => {
+    if (!user) return;
+
     try {
       const result = await updateUser(axios, {
         ...user,
@@ -41,30 +44,27 @@ const UserSettings = () => {
 
   // save coords in recoil
   useEffect(() => {
-    if (liveLocation) {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position: any) => {
-          setUser((prevState) => ({
-            ...prevState,
-            lat: position.coords.latitude,
-            long: position.coords.longitude,
-          }));
-        });
-      } else {
-        console.log("Geolocation is not supported by this browser.");
-      }
+    if (!user) return;
+    if (geolocation && geolocation.coordinates) {
+      setUser((prevState) => ({
+        ...prevState!,
+        lat: geolocation.coordinates?.latitude,
+        long: geolocation.coordinates?.longitude,
+      }));
     } else {
       setUser((prevState) => ({
-        ...prevState,
+        ...prevState!,
         lat: "",
         long: "",
       }));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [liveLocation]);
+  }, [geolocation]);
 
   // Set initial diet & intolerance states
   useEffect(() => {
+    if (!user) return;
+
     const dietsObj: any = {};
     const typesObj: any = {};
     const cuisinesObj: any = {};
@@ -76,7 +76,8 @@ const UserSettings = () => {
     setDiets(dietsObj);
     setCuisines(cuisinesObj);
     setTypes(typesObj);
-  }, [user.cuisines, user.diets, user.intolerances, user.types]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.cuisines, user?.diets, user?.intolerances, user?.types]);
 
   return (
     <div className="user-settings">

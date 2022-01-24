@@ -1,24 +1,23 @@
 import { ChangeEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router";
+import { useRecoilValue } from "recoil";
+import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow_left.svg";
 import { useAxios } from "../../utils/AxiosUtil";
 import { Page, useNavigation } from "../../utils/hooks/useNavigation";
-import { User } from "../../utils/user/User.types";
-import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow_left.svg";
+import { userState } from "../../utils/user/User.state";
+import { updateUser } from "../../utils/user/User.util";
 import Layout from "../LayoutComponent/Layout";
 import PictureEditable from "../PictureEditable/PictureEditable";
 import "./ProfileFormStyles.scss";
-import { updateUser } from "../../utils/user/User.util";
-import { useRecoilState } from "recoil";
-import { userState } from "../../utils/user/User.state";
 
 const inputs: string[] = ["firstName", "lastName", "username", "bio"];
 
 const ProfileForm: React.FC<{}> = () => {
   const { axios } = useAxios();
   const { t } = useTranslation();
-  const { currentLocation, onLocationChange } = useNavigation();
-  const [user, setUser] = useRecoilState(userState);
+  const navProps = useNavigation(Page.PROFILE_FORM);
+  const user = useRecoilValue(userState);
   const [formData, setFormData] = useState<any>(user);
   const history = useHistory();
 
@@ -30,11 +29,7 @@ const ProfileForm: React.FC<{}> = () => {
 
   return (
     <Layout
-      navigationElements={Object.entries(Page).map((page) => ({
-        title: page[1],
-      }))}
-      changeLocation={onLocationChange}
-      currentLocation={currentLocation}
+      {...navProps}
       header={{
         leftIconButton: {
           value: <ArrowIcon />,

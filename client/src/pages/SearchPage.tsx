@@ -1,27 +1,27 @@
 import { ChangeEvent, FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import Layout from "../components/LayoutComponent/Layout";
-import { Page, useNavigation } from "../utils/hooks/useNavigation";
-import "../styles/SearchPage.styles.scss";
-import { ReactComponent as ArrowIcon } from "../assets/icons/arrow_left.svg";
 import { useHistory } from "react-router";
+import { Link } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { ReactComponent as ArrowIcon } from "../assets/icons/arrow_left.svg";
+import Layout from "../components/LayoutComponent/Layout";
+import "../styles/SearchPage.styles.scss";
 import { useAxios } from "../utils/AxiosUtil";
+import { Page, useNavigation } from "../utils/hooks/useNavigation";
+import { userState } from "../utils/user/User.state";
+import { BuddyType, User } from "../utils/user/User.types";
 import {
   addBuddy,
   fetchAllUsers,
   getFriendRequestStatus,
 } from "../utils/user/User.util";
-import { BUDDY_REQUEST, User } from "../utils/user/User.types";
-import { useRecoilValue } from "recoil";
-import { userState } from "../utils/user/User.state";
-import { Link } from "react-router-dom";
 
 const SearchPage: FC<{}> = () => {
   const { t } = useTranslation();
   const history = useHistory();
   const { axios } = useAxios();
   const user = useRecoilValue(userState);
-  const { currentLocation, onLocationChange } = useNavigation();
+  const navProps = useNavigation(Page.SEARCH);
   const [searchValue, setSearchValue] = useState<string>("");
   const [users, setUsers] = useState<User[]>([]);
 
@@ -38,12 +38,14 @@ const SearchPage: FC<{}> = () => {
   }, [axios]);
 
   const handleAddBuddy = async (buddyId: string) => {
+    if (!user) return;
     await addBuddy(axios, { userId: user.id, buddyId });
   };
 
   const renderButton = (userId: string) => {
-    const status: BUDDY_REQUEST = getFriendRequestStatus(user, userId);
-    if (status === BUDDY_REQUEST.PENDING) {
+    if (!user) return;
+    const status: BuddyType = getFriendRequestStatus(user, userId);
+    if (status === BuddyType.PENDING) {
       return (
         <button className="button-inactive">
           {t("general.pages.search.added")}
@@ -60,11 +62,7 @@ const SearchPage: FC<{}> = () => {
 
   return (
     <Layout
-      navigationElements={Object.entries(Page).map((page) => ({
-        title: page[1],
-      }))}
-      changeLocation={onLocationChange}
-      currentLocation={currentLocation}
+      {...navProps}
       header={{
         leftIconButton: {
           value: <ArrowIcon />,

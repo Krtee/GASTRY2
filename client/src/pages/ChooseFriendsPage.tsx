@@ -67,7 +67,7 @@ const ChooseFriendsPage: React.FC<ChooseFriendsPageProps> = () => {
               userToFilter.lastName.includes(searchText))
         )
     );
-  }, [searchText, user]);
+  }, [searchText, user, buddyList]);
 
   /**
    * creates new multiusermatch, and routes to the matching page

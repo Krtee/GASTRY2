@@ -61,6 +61,10 @@ enum PopUpContent {
   NO_LOCATION_ERROR,
   CANCEL_MATCHING,
 }
+enum SwipeDirection {
+  LIKE,
+  DISLIKE,
+}
 const MatchingPage: FC<MatchingPageProps> = () => {
   const navProps = useNavigation(Page.MATCHING);
   const [currentMatch, setCurrentMatch] = useRecoilState<Match | undefined>(
@@ -93,6 +97,7 @@ const MatchingPage: FC<MatchingPageProps> = () => {
         .map(() => createRef()),
     [mealsToSwipe.length]
   );
+  const [showDirOnImage, setShowDirOnImage] = useState<SwipeDirection>();
   /**
    * updates current index, and ref for index
    * @param val index
@@ -105,6 +110,7 @@ const MatchingPage: FC<MatchingPageProps> = () => {
 
   // set last direction and decrease current index
   const swiped = (direction: "left" | "right", meal: Meal, index: number) => {
+    setShowDirOnImage(undefined);
     switch (direction) {
       case "left":
         setCurrentMatch((lastMatchState) => ({
@@ -352,6 +358,23 @@ const MatchingPage: FC<MatchingPageProps> = () => {
                   preventSwipe={["up", "down"]}
                   onCardLeftScreen={() => outOfFrame(index)}
                   className={`container container--${index}`}
+                  onSwipeRequirementFulfilled={(dir) => {
+                    if (dir === "left") {
+                      console.log(dir, currentIndex, index);
+
+                      setShowDirOnImage(SwipeDirection.DISLIKE);
+                    }
+                    if (dir === "right") {
+                      console.log(dir, currentIndex, index);
+
+                      setShowDirOnImage(SwipeDirection.LIKE);
+                    }
+                  }}
+                  onSwipeRequirementUnfulfilled={() =>
+                    setShowDirOnImage(undefined)
+                  }
+                  swipeRequirementType="position"
+                  swipeThreshold={200}
                 >
                   <img src={meal.strMealThumb} alt={meal.strMeal} />
                   <div className="progressBar">
@@ -366,6 +389,26 @@ const MatchingPage: FC<MatchingPageProps> = () => {
                       </span>
                     </div>
                   </div>
+                  <span
+                    className={`swipe-gesture-indicator swipe-gesture-indicator__like  ${
+                      showDirOnImage === SwipeDirection.LIKE &&
+                      currentIndex === index
+                        ? "show"
+                        : ""
+                    }`}
+                  >
+                    <LikeIcon />
+                  </span>
+                  <span
+                    className={`swipe-gesture-indicator swipe-gesture-indicator__dislike ${
+                      showDirOnImage === SwipeDirection.DISLIKE &&
+                      currentIndex === index
+                        ? "show"
+                        : ""
+                    }`}
+                  >
+                    <DislikeIcon />
+                  </span>
                 </TinderCard>
               ))}
             </div>

@@ -78,6 +78,7 @@ export interface User {
   visitedRestaurants?: [];
   subscribedRestaurants?: [];
   buddies: Buddy[];
+  activeMatch?: string;
 }
 
 export enum BuddyType {

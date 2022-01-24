@@ -1,12 +1,12 @@
+import { useRecoilValue } from "recoil";
+import { ReactComponent as AddIcon } from "../../assets/icons/add.svg";
+import { userState } from "../../utils/user/User.state";
 import { PostsProps } from "./Posts.types";
 import "./PostsStyles.scss";
-import { ReactComponent as AddIcon } from "../../assets/icons/add.svg";
-import { useRecoilState } from "recoil";
-import { userState } from "../../utils/user/User.state";
 
 const Posts: React.FC<PostsProps> = ({ posts }) => {
   const addPost = () => {};
-  const [user, setUser] = useRecoilState(userState);
+  const user = useRecoilValue(userState);
 
   return (
     <div className="posts">

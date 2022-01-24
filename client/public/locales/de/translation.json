@@ -67,7 +67,8 @@
         "findNameOrEmail": "Name oder E-Mail suchen",
         "prevSelection": "Letzte Auswahl",
         "add": "hinzufügen",
-        "yourFriends": "Deine Freunde"
+        "yourFriends": "Deine Freunde",
+        "added": "Hinzugefügt"
       },
       "preferences": {
         "filterPresets": "Filter Voreinstellungen",

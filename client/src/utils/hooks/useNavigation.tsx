@@ -8,6 +8,7 @@ import {
 } from "../../components/LayoutComponent/Layout.types";
 import { currentMatchState } from "../match/Match.state";
 import { Match } from "../match/Match.types";
+import { userState } from "../user/User.state";
 import { ReactComponent as HomeIcon } from "./../../assets/icons/home.svg";
 import { ReactComponent as MatchIcon } from "./../../assets/icons/matching_page_icon.svg";
 import { ReactComponent as ProfileIcon } from "./../../assets/icons/profile.svg";
@@ -23,6 +24,11 @@ export enum Page {
   MATCH_FOUND = "MATCH_FOUND",
   CHOOSE_FRIENDS = "CHOOSE_FRIENDS",
   NOTIFICATION = "NOTIFICATION",
+  PROFILE_FORM = "PROFILE_FORM",
+  BUDDIES = "BUDDIES",
+  BUDDY_PROFILE = "BUDDY_PROFILE",
+  FOLLOWINGS = "FOLLOWINGS",
+  SEARCH = "SEARCH",
 }
 
 export interface NavigationPage {
@@ -45,6 +51,7 @@ export const useNavigation = (
   const [currentLocation, setCurrentLocation] = useState<Page>(location);
   const history = useHistory();
   const currentMatch = useRecoilValue<Match | undefined>(currentMatchState);
+  const user = useRecoilValue(userState);
   const navigationItems: NavigationElement[] = [
     {
       title: t("general.navigation.FEED"),
@@ -87,7 +94,7 @@ export const useNavigation = (
       default:
     }
     // eslint-disable-next-line
-  }, [currentLocation, history]);
+  }, [currentLocation, history, user]);
   return {
     currentLocation,
     changeLocation: (newLocation) => {

@@ -1,22 +1,18 @@
+import { useTranslation } from "react-i18next";
+import { useHistory } from "react-router";
+import { ReactComponent as ArrowIcon } from "../assets/icons/arrow_left.svg";
 import Layout from "../components/LayoutComponent/Layout";
 import List from "../components/List/List";
 import { Page, useNavigation } from "../utils/hooks/useNavigation";
-import { ReactComponent as ArrowIcon } from "../assets/icons/arrow_left.svg";
-import { useHistory } from "react-router";
-import { useTranslation } from "react-i18next";
 
 const FollowingsPage: React.FC<{}> = () => {
-  const { currentLocation, onLocationChange } = useNavigation();
+  const navProps = useNavigation(Page.FOLLOWINGS);
   const history = useHistory();
   const { t } = useTranslation();
 
   return (
     <Layout
-      navigationElements={Object.entries(Page).map((page) => ({
-        title: page[1],
-      }))}
-      changeLocation={onLocationChange}
-      currentLocation={currentLocation}
+      {...navProps}
       header={{
         leftIconButton: {
           value: <ArrowIcon />,

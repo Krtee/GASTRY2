@@ -1,29 +1,32 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useParams, useRouteMatch } from "react-router";
+import { useRouteMatch } from "react-router";
 import { Link } from "react-router-dom";
-import PictureEditable from "../PictureEditable/PictureEditable";
-import { BuddyInfoProps } from "./BuddyInfo.types";
+import { useRecoilValue } from "recoil";
+import { useAxios } from "../../utils/AxiosUtil";
+import { userState } from "../../utils/user/User.state";
+import { BuddyType } from "../../utils/user/User.types";
 import {
   addBuddy,
   getFriendRequestStatus,
   removeBuddy,
 } from "../../utils/user/User.util";
-import { BUDDY_REQUEST } from "../../utils/user/User.types";
+import PictureEditable from "../PictureEditable/PictureEditable";
 import "./BuddyInfo.styles.scss";
-import { useAxios } from "../../utils/AxiosUtil";
-import { useState } from "react";
-import { useRecoilState } from "recoil";
-import { userState } from "../../utils/user/User.state";
+import { BuddyInfoProps } from "./BuddyInfo.types";
 
 const BuddyInfo: React.FC<BuddyInfoProps> = ({ buddy }) => {
   const { t } = useTranslation();
   const { axios } = useAxios();
   const [requestSent, setRequestSent] = useState<boolean>(false);
-  const [currentUser, setCurrentUser] = useRecoilState(userState);
+  const currentUser = useRecoilValue(userState);
   let { url } = useRouteMatch();
 
+  /**
+   * adds a buddy to buddylist
+   */
   const handleAddBuddy = async () => {
-    if (buddy) {
+    if (buddy && currentUser) {
       const request = await addBuddy(axios, {
         userId: currentUser.id,
         buddyId: buddy?.id,
@@ -34,8 +37,11 @@ const BuddyInfo: React.FC<BuddyInfoProps> = ({ buddy }) => {
     }
   };
 
+  /**
+   * removes a buddy from buddylist
+   */
   const handleRemoveBuddy = async () => {
-    if (buddy) {
+    if (buddy && currentUser) {
       const isRemoved = await removeBuddy(axios, {
         userId: currentUser.id,
         buddyId: buddy?.id,
@@ -47,11 +53,11 @@ const BuddyInfo: React.FC<BuddyInfoProps> = ({ buddy }) => {
   };
 
   const renderRightButton = () => {
-    let status: BUDDY_REQUEST = BUDDY_REQUEST.REJECTED;
-    if (buddy) {
+    let status: BuddyType = BuddyType.REJECTED;
+    if (buddy && currentUser) {
       status = getFriendRequestStatus(currentUser, buddy?.id);
     }
-    if (status === BUDDY_REQUEST.ACCEPTED) {
+    if (status === BuddyType.ACCEPTED) {
       return (
         <button
           className={`user-info-button-secondary`}
@@ -61,7 +67,7 @@ const BuddyInfo: React.FC<BuddyInfoProps> = ({ buddy }) => {
         </button>
       );
     }
-    if (status === BUDDY_REQUEST.PENDING || requestSent) {
+    if (status === BuddyType.PENDING || requestSent) {
       return (
         <button
           className={`user-info-button-secondary`}

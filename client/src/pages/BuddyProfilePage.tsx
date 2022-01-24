@@ -1,26 +1,26 @@
 import { FC, useEffect, useState } from "react";
-import BuddyInfo from "../components/BuddyInfo/BuddyInfo";
-import BuddyStats from "../components/BuddyStats/BuddyStats";
-import { Page, useNavigation } from "../utils/hooks/useNavigation";
-import "../styles/ProfilePage.styles.scss";
-import ProfileNav from "../components/ProfileNav/ProfileNav";
 import {
-  Switch,
   Route,
-  useRouteMatch,
-  useParams,
+  Switch,
   useHistory,
+  useParams,
+  useRouteMatch,
 } from "react-router";
+import { ReactComponent as ArrowIcon } from "../assets/icons/arrow_left.svg";
+import BuddyInfo from "../components/BuddyInfo/BuddyInfo";
+import BuddyPosts from "../components/BuddyPosts/BuddyPosts";
+import BuddyStats from "../components/BuddyStats/BuddyStats";
 import Favorites from "../components/Favorites/Favorites";
 import Layout from "../components/LayoutComponent/Layout";
-import { loadSingleUser } from "../utils/user/User.util";
+import ProfileNav from "../components/ProfileNav/ProfileNav";
+import "../styles/ProfilePage.styles.scss";
 import { useAxios } from "../utils/AxiosUtil";
+import { Page, useNavigation } from "../utils/hooks/useNavigation";
 import { User } from "../utils/user/User.types";
-import { ReactComponent as ArrowIcon } from "../assets/icons/arrow_left.svg";
-import BuddyPosts from "../components/BuddyPosts/BuddyPosts";
+import { loadSingleUser } from "../utils/user/User.util";
 
 const BuddyProfilePage: FC<{}> = () => {
-  const { currentLocation, onLocationChange } = useNavigation();
+  const navProps = useNavigation(Page.BUDDY_PROFILE);
   const { axios } = useAxios();
   const history = useHistory();
   const [user, setUser] = useState<User>();
@@ -40,11 +40,7 @@ const BuddyProfilePage: FC<{}> = () => {
 
   return (
     <Layout
-      navigationElements={Object.entries(Page).map((page) => ({
-        title: page[1],
-      }))}
-      changeLocation={onLocationChange}
-      currentLocation={currentLocation}
+      {...navProps}
       header={{
         leftIconButton: {
           value: <ArrowIcon />,

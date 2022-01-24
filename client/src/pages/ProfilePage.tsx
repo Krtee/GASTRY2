@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Route, Switch, useRouteMatch } from "react-router";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import Favorites from "../components/Favorites/Favorites";
 import Layout from "../components/LayoutComponent/Layout";
 import Posts from "../components/Posts/Posts";
@@ -14,7 +14,7 @@ import { userState } from "../utils/user/User.state";
 
 const ProfilePage: FC<{}> = () => {
   const navProps = useNavigation(Page.PROFILE);
-  const [user, setUser] = useRecoilState(userState);
+  const user = useRecoilValue(userState);
 
   let { url } = useRouteMatch();
 

@@ -4,11 +4,14 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 
 import io.yumatch.userservice.constants.BuddyType;
+import io.yumatch.userservice.constants.Diets;
+import io.yumatch.userservice.constants.Intolerances;
 import io.yumatch.userservice.constants.UserRole;
 import lombok.Data;
 
@@ -31,9 +34,18 @@ public class UserDto implements Serializable {
 
     @Transient
     private String password;
+    private String city = "";
+    private String latitude = "";
+    private String longitude = "";
+    private String bio = "";
+    private Diets diets;
+    private Intolerances intolerances;
+    private Set<String> favoriteRestaurantIds;
+    private Set<String> followerUserIds;
+    private Set<String> followingUserIds;
 
     /**
-     * Helper method to update this {@link User} instance
+     * Helper method to update this {@link UserDTO} instance
      * 
      * @param updatedUser The clientside updated instance
      */
@@ -46,10 +58,19 @@ public class UserDto implements Serializable {
         this.email = updatedUser.getEmail();
         this.token = updatedUser.getToken();
         this.activeMatch = updatedUser.getActiveMatch();
+        this.city = updatedUser.getCity();
+        this.latitude = updatedUser.getLatitude();
+        this.longitude = updatedUser.getLongitude();
+        this.bio = updatedUser.getBio();
+        this.diets = updatedUser.getDiets();
+        this.intolerances = updatedUser.getIntolerances();
+        this.favoriteRestaurantIds = updatedUser.getFavoriteRestaurantIds();
+        this.followerUserIds = updatedUser.getFollowerUserIds();
+        this.followingUserIds = updatedUser.getFollowingUserIds();
     }
 
     /**
-     * Helper method to add new {@link Buddy} instance to {@link User}
+     * Helper method to add new {@link Buddy} instance to {@link UserDTO}
      * 
      * @param buddyId    to id of the buddy to be added
      * @param buddyState the BuddyType the new instance of {@link Buddy} should

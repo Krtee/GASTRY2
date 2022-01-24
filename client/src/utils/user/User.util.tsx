@@ -1,6 +1,6 @@
 import { AxiosInstance } from "axios";
 import { ResponseTypes } from "../AxiosUtil";
-import { User, UserRole } from "./User.types";
+import { BuddyType, User, UserRole } from "./User.types";
 
 /**
  * Helper function to create an empty user for modification
@@ -10,13 +10,24 @@ import { User, UserRole } from "./User.types";
 export const createEmptyUser = (): User => {
   return {
     id: "",
+    photo: "",
     username: "",
     password: "",
     firstName: "",
     lastName: "",
     email: "",
+    city: "",
+    lat: "",
+    long: "",
     role: UserRole.USER,
-    token: "",
+    posts: [],
+    diets: [],
+    intolerances: [],
+    types: [],
+    cuisines: [],
+    favoriteRestaurants: [],
+    visitedRestaurants: [],
+    subscribedRestaurants: [],
     buddies: [],
   };
 };
@@ -34,9 +45,8 @@ export const createNewUser = async (
   return axios
     .post("/user/", newUser)
     .then((response) => response.data)
-    .catch((error) => {
+    .catch(() => {
       console.error("Error while creating a new user!");
-      return error.response.data;
     });
 };
 
@@ -46,7 +56,7 @@ export const createNewUser = async (
  * @param userId The id of the {@link User} to fetch
  * @param axios The axios instance
  * @returns Either the loaded user or undefined in case of an error
- * @author Domenico Ferrari
+ * @author Fadel Kaadan
  */
 export const loadSingleUser = async (
   userId: string,
@@ -96,3 +106,71 @@ export const updateUser = async (
       console.error("Error while updating user!");
       console.log(error);
     });
+
+/**
+ * API method to load all {@link User}
+ *
+ * @param axios The axios instance
+ * @returns Either all users or undefined in case of an error
+ * @author Fadel Kaadan
+ */
+export const fetchAllUsers = async (axios: AxiosInstance): Promise<User[]> => {
+  return axios
+    .get("/user/all/")
+    .then((resp) => resp.data)
+    .catch((exc) => console.error("Error fetching all users!", exc));
+};
+
+/**
+ * API method to a buddy to {@link User}
+ *
+ * @param axios The axios instance
+ * @returns Either the updated user or undefined in case of an error
+ * @author Fadel Kaadan
+ */
+export const addBuddy = async (
+  axios: AxiosInstance,
+  bodyRequest: { userId: string; buddyId: string }
+): Promise<boolean> => {
+  return axios
+    .post("/user/buddy/", bodyRequest)
+    .then((resp) => resp.data)
+    .catch((exc) => console.error("Error while adding a buddy!", exc));
+};
+
+/**
+ * API method to a buddy to {@link User}
+ *
+ * @param axios The axios instance
+ * @returns Either the updated user or undefined in case of an error
+ * @author Fadel Kaadan
+ */
+export const removeBuddy = async (
+  axios: AxiosInstance,
+  bodyRequest: { userId: string; buddyId: string }
+): Promise<boolean> => {
+  return axios
+    .post("/user/buddy/remove", bodyRequest)
+    .then((resp) => resp.data)
+    .catch((exc) => console.error("Error while removing a buddy!", exc));
+};
+
+/**
+ * Helper method to get friend request status
+ *
+ * @param user current user {@link User}
+ * @param buddyId buddy id
+ * @returns friend request status
+ * @author Fadel Kaadan
+ */
+export const getFriendRequestStatus = (
+  user: User,
+  buddyId: string
+): BuddyType => {
+  const buddy = user.buddies.find((buddy) => buddy.buddyId === buddyId);
+  if (buddy) {
+    return buddy?.buddyType;
+  }
+
+  return BuddyType.REJECTED;
+};

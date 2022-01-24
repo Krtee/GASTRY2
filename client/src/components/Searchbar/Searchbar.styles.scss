@@ -1,0 +1,30 @@
+.searchbar {
+  display: flex;
+  align-items: center;
+  background-color: #fca262;
+  border-radius: 24px;
+  padding: 10px 15px;
+  width: 100%;
+  position: relative;
+
+  &-input {
+    background-color: #fca262;
+    border-radius: 24px;
+    width: 100%;
+    padding: 0 16px;
+    border: none;
+    outline: none;
+    color: #fff;
+    &::placeholder {
+      color: #f9eee1;
+    }
+  }
+
+  &-icon {
+    width: 18px;
+    height: 16px;
+    background-image: url("../../assets/icons/search.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+}

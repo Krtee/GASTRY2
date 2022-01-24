@@ -67,10 +67,10 @@ export interface User {
   password?: string;
   token?: string;
   posts?: [];
-  diets?: DIETS[];
-  intolerances?: INTOLERANCES[];
-  cuisines?: CUISINES[];
-  types?: TYPES[];
+  diets?: string[];
+  intolerances?: string[];
+  cuisines?: string[];
+  types?: string[];
   favoriteRestaurants?: [];
   visitedRestaurants?: [];
   subscribedRestaurants?: [];

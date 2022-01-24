@@ -10,7 +10,7 @@ import { userState } from "../../utils/user/User.state";
 import { CUISINES, DIETS, TYPES } from "../../utils/user/User.types";
 
 const UserSettings = () => {
-  const axios = useAxios();
+  const { axios } = useAxios();
   const { t } = useTranslation();
 
   /* 
@@ -22,22 +22,21 @@ const UserSettings = () => {
   const [diets, setDiets] = useState<any>({});
   const [types, setTypes] = useState<any>({});
   const [cuisines, setCuisines] = useState<any>({});
-  const [city, setCity] = useState<string>("");
   const [liveLocation, setLiveLocation] = useState<boolean>(false);
   const [user, setUser] = useRecoilState(userState);
 
-  const submit = async () => {
-    // try {
-    //   const result = await updateUser(axios, {
-    //     ...user,
-    //     diets: convertObjToArr(diets),
-    //     types: convertObjToArr(types),
-    //     cuisines: convertObjToArr(cuisines),
-    //   });
-    //   console.log(result);
-    // } catch (err) {
-    //   console.log(err);
-    // }
+  const onSubmit = async () => {
+    try {
+      const result = await updateUser(axios, {
+        ...user,
+        diets: convertObjToArr(diets),
+        types: convertObjToArr(types),
+        cuisines: convertObjToArr(cuisines),
+      });
+      console.log(result);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   // save coords in recoil
@@ -83,7 +82,7 @@ const UserSettings = () => {
     <div className="user-settings">
       <div className="switch-inputs-wrapper">
         <p>{t("general.pages.preferences.filterPresets")}</p>
-        <button className="user-settings-save-btn">
+        <button className="user-settings-save-btn" onClick={onSubmit}>
           {t("general.buttons.save")}
         </button>
       </div>

@@ -35,7 +35,6 @@ const NotificationPage: React.FC<NotificationPageProps> = () => {
   const [peristentNotifcationList, setPeristentNotifcationList] =
     useState<Notification[]>();
 
-
   useEffect(() => {
     if (!axios || !user || !user.id) return;
     loadAllNotifications(user!.id, axios).then((notifications) => {
@@ -61,7 +60,18 @@ const NotificationPage: React.FC<NotificationPageProps> = () => {
     >
       <div className="notification-page--wrapper">
         {peristentNotifcationList?.map((noti, index) => (
-          <NotificationCardComponent {...noti} index={index} key={index} />
+          <NotificationCardComponent
+            {...noti}
+            index={index}
+            key={index}
+            onClick={
+              noti.notificationType === NotificationType.MULTI_MATCH
+                ? () => history.push(`/matching/result/${noti.matchId}`)
+                : noti.notificationType === NotificationType.BUDDY_REQUEST
+                ? () => alert("IMPLEMET ROUTING TO FRIENDS PAGE")
+                : () => alert("NO DEFAULT IMPLEMENT")
+            }
+          />
         ))}
       </div>
     </Layout>

@@ -17,6 +17,8 @@ public class PersistedNotification extends Notification {
     private boolean seen = false;
     private String userId;
     private NotificationType notificationType;
+    private String matchId;
+    private String userIdRequest;
     private String topic;
 
     public void updateSeen() {

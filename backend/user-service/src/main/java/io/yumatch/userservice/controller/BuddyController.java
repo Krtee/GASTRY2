@@ -73,12 +73,13 @@ public class BuddyController {
         persistNotification.setMessage(config.getNotification().getBuddyRequestText());
         persistNotification.setUserId(buddyUser.getId());
         persistNotification.setNotificationType(NotificationType.BUDDY_REQUEST);
+        persistNotification.setUserIdRequest(loadedUser.getId());
         notiRepo.save(persistNotification);
         if (buddyUser.getToken() != null) {
             firebaseService.sendNotificationToTarget(
                     new DirectNotification(buddyUser.getToken(), config.getNotification().getBuddyRequestText(),
                             config.getNotification().getBuddyRequestTitle()),
-                    "userId", loadedUser.getId());
+                    "userIdRequest", loadedUser.getId(), NotificationType.BUDDY_REQUEST.toString());
         }
 
         loadedUser.addBuddy(buddyId, BuddyType.PENDING);

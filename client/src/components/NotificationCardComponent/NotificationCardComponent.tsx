@@ -109,7 +109,8 @@ export const generateNotification = (
   title: string,
   message: string,
   notificationType: NotificationType,
-  duration?: number
+  duration?: number,
+  onClick?: () => void
 ): void => {
   let divWrapper: HTMLDivElement = document.createElement("div");
   let className: string = "in-app-notification";
@@ -126,6 +127,7 @@ export const generateNotification = (
       notificationType: notificationType,
       duration: duration,
       onDestroy: () => document.getElementById(idName)?.remove(),
+      onClick: onClick,
     },
     null
   );

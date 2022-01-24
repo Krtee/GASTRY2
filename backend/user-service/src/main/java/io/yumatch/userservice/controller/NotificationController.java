@@ -55,7 +55,7 @@ public class NotificationController {
     @PostMapping(value = "/")
     public ResponseEntity<Boolean> sendTargetedNotification(@RequestBody DirectNotification notification) {
         log.info("Request to send targeted notification");
-        firebaseService.sendNotificationToTarget(notification, null,null);
+        firebaseService.sendNotificationToTarget(notification, null, null, null);
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
@@ -82,7 +82,8 @@ public class NotificationController {
         persistNotification.setNotificationType(NotificationType.USER);
         notiRepo.save(persistNotification);
         firebaseService.sendNotificationToTarget(
-                new DirectNotification(loadedUser.getToken(), notification.getMessage(), notification.getTitle()), null, null);
+                new DirectNotification(loadedUser.getToken(), notification.getMessage(), notification.getTitle()), null,
+                null, null);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
@@ -193,10 +194,11 @@ public class NotificationController {
                 persistNotification.setMessage(message);
                 persistNotification.setUserId(loadedUser.getId());
                 persistNotification.setNotificationType(NotificationType.MULTI_MATCH);
+                persistNotification.setMatchId(request.getMatchId());
                 notiRepo.save(persistNotification);
             }
         });
-        firebaseService.sendMultipleNotification(notifications, "matchId", request.getMatchId());
+        firebaseService.sendMultipleNotification(notifications, "matchId", request.getMatchId(), NotificationType.MULTI_MATCH.toString() );
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
@@ -215,7 +217,7 @@ public class NotificationController {
         persistNotification.setTopic(notification.getTopic());
         persistNotification.setNotificationType(NotificationType.TOPIC);
         notiRepo.save(persistNotification);
-        firebaseService.sendNotificationToTopic(notification, null, null);
+        firebaseService.sendNotificationToTopic(notification, null, null, null);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

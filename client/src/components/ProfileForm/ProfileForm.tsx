@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router";
 import { useAxios } from "../../utils/AxiosUtil";
@@ -8,19 +8,25 @@ import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow_left.svg";
 import Layout from "../LayoutComponent/Layout";
 import PictureEditable from "../PictureEditable/PictureEditable";
 import "./ProfileFormStyles.scss";
+import { updateUser } from "../../utils/user/User.util";
+import { useRecoilState } from "recoil";
+import { userState } from "../../utils/user/User.state";
 
 const inputs: string[] = ["firstName", "lastName", "username", "bio"];
 
 const ProfileForm: React.FC<{}> = () => {
-  const axios = useAxios();
+  const { axios } = useAxios();
   const { t } = useTranslation();
   const { currentLocation, onLocationChange } = useNavigation();
-  const [formData, setFormData] = useState<any>({});
+  const [user, setUser] = useRecoilState(userState);
+  const [formData, setFormData] = useState<any>(user);
   const history = useHistory();
 
   const onUpload = () => {};
 
-  const onSubmit = () => {};
+  const onSubmit = async () => {
+    await updateUser(axios, formData);
+  };
 
   return (
     <Layout
@@ -53,16 +59,25 @@ const ProfileForm: React.FC<{}> = () => {
             <span className="user-info-edit-btn-icon user-info-interactions-element-icon"></span>
             {t("general.pages.profile.editPic")}
           </button>
-          {inputs.map((item) => (
+          {inputs.map((item: string) => (
             <div key={item} className="profile-form-input">
               <label>{t(`general.pages.profile.${item}`)}:</label>
-              <input type="text" />
+              <input
+                type="text"
+                value={formData[item] ? formData[item] : ""}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  setFormData((state: any) => ({
+                    ...state,
+                    [item]: e.target.value,
+                  }))
+                }
+              />
             </div>
           ))}
         </div>
         <button
           className="profile-form-btn profile-form-submit"
-          onClick={onUpload}
+          onClick={onSubmit}
         >
           {t("general.pages.profile.saveChanges")}
         </button>

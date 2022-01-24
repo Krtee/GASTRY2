@@ -34,36 +34,7 @@ const NotificationPage: React.FC<NotificationPageProps> = () => {
 
   const [peristentNotifcationList, setPeristentNotifcationList] =
     useState<Notification[]>();
-  const demoNoti: NotificationCardComponentProps[] = [
-    {
-      title: "TestNoti",
-      message: "This is a test noti",
-      notificationType: NotificationType.BUDDY_REQUEST,
-    },
-    {
-      title: "TestNoti",
-      message: "This is a test noti",
-      notificationType: NotificationType.BUDDY_REQUEST,
-    },
-    {
-      title: "TestNoti",
-      message: "This is a test noti",
-      notificationType: NotificationType.BUDDY_REQUEST,
-      disableAnimation: true,
-    },
-    {
-      title: "TestNoti",
-      message: "This is a test noti",
-      notificationType: NotificationType.MULTI_MATCH,
-      disableAnimation: true,
-    },
-    {
-      title: "TestNoti",
-      message: "This is a test noti",
-      notificationType: NotificationType.MULTI_MATCH,
-      seen: true,
-    },
-  ];
+
 
   useEffect(() => {
     if (!axios || !user || !user.id) return;
@@ -89,9 +60,6 @@ const NotificationPage: React.FC<NotificationPageProps> = () => {
       }}
     >
       <div className="notification-page--wrapper">
-        {demoNoti.map((noti, index) => (
-          <NotificationCardComponent {...noti} index={index} />
-        ))}
         {peristentNotifcationList?.map((noti, index) => (
           <NotificationCardComponent {...noti} index={index} key={index} />
         ))}

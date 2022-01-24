@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.foodtinder.dataservice.model.Match;
 import io.foodtinder.dataservice.model.MultiUserMatch;
 import io.foodtinder.dataservice.model.requests.MatchRequestBody;
+import io.foodtinder.dataservice.model.requests.MultiMatchRequest;
 import io.foodtinder.dataservice.repositories.MatchRepository;
 import io.foodtinder.dataservice.repositories.MultiUserMatchRepository;
 import io.foodtinder.dataservice.utils.MatchUtils;
@@ -147,7 +148,7 @@ public class MatchController {
                     multiUserMatch.setMatchedRestaurants(
                             matchUtils.matchRestaurants(allMatchesInMultiUserMatch, requestBody.getLocation()));
                     multiUserMatch.setUpdatedAt(LocalDateTime.now());
-                    restUtils.sendMultiMatchFoundNotification(multiUserMatch.getUserIds());
+                    restUtils.sendMultiMatchFoundNotification(new MultiMatchRequest(multiUserMatch.getUserIds(), multiUserMatch.getId()));
                     multiUserMatchRepo.save(multiUserMatch);
                 }
             }

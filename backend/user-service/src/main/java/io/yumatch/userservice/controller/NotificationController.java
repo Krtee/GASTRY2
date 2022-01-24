@@ -25,6 +25,7 @@ import io.yumatch.userservice.model.PersistedNotification;
 import io.yumatch.userservice.model.TopicNotification;
 import io.yumatch.userservice.model.UserDto;
 import io.yumatch.userservice.model.UserNotification;
+import io.yumatch.userservice.model.requests.MultiMatchRequest;
 import io.yumatch.userservice.model.requests.SubscriptionRequest;
 import io.yumatch.userservice.repositories.NotificationRepository;
 import io.yumatch.userservice.repositories.UserRepository;
@@ -54,11 +55,10 @@ public class NotificationController {
     @PostMapping(value = "/")
     public ResponseEntity<Boolean> sendTargetedNotification(@RequestBody DirectNotification notification) {
         log.info("Request to send targeted notification");
-        firebaseService.sendNotificationToTarget(notification);
+        firebaseService.sendNotificationToTarget(notification, null,null);
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
-
 
     /**
      * POST API to send notification to a user, if he has token
@@ -82,7 +82,7 @@ public class NotificationController {
         persistNotification.setNotificationType(NotificationType.USER);
         notiRepo.save(persistNotification);
         firebaseService.sendNotificationToTarget(
-                new DirectNotification(loadedUser.getToken(), notification.getMessage(), notification.getTitle()));
+                new DirectNotification(loadedUser.getToken(), notification.getMessage(), notification.getTitle()), null, null);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
@@ -175,10 +175,10 @@ public class NotificationController {
      * @return 200
      */
     @PostMapping(value = "/multi/match")
-    public ResponseEntity<Boolean> sendMultiMatchNotification(@RequestBody List<String> userIds) {
+    public ResponseEntity<Boolean> sendMultiMatchNotification(@RequestBody MultiMatchRequest request) {
         log.info("Request to send notifications to users in match group");
         List<DirectNotification> notifications = new ArrayList<DirectNotification>();
-        userIds.forEach(userId -> {
+        request.getUserIds().forEach(userId -> {
             UserDto loadedUser = userRepo.findById(userId).orElse(null);
             if (loadedUser == null) {
                 log.warn("User with id {} not found!", userId);
@@ -196,7 +196,7 @@ public class NotificationController {
                 notiRepo.save(persistNotification);
             }
         });
-        firebaseService.sendMultipleNotification(notifications);
+        firebaseService.sendMultipleNotification(notifications, "matchId", request.getMatchId());
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
@@ -215,7 +215,7 @@ public class NotificationController {
         persistNotification.setTopic(notification.getTopic());
         persistNotification.setNotificationType(NotificationType.TOPIC);
         notiRepo.save(persistNotification);
-        firebaseService.sendNotificationToTopic(notification);
+        firebaseService.sendNotificationToTopic(notification, null, null);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

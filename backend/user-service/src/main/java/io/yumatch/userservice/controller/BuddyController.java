@@ -77,7 +77,8 @@ public class BuddyController {
         if (buddyUser.getToken() != null) {
             firebaseService.sendNotificationToTarget(
                     new DirectNotification(buddyUser.getToken(), config.getNotification().getBuddyRequestText(),
-                            config.getNotification().getBuddyRequestTitle()));
+                            config.getNotification().getBuddyRequestTitle()),
+                    "userId", loadedUser.getId());
         }
 
         loadedUser.addBuddy(buddyId, BuddyType.PENDING);

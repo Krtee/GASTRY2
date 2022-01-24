@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 
+import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 
 import com.google.auth.oauth2.GoogleCredentials;
@@ -62,7 +63,8 @@ public class FirebaseService {
      * 
      * @param notification the notification to be sent
      */
-    public void sendNotificationToTarget(DirectNotification notification) {
+    public void sendNotificationToTarget(DirectNotification notification, @Nullable String key,
+            @Nullable String value) {
         Message message = Message.builder()
                 .setWebpushConfig(
                         WebpushConfig.builder()
@@ -72,7 +74,10 @@ public class FirebaseService {
                                                 .setBody(notification.getMessage())
                                                 .setIcon(notificationIcon)
                                                 .build())
+                                .putData(key, value)
+
                                 .build())
+
                 .setToken(notification.getTarget())
                 .build();
 
@@ -85,7 +90,7 @@ public class FirebaseService {
      * 
      * @param notification the notification to be sent
      */
-    public void sendNotificationToTopic(TopicNotification notification) {
+    public void sendNotificationToTopic(TopicNotification notification, @Nullable String key, @Nullable String value) {
         Message message = Message.builder()
                 .setWebpushConfig(
                         WebpushConfig.builder()
@@ -95,6 +100,8 @@ public class FirebaseService {
                                                 .setBody(notification.getMessage())
                                                 .setIcon(notificationIcon)
                                                 .build())
+                                .putData(key, value)
+
                                 .build())
                 .setTopic(notification.getTopic())
                 .build();
@@ -123,7 +130,8 @@ public class FirebaseService {
      * 
      * @param notifications the notifications being sent by Firebase
      */
-    public void sendMultipleNotification(List<DirectNotification> notifications) {
+    public void sendMultipleNotification(List<DirectNotification> notifications, @Nullable String key,
+            @Nullable String value) {
         List<Message> messages = new ArrayList<Message>();
         notifications.forEach(notification -> {
             Message message = Message.builder()
@@ -135,6 +143,8 @@ public class FirebaseService {
                                                     .setBody(notification.getMessage())
                                                     .setIcon(notificationIcon)
                                                     .build())
+                                    .putData(key, value)
+
                                     .build())
                     .setToken(notification.getTarget())
                     .build();

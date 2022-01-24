@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { NavLinkProps } from "./NavLink.types";
 import "./NavLinkStyles.scss";
 
-const NavLink = ({ label, to, icon }: NavLinkProps) => {
+const NavLink: React.FC<NavLinkProps> = ({ label, to, icon }) => {
   let match = useRouteMatch({
     path: to,
     exact: true,

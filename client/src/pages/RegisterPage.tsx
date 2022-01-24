@@ -1,10 +1,10 @@
 import { useKeycloak } from "@react-keycloak/web";
 import { FC, useEffect, useState } from "react";
+import Layout from "../components/LayoutComponent/Layout";
+import InputComponent from "../components/InputComponent/InputComponent";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router";
 import ButtonComponent from "../components/ButtonComponent/ButtonComponent";
-import InputComponent from "../components/InputComponent/InputComponent";
-import Layout from "../components/LayoutComponent/Layout";
 import "../styles/RegisterPage.styles.scss";
 import { ResponseTypes, useAxios } from "../utils/AxiosUtil";
 import { User } from "../utils/user/User.types";

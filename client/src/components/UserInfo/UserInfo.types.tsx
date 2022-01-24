@@ -1,6 +1,5 @@
-export interface UserInfoComponentProps {
-  photo: any;
-  name: string;
-  username: string;
-  fav_restaurant?: string;
+import { User } from "../../utils/user/User.types";
+
+export interface UserInfoProps {
+  user: User | undefined;
 }

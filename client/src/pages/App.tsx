@@ -1,12 +1,15 @@
 import "leaflet/dist/leaflet.css";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import { RecoilRoot, useRecoilValue } from "recoil";
+import ProfileForm from "../components/ProfileForm/ProfileForm";
 import { AxiosSubscriber } from "../utils/Axios.state";
 import { currentMatchState } from "../utils/match/Match.state";
 import { Match } from "../utils/match/Match.types";
 import { UserSubscriber } from "../utils/user/UserSubscriber";
+import Buddies from "./BuddiesPage";
 import BuddyProfilePage from "./BuddyProfilePage";
 import ChooseFriendsPage from "./ChooseFriendsPage";
+import FollowingsPage from "./FollowingsPage";
 import MatchFoundPage from "./MatchFoundPage";
 import MatchingPage from "./MatchingPage";
 import MatchingStartpage from "./MatchingStartpage";
@@ -15,9 +18,6 @@ import ProfilePage from "./ProfilePage";
 import RegisterPage from "./RegisterPage";
 import SearchPage from "./SearchPage";
 import TutorialPage from "./TutorialPage";
-import ProfileForm from "../components/ProfileForm/ProfileForm";
-import Buddies from "./BuddiesPage";
-import FollowingsPage from "./FollowingsPage";
 
 const App = () => {
   const currentMatch = useRecoilValue<Match | undefined>(currentMatchState);

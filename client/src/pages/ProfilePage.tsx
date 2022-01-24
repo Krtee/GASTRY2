@@ -8,7 +8,6 @@ import ProfileNav from "../components/ProfileNav/ProfileNav";
 import UserInfo from "../components/UserInfo/UserInfo";
 import UserSettings from "../components/UserSettings/UserSettings";
 import UserStats from "../components/UserStats/UserStats";
-import "../styles/ProfilePage.styles.scss";
 import { Page, useNavigation } from "../utils/hooks/useNavigation";
 import { userState } from "../utils/user/User.state";
 

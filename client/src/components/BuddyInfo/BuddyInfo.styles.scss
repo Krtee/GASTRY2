@@ -1,0 +1,116 @@
+.user-info {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  margin-bottom: 24px;
+  color: #fff;
+  z-index: 999;
+  border-radius: 35px;
+  padding: 16px;
+  background-color: #fca262;
+
+  &-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 999;
+    color: #fff;
+  }
+
+  &-username {
+    color: #f2594b;
+    background-color: #fff;
+    border-radius: 24px;
+    padding: 3px 16px;
+    font-weight: 700;
+    margin: 8px;
+  }
+
+  &-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &-background {
+      align-self: flex-end;
+      position: absolute;
+      height: 75%;
+      width: 100%;
+      border-radius: 35px;
+      top: 25%;
+      left: 0;
+      z-index: 1;
+      background-color: #fca262;
+    }
+  }
+
+  &-button-icon {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    margin-right: 5px;
+  }
+
+  &-button-primary,
+  &-button-secondary {
+    align-self: flex-end;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    flex: 1;
+    padding: 5px 0;
+    border: none;
+    outline: none;
+    white-space: nowrap;
+    background: linear-gradient(
+      90deg,
+      #bb002d -7.87%,
+      #f2594b 52.42%,
+      #d63627 109.06%
+    );
+    color: #fff;
+    border-radius: 24px;
+    font-weight: 700;
+    font-size: 0.8rem;
+    z-index: 999;
+  }
+
+  &-button-secondary {
+    outline: 2px solid #fff7ed;
+    color: #fff7ed;
+    background: #fca262;
+  }
+
+  &-edit-btn {
+    &-icon {
+      background-image: url("../../assets/icons/edit.svg");
+      width: 12px;
+      height: 14px;
+    }
+  }
+
+  &-match-btn {
+    &-icon {
+      background-image: url("../../assets/icons/match.svg");
+      width: 19px;
+      height: 14px;
+    }
+  }
+
+  &-search-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+
+    &-icon {
+      background-image: url("../../assets/icons/search-small.svg");
+      width: 13px;
+      height: 11px;
+    }
+  }
+}

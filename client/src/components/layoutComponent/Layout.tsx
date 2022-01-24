@@ -39,28 +39,30 @@ const Layout: FC<LayoutProps> = ({
       {!hideBar && (
         <div id="layout-component-navigation-bar">
           {navigationElements &&
-            navigationElements.map((navigation, index) => (
-              <div
-                key={index}
-                onClick={() => changeLocation?.(index)}
-                className={
-                  currentLocation === index
-                    ? "navigation-wrapper disabled"
-                    : "navigation-wrapper"
-                }
-              >
-                {navigation.icon}
-                <p
+            navigationElements
+              .filter((page, index) => index < navigationElements.length - 1)
+              .map((navigation, index) => (
+                <div
+                  key={index}
+                  onClick={() => changeLocation?.(index)}
                   className={
                     currentLocation === index
-                      ? "navigation-node selected"
-                      : "navigation-node"
+                      ? "navigation-wrapper disabled"
+                      : "navigation-wrapper"
                   }
                 >
-                  {navigation.title}
-                </p>
-              </div>
-            ))}
+                  {navigation.icon}
+                  <p
+                    className={
+                      currentLocation === index
+                        ? "navigation-node selected"
+                        : "navigation-node"
+                    }
+                  >
+                    {navigation.title}
+                  </p>
+                </div>
+              ))}
         </div>
       )}
     </div>

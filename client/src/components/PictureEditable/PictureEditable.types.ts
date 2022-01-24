@@ -1,4 +1,7 @@
+import { CSSProperties } from "react";
+
 export interface PictureEditableProps {
-  photo: any;
-  onUpload?: any;
+  photo: string;
+  onUpload?: () => void;
+  styles?: CSSProperties;
 }

@@ -2,12 +2,16 @@ package io.yumatch.userservice.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Set;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 
+import io.yumatch.userservice.constants.Diets;
+import io.yumatch.userservice.constants.Intolerances;
 import io.yumatch.userservice.constants.BuddyType;
 import io.yumatch.userservice.constants.UserRole;
 import lombok.Data;
@@ -30,6 +34,15 @@ public class UserDto implements Serializable {
 
     @Transient
     private String password;
+    private String city = "";
+    private String latitude = "";
+    private String longitude = "";
+    private String bio = "";
+    private Diets diets;
+    private Intolerances intolerances;
+    private Set<String> favoriteRestaurantIds;
+    private Set<String> followerUserIds;
+    private Set<String> followingUserIds;
 
     /**
      * Helper method to update this {@link User} instance
@@ -44,9 +57,18 @@ public class UserDto implements Serializable {
         this.lastName = updatedUser.getLastName();
         this.email = updatedUser.getEmail();
         this.token = updatedUser.getToken();
+        this.city = updatedUser.getCity();
+        this.latitude = updatedUser.getLatitude();
+        this.longitude = updatedUser.getLongitude();
+        this.bio = updatedUser.getBio();
+        this.diets = updatedUser.getDiets();
+        this.intolerances = updatedUser.getIntolerances();
+        this.favoriteRestaurantIds = updatedUser.getFavoriteRestaurantIds();
+        this.followerUserIds = updatedUser.getFollowerUserIds();
+        this.followingUserIds = updatedUser.getFollowingUserIds();
     }
 
-     /**
+    /**
      * Helper method to add new {@link Buddy} instance to {@link User}
      * 
      * @param buddyId    to id of the buddy to be added
@@ -91,6 +113,7 @@ public class UserDto implements Serializable {
 
     /**
      * Helper method to set a buddy instance to rejected
+     * 
      * @param buddyId the id of the buddy to be rejected
      */
     public void rejectBuddy(String buddyId) {
@@ -105,6 +128,7 @@ public class UserDto implements Serializable {
 
     /**
      * Helper method to set a buddy instance to accepted
+     * 
      * @param buddyId the id of the buddy to be accepted
      */
     public void acceptBuddy(String buddyId) {
@@ -119,11 +143,12 @@ public class UserDto implements Serializable {
 
     /**
      * Helper method to get a buddy from a given list of buddies
+     * 
      * @param buddyList a list containing buddies
-     * @param buddyId the id of buddy to be found
+     * @param buddyId   the id of buddy to be found
      * @return a buddy instance if search successful otherwise null
      */
-    public Buddy getBuddyFromList( String buddyId) {
+    public Buddy getBuddyFromList(String buddyId) {
         return this.buddies.stream().filter(buddy -> buddy.getBuddyId().equals(buddyId)).findFirst()
                 .orElse(null);
     }

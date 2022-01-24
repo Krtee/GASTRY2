@@ -1,8 +1,8 @@
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import "./UserStatsStyles.scss";
-
 import { UserStatsComponentProps } from "./UserStats.types";
+import { Link } from "react-router-dom";
 
 const UserStats: FC<UserStatsComponentProps> = ({
   visitedRestaurants,
@@ -15,26 +15,21 @@ const UserStats: FC<UserStatsComponentProps> = ({
     <div className="user-stats">
       <div className="user-stats-box">
         <p className="user-stats-number">{visitedRestaurants}</p>
-        <p className="user-stats-label">
-          {t("general.pages.profile.visitedRestaurants")}
-        </p>
+        <p>{t("general.pages.profile.visitedRestaurants")}</p>
       </div>
       <div className="user-stats-box">
         <p className="user-stats-number">{posts}</p>
-        <p className="user-stats-label">{t("general.pages.profile.posts")}</p>
+        <p>{t("general.pages.profile.posts")}</p>
       </div>
-      <div className="user-stats-box">
+      {/* TODO: add the right path when this feature is ready */}
+      <Link to={`/profile`} className="user-stats-box">
         <p className="user-stats-number">{followings}</p>
-        <p className="user-stats-label">
-          {t("general.pages.profile.followers")}
-        </p>
-      </div>
-      <div className="user-stats-box">
+        <p>{t("general.pages.profile.subscribedRestaurants")}</p>
+      </Link>
+      <Link to={`/buddies`} className="user-stats-box">
         <p className="user-stats-number">{followers}</p>
-        <p className="user-stats-label">
-          {t("general.pages.profile.followings")}
-        </p>
-      </div>
+        <p>{t("general.pages.profile.friends")}</p>
+      </Link>
     </div>
   );
 };

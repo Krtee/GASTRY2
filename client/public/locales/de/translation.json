@@ -4,13 +4,17 @@
     "buttons": {
       "logout": "Ausloggen",
       "login": "Einloggen",
-      "showmore":"Mehr anzeigen",
-      "showless":"Weniger anzeigen"
+      "add": "Hinzufügen",
+      "added": "Hinzugefügt",
+      "pending": "Pending",
+      "showmore": "Mehr anzeigen",
+      "showless": "Weniger anzeigen",
+      "save": "Speichern"
     },
-    "navigation":{
-      "feed":"Feed",
-      "profile":"profile",
-      "matching":"Match"
+    "navigation": {
+      "feed": "Feed",
+      "profile": "profile",
+      "matching": "Match"
     },
     "pages": {
       "matching": "Matchen",
@@ -26,19 +30,74 @@
         "REGISTER_USER_EXISTS_MAIL": "Ein User mit dieser E-Mail existiert bereits",
         "REGISTER_USER_EXISTS_USERNAME": "Der Username ist bereits vergeben"
       },
-      "matchfound":{
-        "title":"Hier sind deine 3 Matches:"
+      "profile": {
+        "favRestaurant": "Lieblingsrestaurant",
+        "followers": "Abonennten",
+        "followings": "Abonniert",
+        "posts": "Meine Beiträge",
+        "friends": "Meine Foodies",
+        "visitedRestaurants": "Besuchte Restaurants",
+        "subscribedRestaurants": "Subscribed restaurants",
+        "editProfile": "Profil bearbeiten",
+        "searchFriends": "Freunde suchen",
+        "firstName": "Vorname",
+        "lastName": "Nachname",
+        "username": "Benutzername",
+        "bio": "Biografie",
+        "editPic": "Profilbild bearbeiten",
+        "saveChanges": "Änderungen speichern",
+        "match": "Matchen"
+      },
+      "search": {
+        "findNameOrEmail": "Name oder E-Mail suchen",
+        "prevSelection": "Letzte Auswahl",
+        "add": "hinzufügen",
+        "yourFriends": "Deine Freunde"
+      },
+      "preferences": {
+        "filterPresets": "Filter Voreinstellungen",
+        "diet": "Ernährungsweise",
+        "type": "Art",
+        "intolerances": "Deine Unverträglichkeiten",
+        "selectCuisine": "Geschmacksrichtungen  auswählen",
+        "vegan": "Vegan",
+        "vegetarian": "vegetarisch",
+        "gluten_free": "Glutenfrei",
+        "no_pork": "Kein Schwein",
+        "peanut": "Erdnuss",
+        "fish": "Fisch",
+        "Onions": "Zwiebel",
+        "garlic": "Knoblauch",
+        "tomatoe": "Tomaten",
+        "italian": "Italianisch",
+        "asian": "Asiatisch",
+        "greek": "Griechisch",
+        "south_american": "Südamerikanisch",
+        "african": "Afrikanisch",
+        "spanish": "Spanisch",
+        "french": "Französich",
+        "cafe": "Café",
+        "cold": "Kalt",
+        "warm": "Warm",
+        "dessert": "Nachtisch",
+        "location": "Deine Standort",
+        "enterCity": "PLZ oder Stadt eingeben",
+        "useLiveLocation": "Live Standort verwenden",
+        "recentLocations": "Vergangene Standorte"
+      },
+      "matchfound": {
+        "title": "Hier sind deine 3 Matches:"
       }
     }
   },
-  "match":{
-    "button":{
-      "rematch":"Erneut matchen"
+  "match": {
+    "button": {
+      "rematch": "Erneut matchen"
     },
-    "loading":{
-      "top":"Es ist ein ...",
-      "center":"YUMMMMatch",
-      "bottom":"Und die besten Restaurants in deiner Nähe sind..."
+    "loading": {
+      "top": "Es ist ein ...",
+      "center": "YUMMMMatch",
+      "bottom": "Und die besten Restaurants in deiner Nähe sind..."
     }
   }
 }

@@ -6,7 +6,7 @@ import "./PostsStyles.scss";
 
 const Posts: React.FC<PostsProps> = ({ posts }) => {
   const addPost = () => {};
-  const user = useRecoilValue(userState);
+  const { user } = useRecoilValue(userState);
 
   return (
     <div className="posts">

@@ -225,4 +225,29 @@
   font-size: 28px;
   line-height: 34px;
   text-align: center;
+
+  .lds-heart {
+    animation: lds-heart 3s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+
+  @keyframes lds-heart {
+    0% {
+      transform: scale(0.99);
+    }
+    5% {
+      transform: scale(1.01);
+    }
+    39% {
+      transform: scale(0.9);
+    }
+    45% {
+      transform: scale(1);
+    }
+    60% {
+      transform: scale(0.98);
+    }
+    100% {
+      transform: scale(0.96);
+    }
+  }
 }

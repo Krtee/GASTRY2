@@ -23,7 +23,7 @@ const UserSettings = () => {
   const [diets, setDiets] = useState<any>({});
   const [types, setTypes] = useState<any>({});
   const [cuisines, setCuisines] = useState<any>({});
-  const [user, setUser] = useRecoilState(userState);
+  const [{ user }, setUser] = useRecoilState(userState);
   const { geolocation } = useGeoLocation();
 
   const onSubmit = async () => {

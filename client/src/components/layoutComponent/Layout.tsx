@@ -1,8 +1,9 @@
 import { FC } from "react";
+import { useHistory } from "react-router";
 import IconButtonComponent from "../IconButtonComponent/IconButtonComponent";
+import { ReactComponent as NotificationIcon } from "./../../assets/icons/notification.svg";
 import { LayoutProps } from "./Layout.types";
 import "./LayoutStyles.scss";
-
 const Layout: FC<LayoutProps> = ({
   children,
   navigationElements,
@@ -13,6 +14,7 @@ const Layout: FC<LayoutProps> = ({
   className,
   withBackgroundImage = false,
 }) => {
+  const history = useHistory();
   return (
     <div
       id="layout-component"
@@ -33,6 +35,14 @@ const Layout: FC<LayoutProps> = ({
           ) : (
             <span className="layout-component-header__button-placeholder" />
           )}
+          <IconButtonComponent
+            value={<NotificationIcon />}
+            onClick={() => {
+              history.push("/profile/notifications");
+            }}
+            color={"#fca262"}
+            hideBorder
+          />
         </div>
       )}
 

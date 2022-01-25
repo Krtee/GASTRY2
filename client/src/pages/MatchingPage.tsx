@@ -75,7 +75,7 @@ const MatchingPage: FC<MatchingPageProps> = () => {
     currentMultiMatchState
   );
   const { t } = useTranslation();
-  const user = useRecoilValue(userState);
+  const { user } = useRecoilValue(userState);
   const [mealsToSwipe, setMealsToSwipe] =
     useRecoilState<Meal[]>(randomMealsState);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -84,8 +84,9 @@ const MatchingPage: FC<MatchingPageProps> = () => {
   const canSwipe = currentIndex >= 0;
   const [disableGoBack, setdisableGoBack] = useState(true);
   const history = useHistory();
-  const [showLoadingMatchModal, setShowLoadingMatchModal] =
-    useState<MatchType>();
+  const [showLoadingMatchModal, setShowLoadingMatchModal] = useState<
+    MatchType | undefined
+  >(MatchType.SINGLE_MATCH);
   const { geolocation: location, refreshGeolocation } = useGeoLocation();
   const { axios } = useAxios();
   const multiUserList = useRecoilValue<User[]>(getUserForMultiMatch);
@@ -464,7 +465,7 @@ const MatchingPage: FC<MatchingPageProps> = () => {
                 {/** TODO implement image and translations */}
                 <p>{t("match.loading.top")}</p>
                 <p>{t("match.loading.center")}</p>
-                <EatableHart />
+                <EatableHart className="lds-heart" />
                 <p>{t("match.loading.bottom")}</p>
               </ModalComponent>
             )}

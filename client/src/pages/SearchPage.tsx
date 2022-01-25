@@ -20,7 +20,7 @@ const SearchPage: FC<{}> = () => {
   const { t } = useTranslation();
   const history = useHistory();
   const { axios } = useAxios();
-  const user = useRecoilValue(userState);
+  const { user } = useRecoilValue(userState);
   const navProps = useNavigation(Page.SEARCH);
   const [searchValue, setSearchValue] = useState<string>("");
   const [users, setUsers] = useState<User[]>([]);

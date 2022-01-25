@@ -12,11 +12,11 @@
     background-image: url("./../../assets/images/backgroundImage.svg");
   }
   &-header {
-    flex: 1 0 0;
+    height: 64px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 0 1vw;
+    margin: 12px 1vw;
     .layout-component-header {
       &__title {
         color: #fca262;

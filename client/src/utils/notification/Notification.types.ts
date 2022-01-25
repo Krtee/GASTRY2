@@ -1,7 +1,5 @@
 export interface NotificationPageProps {}
 
-
-
 export enum NotificationType {
   MULTI_MATCH = "MULTI_MATCH",
   REQUEST_MULTI_MATCH = "REQUEST_MULTI_M",
@@ -15,5 +13,7 @@ export interface Notification {
   title: string;
   message: string;
   notificationType: NotificationType;
+  userIdRequest?: string;
+  matchId?: string;
   topic?: string;
 }

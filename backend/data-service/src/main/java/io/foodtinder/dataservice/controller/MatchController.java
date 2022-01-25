@@ -21,6 +21,7 @@ import io.foodtinder.dataservice.model.Match;
 import io.foodtinder.dataservice.model.MultiMatchUserWrapper;
 import io.foodtinder.dataservice.model.MultiUserMatch;
 import io.foodtinder.dataservice.model.requests.MatchRequestBody;
+import io.foodtinder.dataservice.model.requests.MultiMatchRequest;
 import io.foodtinder.dataservice.repositories.MatchRepository;
 import io.foodtinder.dataservice.repositories.MultiUserMatchRepository;
 import io.foodtinder.dataservice.utils.MatchUtils;
@@ -156,10 +157,13 @@ public class MatchController {
                             matchUtils.matchRestaurants(allMatchesInMultiUserMatch, requestBody.getLocation()));
                     multiUserMatch.setUpdatedAt(LocalDateTime.now());
                     restUtils.sendMultiMatchFoundNotification(
-                            multiUserMatch.getUserList().stream()
-                                    .filter(userWrapper -> userWrapper.getStatus() == MultiMatchRequestStatus.ACCEPTED)
-                                    .map(MultiMatchUserWrapper::getUserId)
-                                    .collect(Collectors.toList()));
+                            new MultiMatchRequest(
+                                    multiUserMatch.getUserList().stream()
+                                            .filter(userWrapper -> userWrapper
+                                                    .getStatus() == MultiMatchRequestStatus.ACCEPTED)
+                                            .map(MultiMatchUserWrapper::getUserId)
+                                            .collect(Collectors.toList()),
+                                    multiUserMatch.getId()));
                     multiUserMatchRepo.save(multiUserMatch);
                 }
             }

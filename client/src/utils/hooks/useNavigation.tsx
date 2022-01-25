@@ -78,7 +78,7 @@ export const useNavigation = (
   useEffect(() => {
     switch (currentLocation) {
       case Page.FEED:
-        history.push("/feed");
+        //history.push("/feed");
         break;
       case Page.MATCHING:
         if (currentMatch) {

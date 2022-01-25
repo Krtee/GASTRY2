@@ -21,6 +21,7 @@ import io.foodtinder.dataservice.constants.MealArea;
 import io.foodtinder.dataservice.model.GeoLocation;
 import io.foodtinder.dataservice.model.Meal;
 import io.foodtinder.dataservice.model.requests.MealWrapper;
+import io.foodtinder.dataservice.model.requests.MultiMatchRequest;
 import io.foodtinder.dataservice.model.requests.google.GoogleMapsResponseRestaurant;
 import io.foodtinder.dataservice.model.requests.google.GoogleMapsResponseWrapper;
 import io.foodtinder.dataservice.model.requests.google.GoogleMapsSingleResultWrapper;
@@ -204,8 +205,8 @@ public class RestUtils {
          * 
          * @param userIds
          */
-        public void sendMultiMatchFoundNotification(List<String> userIds) {
-                userServiceWebClient.post().uri("/notifications/multi/match/finished").bodyValue(userIds)
+        public void sendMultiMatchFoundNotification(MultiMatchRequest request) {
+                userServiceWebClient.post().uri("/notifications/multi/match/finished").bodyValue(request)
                                 .retrieve()
                                 .toBodilessEntity()
                                 .block();
@@ -214,10 +215,10 @@ public class RestUtils {
         /**
          * Internal API to send notifications to all users that are part of the match
          * 
-         * @param userIds
+         * @param request
          */
-        public void sendMultiMatchRequestNotification(List<String> userIds) {
-                userServiceWebClient.post().uri("/notifications/multi/match").bodyValue(userIds)
+        public void sendMultiMatchRequestNotification(MultiMatchRequest request) {
+                userServiceWebClient.post().uri("/notifications/multi/match").bodyValue(request)
                                 .retrieve()
                                 .toBodilessEntity()
                                 .block();

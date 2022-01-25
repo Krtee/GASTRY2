@@ -18,6 +18,7 @@ import io.foodtinder.dataservice.constants.MultiMatchRequestStatus;
 import io.foodtinder.dataservice.model.Match;
 import io.foodtinder.dataservice.model.MultiMatchUserWrapper;
 import io.foodtinder.dataservice.model.MultiUserMatch;
+import io.foodtinder.dataservice.model.requests.MultiMatchRequest;
 import io.foodtinder.dataservice.repositories.MatchRepository;
 import io.foodtinder.dataservice.repositories.MultiUserMatchRepository;
 import io.foodtinder.dataservice.utils.MatchUtils;
@@ -59,11 +60,13 @@ public class MultiUserMatchController {
             matchRepository.save(foundMatch);
         }
         restUtils.sendMultiMatchFoundNotification(
-                newMultiUserMatch.getUserList().stream()
-                        .filter(userWrapper -> userWrapper.getStatus() == MultiMatchRequestStatus.ACCEPTED
-                                && userWrapper.getUserId() != newMultiUserMatch.getCreatorId())
-                        .map(MultiMatchUserWrapper::getUserId)
-                        .collect(Collectors.toList()));
+                new MultiMatchRequest(
+                        newMultiUserMatch.getUserList().stream()
+                                .filter(userWrapper -> userWrapper.getStatus() == MultiMatchRequestStatus.ACCEPTED
+                                        && userWrapper.getUserId() != newMultiUserMatch.getCreatorId())
+                                .map(MultiMatchUserWrapper::getUserId)
+                                .collect(Collectors.toList()),
+                        newMultiUserMatch.getId()));
         return ResponseEntity.status(HttpStatus.OK).body(multiUserMatchRepo.save(newMultiUserMatch));
     }
 
@@ -122,6 +125,7 @@ public class MultiUserMatchController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(matchUtils.checkIfAllMatchesAreFinishedInsideMultiUserMatch(multiUserMatch));
     }
+
 
     /**
      * POST API to update a group match

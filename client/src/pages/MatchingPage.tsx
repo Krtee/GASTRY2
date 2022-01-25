@@ -29,6 +29,7 @@ import "../styles/MatchingPage.styles.scss";
 import { useAxios } from "../utils/AxiosUtil";
 import useGeoLocation from "../utils/hooks/useGeoLocation";
 import { Page, useNavigation } from "../utils/hooks/useNavigation";
+import { useWindowDimensions } from "../utils/hooks/useWindowDimensions";
 import { currentMatchState } from "../utils/match/Match.state";
 import { Match } from "../utils/match/Match.types";
 import {
@@ -81,7 +82,7 @@ const MatchingPage: FC<MatchingPageProps> = () => {
   const currentIndexRef = useRef<number>(currentIndex);
   const canGoBack = currentIndex < mealsToSwipe.length - 1;
   const canSwipe = currentIndex >= 0;
-  const [disableGoBack, setdisableGoBack] = useState(false);
+  const [disableGoBack, setdisableGoBack] = useState(true);
   const history = useHistory();
   const [showLoadingMatchModal, setShowLoadingMatchModal] =
     useState<MatchType>();
@@ -98,6 +99,10 @@ const MatchingPage: FC<MatchingPageProps> = () => {
     [mealsToSwipe.length]
   );
   const [showDirOnImage, setShowDirOnImage] = useState<SwipeDirection>();
+  const dimensions = useWindowDimensions();
+  const [swipeProps, setSwipeProps] =
+    useState<{ direction: "left" | "right"; meal: Meal; index: number }>();
+
   /**
    * updates current index, and ref for index
    * @param val index
@@ -106,31 +111,6 @@ const MatchingPage: FC<MatchingPageProps> = () => {
   const updateCurrentIndex = (val: number) => {
     setCurrentIndex(val);
     currentIndexRef.current = val;
-  };
-
-  // set last direction and decrease current index
-  const swiped = (direction: "left" | "right", meal: Meal, index: number) => {
-    setShowDirOnImage(undefined);
-    switch (direction) {
-      case "left":
-        setCurrentMatch((lastMatchState) => ({
-          ...lastMatchState!,
-          unmatchedMeals: [...lastMatchState!.unmatchedMeals, meal],
-        }));
-        break;
-      case "right":
-        setCurrentMatch((lastMatchState) => ({
-          ...lastMatchState!,
-          matchedMeals: [...lastMatchState!.matchedMeals, meal],
-        }));
-        break;
-      default:
-    }
-    setdisableGoBack(false);
-    updateCurrentIndex(index + 1);
-    if (index === mealsToSwipe.length - 1) {
-      handleSubmitMatch();
-    }
   };
 
   /**
@@ -299,6 +279,37 @@ const MatchingPage: FC<MatchingPageProps> = () => {
   };
 
   /**
+   *changes currentmatch,set last direction and decrease current index. Submits match, when finished
+   */
+  useEffect(() => {
+    if (!swipeProps) return;
+    setShowDirOnImage(undefined);
+    switch (swipeProps.direction) {
+      case "left":
+        setCurrentMatch((lastMatchState) => ({
+          ...lastMatchState!,
+          unmatchedMeals: [...lastMatchState!.unmatchedMeals, swipeProps.meal],
+        }));
+        break;
+      case "right":
+        setCurrentMatch((lastMatchState) => ({
+          ...lastMatchState!,
+          matchedMeals: [...lastMatchState!.matchedMeals, swipeProps.meal],
+        }));
+        break;
+      default:
+        break;
+    }
+    setdisableGoBack(false);
+    updateCurrentIndex(swipeProps.index + 1);
+    if (swipeProps.index === mealsToSwipe.length - 1) {
+      handleSubmitMatch();
+    }
+    setSwipeProps(undefined);
+    // eslint-disable-next-line
+  }, [swipeProps]);
+
+  /**
    * returns to the starting screen, if no match exist
    * @author Minh
    */
@@ -353,20 +364,20 @@ const MatchingPage: FC<MatchingPageProps> = () => {
                   ref={childRefs[index]}
                   key={meal.idMeal}
                   onSwipe={(dir) =>
-                    swiped(dir as "left" | "right", meal, index)
+                    setSwipeProps({
+                      direction: dir as "left" | "right",
+                      meal: meal,
+                      index: index,
+                    })
                   }
+                  className={`swipe swipe--${index}`}
                   preventSwipe={["up", "down"]}
                   onCardLeftScreen={() => outOfFrame(index)}
-                  className={`container container--${index}`}
                   onSwipeRequirementFulfilled={(dir) => {
                     if (dir === "left") {
-                      console.log(dir, currentIndex, index);
-
                       setShowDirOnImage(SwipeDirection.DISLIKE);
                     }
                     if (dir === "right") {
-                      console.log(dir, currentIndex, index);
-
                       setShowDirOnImage(SwipeDirection.LIKE);
                     }
                   }}
@@ -374,41 +385,46 @@ const MatchingPage: FC<MatchingPageProps> = () => {
                     setShowDirOnImage(undefined)
                   }
                   swipeRequirementType="position"
-                  swipeThreshold={200}
+                  swipeThreshold={dimensions.width / 4}
                 >
-                  <img src={meal.strMealThumb} alt={meal.strMeal} />
-                  <div className="progressBar">
+                  <div className={`container `}>
                     <div
-                      className="progressBarStyle"
-                      style={{
-                        width: ((currentIndex / 15) * 100).toFixed(0) + "%",
-                      }}
-                    >
-                      <span className="progressBarText">
-                        {((currentIndex / 15) * 100).toFixed(0) + "%"}
-                      </span>
+                      className="meal-image"
+                      style={{ backgroundImage: `url(${meal.strMealThumb})` }}
+                    />
+                    <div className="progressBar">
+                      <div
+                        className="progressBarStyle"
+                        style={{
+                          width: ((currentIndex / 15) * 100).toFixed(0) + "%",
+                        }}
+                      >
+                        <span className="progressBarText">
+                          {((currentIndex / 15) * 100).toFixed(0) + "%"}
+                        </span>
+                      </div>
                     </div>
+                    <span
+                      className={`swipe-gesture-indicator swipe-gesture-indicator__like  ${
+                        showDirOnImage === SwipeDirection.LIKE &&
+                        currentIndex === index
+                          ? "show"
+                          : ""
+                      }`}
+                    >
+                      <LikeIcon />
+                    </span>
+                    <span
+                      className={`swipe-gesture-indicator swipe-gesture-indicator__dislike ${
+                        showDirOnImage === SwipeDirection.DISLIKE &&
+                        currentIndex === index
+                          ? "show"
+                          : ""
+                      }`}
+                    >
+                      <DislikeIcon />
+                    </span>
                   </div>
-                  <span
-                    className={`swipe-gesture-indicator swipe-gesture-indicator__like  ${
-                      showDirOnImage === SwipeDirection.LIKE &&
-                      currentIndex === index
-                        ? "show"
-                        : ""
-                    }`}
-                  >
-                    <LikeIcon />
-                  </span>
-                  <span
-                    className={`swipe-gesture-indicator swipe-gesture-indicator__dislike ${
-                      showDirOnImage === SwipeDirection.DISLIKE &&
-                      currentIndex === index
-                        ? "show"
-                        : ""
-                    }`}
-                  >
-                    <DislikeIcon />
-                  </span>
                 </TinderCard>
               ))}
             </div>

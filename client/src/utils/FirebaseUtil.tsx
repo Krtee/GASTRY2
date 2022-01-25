@@ -1,5 +1,10 @@
 import { initializeApp } from "firebase/app";
-import { getMessaging, getToken, onMessage } from "firebase/messaging";
+import {
+  getMessaging,
+  getToken,
+  MessagePayload,
+  onMessage,
+} from "firebase/messaging";
 
 // Initialize the Firebase app in the service worker by passing the generated config
 const firebaseConfig = {
@@ -35,11 +40,5 @@ getToken(messaging, {
   });
 
 export const onMessageListener = (
-  setNotificationCard: (title: string, body: string) => void
-) =>
-  onMessage(messaging, (payload) => {
-    setNotificationCard(
-      payload.notification?.title || "",
-      payload.notification?.body || ""
-    );
-  });
+  payloadHandler: (payload: MessagePayload) => void
+) => onMessage(messaging, (payload) => payloadHandler(payload));

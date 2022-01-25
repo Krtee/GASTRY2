@@ -3,8 +3,8 @@ import { axiosState } from "../Axios.state";
 import { currentMatchState } from "../match/Match.state";
 import { userState } from "../user/User.state";
 import { User } from "../user/User.types";
-import { loadMultipleUser } from "../user/User.util";
-import { MultiMatchRequestStatus, MultiUserMatch } from "./MultiMatch.types";
+import { loadUsersForMultiMatchId } from "../user/User.util";
+import { MultiUserMatch } from "./MultiMatch.types";
 import { fetchMultiMatchForSingleMatchId } from "./MultiMatch.Utils";
 
 /**
@@ -51,14 +51,9 @@ export const getUserForMultiMatch = selector<User[]>({
     if (!axios || axios === null || !multiUserMatch) {
       return [];
     }
-    const usersToReturn = await loadMultipleUser(
+    const usersToReturn = await loadUsersForMultiMatchId(
       axios,
-      multiUserMatch.userList
-        .filter(
-          (userToFilter) =>
-            userToFilter.status !== MultiMatchRequestStatus.REJECTED
-        )
-        .map((userToMap) => userToMap.userId)
+      multiUserMatch.id!
     );
     return usersToReturn || [];
   },

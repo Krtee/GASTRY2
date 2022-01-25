@@ -58,10 +58,10 @@ export interface Buddy {
 export interface User {
   id: string;
   photo?: string;
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
   username: string;
-  email: string;
+  email?: string;
   role: UserRole;
   city?: string;
   lat?: string;

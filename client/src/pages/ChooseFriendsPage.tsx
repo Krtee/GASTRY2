@@ -62,9 +62,9 @@ const ChooseFriendsPage: React.FC<ChooseFriendsPageProps> = () => {
         .filter(
           (userToFilter) =>
             userToFilter.id !== user!.id &&
-            (userToFilter.email.includes(searchText) ||
-              userToFilter.firstName.includes(searchText) ||
-              userToFilter.lastName.includes(searchText))
+            (userToFilter.email?.includes(searchText) ||
+              userToFilter.firstName?.includes(searchText) ||
+              userToFilter.lastName?.includes(searchText))
         )
     );
   }, [searchText, user, buddyList]);
@@ -86,8 +86,6 @@ const ChooseFriendsPage: React.FC<ChooseFriendsPageProps> = () => {
         )
       ).then((mulitUserMatch) => {
         setMultiUserMatch(mulitUserMatch);
-        console.log(currentMatch);
-
         setCurrentMatch((matchToUpdate) => ({
           ...matchToUpdate!,
           partOfGroup: true,
@@ -143,7 +141,7 @@ const ChooseFriendsPage: React.FC<ChooseFriendsPageProps> = () => {
         {alphabet.map((letter) => {
           const usersToRender = filteredFriendlist.filter(
             (userToFilter) =>
-              userToFilter.firstName.charAt(0).toLowerCase() === letter
+              userToFilter.firstName?.charAt(0).toLowerCase() === letter
           );
           return (
             usersToRender.length > 0 && (

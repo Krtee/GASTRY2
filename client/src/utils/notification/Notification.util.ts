@@ -1,5 +1,5 @@
 import { AxiosInstance } from "axios";
-import { NotificationType } from "./Notification.types";
+import { NotificationType, Notification } from "./Notification.types";
 
 /**
  * API method to load all notifications form user by their id
@@ -14,7 +14,7 @@ export const loadAllNotifications = async (
   axios: AxiosInstance
 ): Promise<Notification[]> => {
   return axios
-    .get("/notification/persistent/all/", { params: { userId: userId } })
+    .get("user/notification/persistent/all/", { params: { userId: userId } })
     .then((resp) => resp.data)
     .catch((exc) => console.error("Error during noti fetch!", exc));
 };
@@ -33,7 +33,7 @@ export const loadAllNotificationsViaType = async (
   axios: AxiosInstance
 ): Promise<Notification[]> => {
   return axios
-    .get("/notification/persistent/type/", {
+    .get("user/notification/persistent/type/", {
       params: { type: type, userId: userId },
     })
     .then((resp) => resp.data)
@@ -54,7 +54,7 @@ export const loadAllNotificationsViaSeen = async (
   axios: AxiosInstance
 ): Promise<Notification[]> => {
   return axios
-    .get("/notification/persistent/seen/", {
+    .get("user/notification/persistent/seen/", {
       params: { seen: seen, userId: userId },
     })
     .then((resp) => resp.data)
@@ -74,7 +74,7 @@ export const persistentNotificationHaveBeenSeen = async (
   axios: AxiosInstance
 ): Promise<Notification[]> => {
   return axios
-    .post("/notification/persistent/update/", userId)
+    .post("user/notification/persistent/update/", userId)
     .then((resp) => resp.data)
     .catch((exc) => console.error("Error during noti fetch!", exc));
 };

@@ -69,19 +69,40 @@ export const loadSingleUser = async (
 };
 
 /**
- * API method to load an {@link User} by its id
+ * API method to load a list of {@link User} by its id
  *
- * @param userId The id of the {@link User} to fetch
+ * @param userId The id of the current{@link User}
  * @param axios The axios instance
- * @returns Either the loaded user or undefined in case of an error
- * @author Domenico Ferrari
+ * @returns Either a list of friends or or an empty array
+ * @author Minh
  */
-export const loadMultipleUser = async (
+export const loadFriends = async (
   axios: AxiosInstance,
-  userIds: string[]
+  userId: string
 ): Promise<User[]> => {
   return axios
-    .get("/user/id/many", { params: { userIds: userIds } })
+    .get("/user/friends", { params: { userId: userId } })
+    .then((resp) => resp.data)
+    .catch((exc) => {
+      console.error("Error during user load!", exc);
+      return [];
+    });
+};
+
+/**
+ * API method to load a list of {@link User}
+ *
+ * @param matchId The id of the match
+ * @param axios The axios instance
+ * @returns Either a list of friends or or an empty array
+ * @author Minh
+ */
+export const loadUsersForMultiMatchId = async (
+  axios: AxiosInstance,
+  matchId: string
+): Promise<User[]> => {
+  return axios
+    .get("/user/multimatch", { params: { matchId: matchId } })
     .then((resp) => resp.data)
     .catch((exc) => {
       console.error("Error during user load!", exc);

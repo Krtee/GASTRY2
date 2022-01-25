@@ -20,6 +20,7 @@ import io.yumatch.userservice.model.PersistedNotification;
 import io.yumatch.userservice.model.TopicNotification;
 import io.yumatch.userservice.model.UserDto;
 import io.yumatch.userservice.model.UserNotification;
+import io.yumatch.userservice.model.requests.MultiMatchRequest;
 import io.yumatch.userservice.model.requests.SubscriptionRequest;
 import io.yumatch.userservice.repositories.NotificationRepository;
 import io.yumatch.userservice.repositories.UserRepository;
@@ -50,7 +51,7 @@ public class NotificationController {
     @PostMapping(value = "/")
     public ResponseEntity<Boolean> sendTargetedNotification(@RequestBody DirectNotification notification) {
         log.info("Request to send targeted notification");
-        firebaseService.sendNotificationToTarget(notification);
+        firebaseService.sendNotificationToTarget(notification, null, null, null);
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
@@ -77,7 +78,8 @@ public class NotificationController {
         persistNotification.setNotificationType(NotificationType.USER);
         notiRepo.save(persistNotification);
         firebaseService.sendNotificationToTarget(
-                new DirectNotification(loadedUser.getToken(), notification.getMessage(), notification.getTitle()));
+                new DirectNotification(loadedUser.getToken(), notification.getMessage(), notification.getTitle()), null,
+                null, null);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
@@ -150,7 +152,7 @@ public class NotificationController {
      */
     @PostMapping(value = "/persistent/update")
     public ResponseEntity<?> updatePersistentNotificationSeen(@RequestBody String userId) {
-        log.info("Request to get all persistent notis belonging to a user by seen, {}, {}", userId);
+        log.info("Request to update all persistent notis to be seen, {}, {}", userId);
         UserDto loadedUser = userRepo.findById(userId).orElse(null);
         if (loadedUser == null) {
             log.warn("User with id {} not found!", userId);
@@ -158,6 +160,7 @@ public class NotificationController {
         }
         List<PersistedNotification> notSeenNotifications = notiRepo.findByUserIdAndSeen(userId, false);
         PersistedNotification.updateManySeen(notSeenNotifications);
+        notiRepo.saveAll(notSeenNotifications);
         return ResponseEntity.status(HttpStatus.OK).build();
 
     }
@@ -169,42 +172,11 @@ public class NotificationController {
      * @return 200
      */
     @PostMapping(value = "/multi/match")
-    public ResponseEntity<Boolean> sendMultiMatchNotification(@RequestBody List<String> userIds) {
-        log.info("Request to send notifications to users to request group match");
-        List<DirectNotification> notifications = new ArrayList<DirectNotification>();
-        userIds.forEach(userId -> {
-            UserDto loadedUser = userRepo.findById(userId).orElse(null);
-            if (loadedUser == null) {
-                log.warn("User with id {} not found!", userId);
-            } else {
-                log.info("Creating both notification and persistent notification for page");
-                String title = "DU hast eine neue Match Anfrage!";
-                String message = "Deine Freunde haben dich zu einem Gruppenmatch eingeladen.";
-                DirectNotification newNotification = new DirectNotification(loadedUser.getToken(), title, message);
-                notifications.add(newNotification);
-                PersistedNotification persistNotification = new PersistedNotification();
-                persistNotification.setTitle(title);
-                persistNotification.setMessage(message);
-                persistNotification.setUserId(loadedUser.getId());
-                persistNotification.setNotificationType(NotificationType.REQUEST_MULTI_MATCH);
-                notiRepo.save(persistNotification);
-            }
-        });
-        firebaseService.sendMultipleNotification(notifications);
-        return ResponseEntity.status(HttpStatus.OK).build();
-    }
 
-    /**
-     * POST API to send notification to all users part of the matching group
-     * 
-     * @param notification
-     * @return 200
-     */
-    @PostMapping(value = "/multi/match/finished")
-    public ResponseEntity<Boolean> sendMultiMatchFinishedNotification(@RequestBody List<String> userIds) {
-        log.info("Request to send notifications to users in match group, saying that matching finished");
+    public ResponseEntity<Boolean> sendMultiMatchNotification(@RequestBody MultiMatchRequest request) {
+        log.info("Request to send notifications to users in match group");
         List<DirectNotification> notifications = new ArrayList<DirectNotification>();
-        userIds.forEach(userId -> {
+        request.getUserIds().forEach(userId -> {
             UserDto loadedUser = userRepo.findById(userId).orElse(null);
             if (loadedUser == null) {
                 log.warn("User with id {} not found!", userId);
@@ -219,10 +191,12 @@ public class NotificationController {
                 persistNotification.setMessage(message);
                 persistNotification.setUserId(loadedUser.getId());
                 persistNotification.setNotificationType(NotificationType.MULTI_MATCH);
+                persistNotification.setMatchId(request.getMatchId());
                 notiRepo.save(persistNotification);
             }
         });
-        firebaseService.sendMultipleNotification(notifications);
+        firebaseService.sendMultipleNotification(notifications, "matchId", request.getMatchId(),
+                NotificationType.MULTI_MATCH.toString());
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
@@ -241,7 +215,7 @@ public class NotificationController {
         persistNotification.setTopic(notification.getTopic());
         persistNotification.setNotificationType(NotificationType.TOPIC);
         notiRepo.save(persistNotification);
-        firebaseService.sendNotificationToTopic(notification);
+        firebaseService.sendNotificationToTopic(notification, null, null, null);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

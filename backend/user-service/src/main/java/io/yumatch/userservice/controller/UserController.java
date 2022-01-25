@@ -19,9 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.yumatch.userservice.constants.ResponseTypes;
 import io.yumatch.userservice.constants.UserRole;
+import io.yumatch.userservice.model.Buddy;
 import io.yumatch.userservice.model.UserDto;
 import io.yumatch.userservice.repositories.UserRepository;
 import io.yumatch.userservice.utils.KeyCloakService;
+import io.yumatch.userservice.utils.RestUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -35,6 +37,9 @@ public class UserController {
 
     @Autowired
     private KeyCloakService keycloakUtil;
+
+    @Autowired
+    private RestUtils restUtils;
 
     /**
      * CREATE API to create a new {@link UserDTO}
@@ -118,18 +123,41 @@ public class UserController {
      * @param userIds list of ids to fetch
      * @return 200 with a loaded {@link UserDTO} instance which can be null
      */
-    @GetMapping(value = "/id/many")
-    public ResponseEntity<List<UserDto>> getMultipleSimpleUsersById(@RequestParam List<String> userIds) {
-        log.info("Request to load list of users received");
-
+    @GetMapping(value = "/friends")
+    public ResponseEntity<List<UserDto>> getFriendsById(@RequestParam String userId) {
+        log.info("Request to load friends of user {} received", userId);
+        UserDto loadedUser = userRepo.findById(userId).orElse(null);
+        if (loadedUser == null) {
+            log.warn("UserDTO with id {} not found to update!", userId);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
         List<UserDto> listOfUsers = new ArrayList<UserDto>();
 
-        for (String userId : userIds) {
-            listOfUsers.add(userRepo.findSimpleUserById(userId).orElse(null));
+        for (Buddy buddy : loadedUser.getBuddies()) {
+            listOfUsers.add(userRepo.findSimpleUserById(buddy.getBuddyId()).orElse(null));
         }
         return ResponseEntity.status(HttpStatus.OK).body(listOfUsers.parallelStream()
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList()));
+    }
+
+    /**
+     * READ API to load a list of {@link UserDTO} instances inside a match
+     * 
+     * @param matchId list of ids to fetch
+     * @return 200 with a loaded list of {@link UserDTO} which can be empty
+     */
+    @GetMapping(value = "/multimatch")
+    public ResponseEntity<List<UserDto>> getUsersByMatchId(@RequestParam String matchId) {
+        log.info("Request to load users for match {} received", matchId);
+
+        List<String> listOfUsers = restUtils.getUserIdsforMatchId(matchId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(listOfUsers.parallelStream()
+                        .map(userId -> userRepo.findSimpleUserById(userId).orElse(null))
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toList()));
     }
 
     /**

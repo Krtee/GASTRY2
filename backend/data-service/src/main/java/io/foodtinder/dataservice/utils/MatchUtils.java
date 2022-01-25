@@ -213,7 +213,7 @@ public class MatchUtils {
          * if no response is found, fetches net google response
          */
         GoogleMapsResponseWrapper newGoogleResp = restUtils.findRestaurants(location, "DE",
-                maxValues.get("area") + " " + maxValues.get("category") + " " + maxValues.get("tag"));
+                maxValues.get("area"));
 
         googleRespSave = new GoogleRespSave();
         googleRespSave.setRestaurants(newGoogleResp.getResults()

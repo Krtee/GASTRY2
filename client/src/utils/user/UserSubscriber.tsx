@@ -24,7 +24,7 @@ export const UserSubscriber: React.FC<{}> = () => {
    * Loads user from backend when authenticated via keycloak and
    */
   useEffect(() => {
-    if (initialized && keycloak.authenticated && axios && !user)
+    if (initialized && keycloak.authenticated && axios && !user?.username)
       keycloak.loadUserProfile().then((profile) => {
         loadSingleUser((profile as any).attributes.serviceId[0], axios).then(
           (serverUser) => {
@@ -43,7 +43,7 @@ export const UserSubscriber: React.FC<{}> = () => {
    * Updating firebase token on backend user in case it changes
    */
   useEffect(() => {
-    if (!user || user.token === token || !axios || !token || !user.id) return;
+    if (user?.token === token || !axios || !token || !user?.id) return;
     updateUser(axios, { ...user, token: token }).then((result) => {
       if (!result) return;
       setUser({ ...user, token: token });

@@ -92,9 +92,9 @@ const SearchPage: FC<{}> = () => {
               users
                 ?.filter((result) => {
                   return (
-                    result.email.toLowerCase().includes(searchValue) ||
-                    result.firstName.toLowerCase().includes(searchValue) ||
-                    result.lastName.toLowerCase().includes(searchValue)
+                    result.email?.toLowerCase().includes(searchValue) ||
+                    result.firstName?.toLowerCase().includes(searchValue) ||
+                    result.lastName?.toLowerCase().includes(searchValue)
                   );
                 })
                 ?.map((result) => (

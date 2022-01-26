@@ -34,7 +34,6 @@ const UserSettings = () => {
         types: convertObjToArr(types),
         cuisines: convertObjToArr(cuisines),
       });
-      console.log(result);
     } catch (err) {
       console.log(err);
     }

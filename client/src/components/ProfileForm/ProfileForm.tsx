@@ -1,11 +1,12 @@
 import { ChangeEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow_left.svg";
 import { useAxios } from "../../utils/AxiosUtil";
 import { Page, useNavigation } from "../../utils/hooks/useNavigation";
 import { userState } from "../../utils/user/User.state";
+import { User } from "../../utils/user/User.types";
 import { updateUser } from "../../utils/user/User.util";
 import Layout from "../LayoutComponent/Layout";
 import PictureEditable from "../PictureEditable/PictureEditable";
@@ -17,14 +18,22 @@ const ProfileForm: React.FC<{}> = () => {
   const { axios } = useAxios();
   const { t } = useTranslation();
   const navProps = useNavigation(Page.PROFILE_FORM);
-  const user = useRecoilValue(userState);
+  const [{ user }, setUser] = useRecoilState(userState);
   const [formData, setFormData] = useState<any>(user);
   const history = useHistory();
 
   const onUpload = () => {};
 
   const onSubmit = async () => {
-    await updateUser(axios, formData);
+    const data = await updateUser(axios, formData);
+    if (data) {
+      setUser((prevState) => ({
+        ...prevState,
+        user: {
+          ...formData,
+        },
+      }));
+    }
   };
 
   return (
@@ -40,6 +49,7 @@ const ProfileForm: React.FC<{}> = () => {
         title: t("general.pages.profile.editProfile"),
       }}
     >
+      {console.log(formData)}
       <div className="profile-form">
         <div className="profile-form-wrapper">
           <PictureEditable

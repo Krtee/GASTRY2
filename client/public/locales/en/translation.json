@@ -4,6 +4,7 @@
     "buttons": {
       "logout": "Logout",
       "login": "Login",
+      "remove": "Remove",
       "add": "Add",
       "added": "Added",
       "pending": "Pending",

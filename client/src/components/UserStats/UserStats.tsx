@@ -7,8 +7,8 @@ import { Link } from "react-router-dom";
 const UserStats: FC<UserStatsComponentProps> = ({
   visitedRestaurants,
   posts,
-  followings,
-  followers,
+  subscribedRestaurants,
+  buddies,
 }) => {
   const { t } = useTranslation();
   return (
@@ -23,11 +23,11 @@ const UserStats: FC<UserStatsComponentProps> = ({
       </div>
       {/* TODO: add the right path when this feature is ready */}
       <Link to={`/profile`} className="user-stats-box">
-        <p className="user-stats-number">{followings}</p>
+        <p className="user-stats-number">{subscribedRestaurants}</p>
         <p>{t("general.pages.profile.subscribedRestaurants")}</p>
       </Link>
       <Link to={`/buddies`} className="user-stats-box">
-        <p className="user-stats-number">{followers}</p>
+        <p className="user-stats-number">{buddies}</p>
         <p>{t("general.pages.profile.friends")}</p>
       </Link>
     </div>

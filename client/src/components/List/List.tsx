@@ -8,8 +8,6 @@ const List: React.FC<ListProps> = ({
   column,
   filterString,
 }) => {
-  console.log(data);
-
   return (
     <div className="list">
       {data?.length > 0 && (

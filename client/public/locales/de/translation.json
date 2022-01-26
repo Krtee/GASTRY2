@@ -4,16 +4,16 @@
     "buttons": {
       "logout": "Ausloggen",
       "login": "Einloggen",
-      "retry":"Erneut versuchen",
-      "canel":"Abbrechen",
+      "retry": "Erneut versuchen",
+      "canel": "Abbrechen",
       "showmore": "Mehr anzeigen",
       "showless": "Weniger anzeigen",
-      "start":"Los geht`s!",
+      "start": "Los geht`s!",
       "add": "Hinzufügen",
+      "remove": "Entfernen",
       "added": "Hinzugefügt",
       "pending": "Pending",
       "save": "Speichern"
-      
     },
     "navigation": {
       "FEED": "Feed",
@@ -41,13 +41,13 @@
         "REGISTER_USER_EXISTS_MAIL": "Ein User mit dieser E-Mail existiert bereits",
         "REGISTER_USER_EXISTS_USERNAME": "Der Username ist bereits vergeben"
       },
-      "matchfound":{
-        "title":"Hier sind deine 3 Matches:"
+      "matchfound": {
+        "title": "Hier sind deine 3 Matches:"
       },
-      "addFriends":{
-        "title":"Freunde hinzufügen",
-        "button":{
-          "addFriend":"hinzufügen"
+      "addFriends": {
+        "title": "Freunde hinzufügen",
+        "button": {
+          "addFriend": "hinzufügen"
         }
       },
       "profile": {
@@ -112,23 +112,23 @@
     }
   },
   "match": {
-    "start":{
-      "title":"Matching starten!"
+    "start": {
+      "title": "Matching starten!"
     },
     "button": {
       "rematch": "Erneut matchen",
-      "cancelMatching":"Matching abbrechen",
-      "continueMatching":"Matching fortsetzen"
+      "cancelMatching": "Matching abbrechen",
+      "continueMatching": "Matching fortsetzen"
     },
     "loading": {
       "top": "Es ist ein ...",
       "center": "YUMMMMatch",
       "bottom": "Und die besten Restaurants in deiner Nähe sind..."
     },
-    "error":{
-      "nolocation":"Du musst deinen Standort zulassen um matchen zu können.",
-      "default":"Es ist ein Fehler beim matchen aufgetreten. Versuche es noch einmal.",
-      "cancelMatching":"Möchtest du das Matching wirklich abbrechen?"
+    "error": {
+      "nolocation": "Du musst deinen Standort zulassen um matchen zu können.",
+      "default": "Es ist ein Fehler beim matchen aufgetreten. Versuche es noch einmal.",
+      "cancelMatching": "Möchtest du das Matching wirklich abbrechen?"
     }
   }
 }

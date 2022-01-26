@@ -24,3 +24,21 @@ export const openInNewTab = (url: string): void => {
   const newWindow = window.open(url, "_blank", "noopener,noreferrer");
   if (newWindow) newWindow.opener = null;
 };
+
+export const metaAdder = (queryProperty: string, value: string): void => {
+  // Get an element if it exists already
+  let element: Element | null = document.querySelector(
+    `meta[${queryProperty}]`
+  );
+
+  // Check if the element exists
+  if (element) {
+    // If it does just change the content of the element
+    element.setAttribute("content", value);
+  } else {
+    // It doesn't exist so lets make a HTML element string with the info we want
+    let elementString = `<meta name="${queryProperty}" content="${value}" />`;
+    // And insert it into the head
+    document.head.insertAdjacentHTML("beforeend", elementString);
+  }
+};

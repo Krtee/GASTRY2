@@ -11,8 +11,10 @@ import { RecoilRoot, useRecoilValue } from "recoil";
 import { generateNotification } from "../components/NotificationCardComponent/NotificationCardComponent";
 import { PrivateRoute } from "../components/PrivateRoute";
 import ProfileForm from "../components/ProfileForm/ProfileForm";
+import UserSettings from "../components/UserSettings/UserSettings";
 import { AxiosSubscriber } from "../utils/Axios.state";
 import { onMessageListener } from "../utils/FirebaseUtil";
+import { metaAdder } from "../utils/GeneralUtils";
 import { currentMatchState } from "../utils/match/Match.state";
 import { Match } from "../utils/match/Match.types";
 import { NotificationType } from "../utils/notification/Notification.types";
@@ -49,6 +51,12 @@ const App = () => {
   };
 
   onMessageListener(payloadHandler);
+
+  metaAdder("apple-mobile-web-app-status-bar-style", "black-translucent");
+  metaAdder("apple-touch-fullscreen", "yes");
+  metaAdder("apple-mobile-web-app-title", "Yumatch");
+  metaAdder("apple-mobile-web-app-capable", "yes");
+  metaAdder("mobile-web-app-capable", "yes");
 
   return (
     <BrowserRouter>

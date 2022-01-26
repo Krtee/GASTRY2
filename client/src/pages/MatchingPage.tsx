@@ -86,7 +86,7 @@ const MatchingPage: FC<MatchingPageProps> = () => {
   const history = useHistory();
   const [showLoadingMatchModal, setShowLoadingMatchModal] = useState<
     MatchType | undefined
-  >(MatchType.SINGLE_MATCH);
+  >(undefined);
   const { geolocation: location, refreshGeolocation } = useGeoLocation();
   const { axios } = useAxios();
   const multiUserList = useRecoilValue<User[]>(getUserForMultiMatch);

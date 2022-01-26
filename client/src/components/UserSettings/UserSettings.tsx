@@ -1,3 +1,4 @@
+import { DH_CHECK_P_NOT_SAFE_PRIME } from "constants";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useRecoilState } from "recoil";
@@ -10,7 +11,7 @@ import { updateUser } from "../../utils/user/User.util";
 import Switch from "../Switch/Switch";
 import "./UserSettings.styles.scss";
 
-const UserSettings = () => {
+const UserSettings: React.FC<{}> = () => {
   const { axios } = useAxios();
   const { t } = useTranslation();
 
@@ -36,7 +37,6 @@ const UserSettings = () => {
         types: convertObjToArr(types),
         cuisines: convertObjToArr(cuisines),
       });
-      console.log(result);
     } catch (err) {
       console.log(err);
     }
@@ -48,8 +48,6 @@ const UserSettings = () => {
     if (geolocation && geolocation.coordinates) {
       setUser((prevState) => ({
         ...prevState!,
-        lat: geolocation.coordinates?.latitude,
-        long: geolocation.coordinates?.longitude,
       }));
     } else {
       setUser((prevState) => ({

@@ -1,5 +1,5 @@
 import { useKeycloak } from "@react-keycloak/web";
-import { Route } from "react-router-dom";
+import { Redirect, Route } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { userState } from "../utils/user/User.state";
 
@@ -17,7 +17,7 @@ export const PrivateRoute: React.FC<{
         user || keycloak.authenticated ? (
           <Route path={path} exact={exact} component={component} />
         ) : (
-          keycloak.login()
+          <Redirect to={"/register"} />
         )
       ) : (
         <div>Loading</div>

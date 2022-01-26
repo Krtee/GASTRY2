@@ -238,6 +238,7 @@ public class RestUtils {
                                                 .queryParam("fields",
                                                                 "address_component,business_status,formatted_address,geometry,name,place_id,url,vicinity,international_phone_number,formatted_phone_number,opening_hours,website")
                                                 .queryParam("place_id", restaurantId)
+                                                .queryParam("language", "de")
                                                 .queryParam("key", "AIzaSyAJt9waW0hVfZ5bSufYZEGGPNYn6zAviq8")
                                                 .build())
                                 .retrieve()

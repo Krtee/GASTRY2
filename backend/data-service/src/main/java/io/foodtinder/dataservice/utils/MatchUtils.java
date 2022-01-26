@@ -212,8 +212,14 @@ public class MatchUtils {
         /**
          * if no response is found, fetches net google response
          */
-        GoogleMapsResponseWrapper newGoogleResp = restUtils.findRestaurants(location, "DE",
-                maxValues.get("area"));
+        GoogleMapsResponseWrapper newGoogleResp = restUtils.findRestaurants(location, "de",
+                maxValues.get("area") + " " + maxValues.get("category"));
+
+        if (newGoogleResp.getResults().size() <= 3) {
+            log.info("recall maps, because no restaurant was found");
+            newGoogleResp = restUtils.findRestaurants(location, "de",
+                    maxValues.get("area"));
+        }
 
         googleRespSave = new GoogleRespSave();
         googleRespSave.setRestaurants(newGoogleResp.getResults()

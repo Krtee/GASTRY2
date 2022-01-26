@@ -53,6 +53,13 @@ const RegisterPage: FC<RegisterPageProps> = () => {
           />
         </div>
 
+        <div className="to-login--wrapper">
+          <p>{t("general.pages.register.exists")}</p>
+          <ButtonComponent
+            value={t("general.pages.register.login")}
+            onClick={() => keycloak.login()}
+          />
+        </div>
         <form
           className="form"
           onInvalid={(evt) => {
@@ -177,14 +184,6 @@ const RegisterPage: FC<RegisterPageProps> = () => {
             value={t("general.pages.register.buttonLabel")}
           />
         </form>
-
-        <div className="to-login--wrapper">
-          <p>{t("general.pages.register.exists")}</p>
-          <ButtonComponent
-            value={t("general.pages.register.login")}
-            onClick={() => keycloak.login()}
-          />
-        </div>
       </div>
     </Layout>
   );

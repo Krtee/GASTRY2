@@ -38,7 +38,7 @@ public class UserDto implements Serializable {
     private String latitude = "";
     private String longitude = "";
     private String bio = "";
-    private Diets diets;
+    private List<Diets> diets;
     private Intolerances intolerances;
     private Set<String> favoriteRestaurantIds;
     private Set<String> followerUserIds;

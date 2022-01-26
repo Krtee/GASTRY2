@@ -6,7 +6,6 @@ import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow_left.svg";
 import { useAxios } from "../../utils/AxiosUtil";
 import { Page, useNavigation } from "../../utils/hooks/useNavigation";
 import { userState } from "../../utils/user/User.state";
-import { User } from "../../utils/user/User.types";
 import { updateUser } from "../../utils/user/User.util";
 import Layout from "../LayoutComponent/Layout";
 import PictureEditable from "../PictureEditable/PictureEditable";
@@ -49,7 +48,6 @@ const ProfileForm: React.FC<{}> = () => {
         title: t("general.pages.profile.editProfile"),
       }}
     >
-      {console.log(formData)}
       <div className="profile-form">
         <div className="profile-form-wrapper">
           <PictureEditable

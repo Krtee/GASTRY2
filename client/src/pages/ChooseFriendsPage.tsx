@@ -37,7 +37,7 @@ const ChooseFriendsPage: React.FC<ChooseFriendsPageProps> = () => {
   const addedUsers = useRecoilValue(getUserForMultiMatch);
   const alphabet: string[] = Array.from("abcdefghijklmnopqrstuvwxyz");
   const [chosenFriends, setChosenFriends] = useState<User[]>(addedUsers);
-  const user = useRecoilValue(userState);
+  const { user } = useRecoilValue(userState);
   const buddyList = useRecoilValue(getUserForBuddiesSelector);
   const [filteredFriendlist, setFilteredFriendlist] = useState<User[]>(
     buddyList.map((userToMap) => ({

@@ -75,7 +75,7 @@ const MatchingPage: FC<MatchingPageProps> = () => {
     currentMultiMatchState
   );
   const { t } = useTranslation();
-  const user = useRecoilValue(userState);
+  const { user } = useRecoilValue(userState);
   const [mealsToSwipe, setMealsToSwipe] =
     useRecoilState<Meal[]>(randomMealsState);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -125,7 +125,10 @@ const MatchingPage: FC<MatchingPageProps> = () => {
       return;
     }
 
-    if (!location || !location.coordinates || !location.loaded) {
+    if (
+      (!location || !location.coordinates || !location.loaded) &&
+      (!user?.lat || !user.long)
+    ) {
       setShowPopUp(PopUpContent.NO_LOCATION_ERROR);
       refreshGeolocation();
       return;
@@ -133,9 +136,17 @@ const MatchingPage: FC<MatchingPageProps> = () => {
 
     let updatedMatch: Match;
     if (user?.id) {
-      updatedMatch = await updateMatch(axios, currentMatch!, location);
+      updatedMatch = await updateMatch(
+        axios,
+        currentMatch!,
+        location.coordinates || { latitude: user?.lat!, longitude: user?.long! }
+      );
     } else {
-      updatedMatch = await matchRestaurants(axios, currentMatch!, location);
+      updatedMatch = await matchRestaurants(
+        axios,
+        currentMatch!,
+        location.coordinates || { latitude: user?.lat!, longitude: user?.long! }
+      );
     }
     if (!updatedMatch) {
       setShowLoadingMatchModal(undefined);
@@ -464,7 +475,7 @@ const MatchingPage: FC<MatchingPageProps> = () => {
                 {/** TODO implement image and translations */}
                 <p>{t("match.loading.top")}</p>
                 <p>{t("match.loading.center")}</p>
-                <EatableHart />
+                <EatableHart className="lds-heart" />
                 <p>{t("match.loading.bottom")}</p>
               </ModalComponent>
             )}

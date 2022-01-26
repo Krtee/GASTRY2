@@ -1,6 +1,6 @@
 import { AxiosInstance } from "axios";
 import { ResponseTypes } from "../AxiosUtil";
-import { BuddyType, User, UserRole } from "./User.types";
+import { Buddy, BuddyType, User, UserRole } from "./User.types";
 
 /**
  * Helper function to create an empty user for modification
@@ -175,7 +175,28 @@ export const removeBuddy = async (
     .then((resp) => resp.data)
     .catch((exc) => console.error("Error while removing a buddy!", exc));
 };
-
+/**
+ * API method to accept a buddy to {@link User}
+ *
+ * @param axios The axios instance
+ * @returns Either the updated user or undefined in case of an error
+ * @author Minh
+ */
+export const acceptBuddy = async (
+  axios: AxiosInstance,
+  userId: string,
+  buddyId: string,
+  updatedBuddy: Buddy
+): Promise<boolean> => {
+  return axios
+    .post("/user/buddy/accept", {
+      userId: userId,
+      buddyId: buddyId,
+      updatedBuddy: updatedBuddy,
+    })
+    .then((resp) => resp.data)
+    .catch((exc) => console.error("Error while removing a buddy!", exc));
+};
 /**
  * Helper method to get friend request status
  *

@@ -9,4 +9,5 @@ export interface IconButtonComponentProps {
   color?: string;
   filled?: boolean;
   size?: "default" | "small";
+  hideBorder?: boolean;
 }

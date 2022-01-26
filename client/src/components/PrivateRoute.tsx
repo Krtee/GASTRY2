@@ -9,10 +9,11 @@ export const PrivateRoute: React.FC<{
   exact?: boolean;
 }> = ({ component, path, exact }) => {
   const { initialized, keycloak } = useKeycloak();
-  const user = useRecoilValue(userState);
+  const { user, loading: userLoading } = useRecoilValue(userState);
+
   return (
     <>
-      {initialized ? (
+      {initialized || !userLoading || !keycloak ? (
         user || keycloak.authenticated ? (
           <Route path={path} exact={exact} component={component} />
         ) : (

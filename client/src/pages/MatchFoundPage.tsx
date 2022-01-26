@@ -47,7 +47,7 @@ const MatchFoundPage: FC<MatchFoundPageProps> = () => {
   const params = useParams<{ id?: string }>();
   const history = useHistory();
   const setMealsToSwipe = useSetRecoilState<Meal[]>(randomMealsState);
-  const user = useRecoilValue(userState);
+  const { user } = useRecoilValue(userState);
 
   /**
    * fetchs meal, if no currentmatch or currentmatch id is different that id in params

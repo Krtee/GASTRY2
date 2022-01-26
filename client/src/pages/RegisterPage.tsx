@@ -2,6 +2,7 @@ import { useKeycloak } from "@react-keycloak/web";
 import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router";
+import { ReactComponent as Logo } from "../assets/icons/logo.svg";
 import ButtonComponent from "../components/ButtonComponent/ButtonComponent";
 import InputComponent from "../components/InputComponent/InputComponent";
 import Layout from "../components/LayoutComponent/Layout";
@@ -38,12 +39,18 @@ const RegisterPage: FC<RegisterPageProps> = () => {
     <Layout hideBar>
       <div className="register-page-wrapper">
         <div className="header-wrapper">
-          <h2 className="header">yumatch</h2>
+          <Logo />
           {registerError && (
             <p className="register-error-header">
               {t(`general.pages.register.${registerError}`)}
             </p>
           )}
+        </div>
+        <div className="register-page--tab-wrapper">
+          <ButtonComponent
+            value={t("general.pages.register.tabUser")}
+            className="tab-button"
+          />
         </div>
 
         <form
@@ -65,6 +72,30 @@ const RegisterPage: FC<RegisterPageProps> = () => {
           }}
         >
           <InputComponent
+            placeholder={t("general.pages.register.firstName")}
+            value={registerUser.firstName || ""}
+            onChange={(value) =>
+              setRegisterUser((user) => ({
+                ...user,
+                firstName: value,
+              }))
+            }
+            type="text"
+            required
+          />
+          <InputComponent
+            placeholder={t("general.pages.register.lastName")}
+            value={registerUser.lastName || ""}
+            onChange={(value) =>
+              setRegisterUser((user) => ({
+                ...user,
+                lastName: value,
+              }))
+            }
+            type="text"
+            required
+          />
+          <InputComponent
             placeholder={t("general.pages.register.username")}
             value={registerUser.username}
             onChange={(value) =>
@@ -74,6 +105,11 @@ const RegisterPage: FC<RegisterPageProps> = () => {
               }))
             }
             type="text"
+            errorLabel={
+              registerError === ResponseTypes.REGISTER_USER_EXISTS_USERNAME
+                ? t(`general.pages.register.${registerError}`)
+                : ""
+            }
             required
           />
           <InputComponent
@@ -84,6 +120,11 @@ const RegisterPage: FC<RegisterPageProps> = () => {
                 ...user,
                 email: value,
               }))
+            }
+            errorLabel={
+              registerError === ResponseTypes.REGISTER_USER_EXISTS_MAIL
+                ? t(`general.pages.register.${registerError}`)
+                : ""
             }
             type="email"
             required
@@ -132,9 +173,18 @@ const RegisterPage: FC<RegisterPageProps> = () => {
           <ButtonComponent
             onClick={() => {}}
             type="submit"
+            className={registerError ? "error" : ""}
             value={t("general.pages.register.buttonLabel")}
           />
         </form>
+
+        <div className="to-login--wrapper">
+          <p>{t("general.pages.register.exists")}</p>
+          <ButtonComponent
+            value={t("general.pages.register.login")}
+            onClick={() => keycloak.login()}
+          />
+        </div>
       </div>
     </Layout>
   );

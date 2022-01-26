@@ -24,7 +24,7 @@ const NotificationPage: React.FC<NotificationPageProps> = () => {
   const navProps = useNavigation(Page.NOTIFICATION);
   const history = useHistory();
   const { axios } = useAxios();
-  const user = useRecoilValue(userState);
+  const { user } = useRecoilValue(userState);
 
   const [peristentNotifcationList, setPeristentNotifcationList] =
     useState<Notification[]>();

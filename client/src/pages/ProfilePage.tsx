@@ -13,7 +13,7 @@ import { userState } from "../utils/user/User.state";
 
 const ProfilePage: FC<{}> = () => {
   const navProps = useNavigation(Page.PROFILE);
-  const user = useRecoilValue(userState);
+  const { user } = useRecoilValue(userState);
 
   let { url } = useRouteMatch();
 

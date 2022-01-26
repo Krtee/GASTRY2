@@ -8,14 +8,13 @@ import { useRecoilState } from "recoil";
 import { useAxios } from "../AxiosUtil";
 import { token } from "../FirebaseUtil";
 import { userState } from "./User.state";
-import { User } from "./User.types";
 import { loadSingleUser, updateUser } from "./User.util";
 
 // mount this component under your application's root
 // needed to use axios in selectors
 // @author Domenico Ferrari
 export const UserSubscriber: React.FC<{}> = () => {
-  const [user, setUser] = useRecoilState<User | undefined>(userState);
+  const [{ user }, setUser] = useRecoilState(userState);
   const { keycloak, initialized } = useKeycloak();
   //When merged replace with recoil axios state;
   const { axios } = useAxios();
@@ -25,16 +24,19 @@ export const UserSubscriber: React.FC<{}> = () => {
    */
   useEffect(() => {
     if (initialized && keycloak.authenticated && axios && !user?.username)
-      keycloak.loadUserProfile().then((profile) => {
+      setUser((prevState) => ({ ...prevState, loading: true }));
+    keycloak.loadUserProfile().then(
+      (profile) =>
+        axios &&
         loadSingleUser((profile as any).attributes.serviceId[0], axios).then(
           (serverUser) => {
-            setUser(serverUser);
+            setUser({ user: serverUser, loading: false });
           }
-        );
-      });
+        )
+    );
 
     return () => {
-      setUser(undefined);
+      setUser({ user: undefined, loading: false });
     };
     // eslint-disable-next-line
   }, [keycloak, axios, initialized, setUser]);
@@ -46,7 +48,7 @@ export const UserSubscriber: React.FC<{}> = () => {
     if (user?.token === token || !axios || !token || !user?.id) return;
     updateUser(axios, { ...user, token: token }).then((result) => {
       if (!result) return;
-      setUser({ ...user, token: token });
+      setUser({ user: { ...user, token: token }, loading: false });
     });
     // eslint-disable-next-line
   }, [user?.token, axios]);

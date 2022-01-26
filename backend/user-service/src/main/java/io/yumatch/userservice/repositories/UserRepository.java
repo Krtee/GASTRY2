@@ -17,10 +17,10 @@ public interface UserRepository extends MongoRepository<UserDto, String> {
 
     public List<UserDto> findAllByRole(UserRole role);
 
-    @Query(value = "{ 'id' : { $exists : true } }", fields = "{'id':1, 'active':1, 'role':1, 'username':1, 'firstname':1, 'lastname':1}")
+    @Query(value = "{ 'id' : { $exists : true } }", fields = "{'id':1, 'active':1, 'role':1, 'username':1, 'firstName':1, 'lastName':1}")
     public List<UserDto> loadAllSimpleUser();
 
-    @Query(value = "{ 'id' :  ?0  }", fields = "{'id':1, 'active':1, 'role':1, 'username':1, 'firstname':1, 'lastname':1}")
+    @Query(value = "{ 'id' :  ?0  }", fields = "{'id':1, 'active':1, 'role':1, 'username':1, 'firstName':1, 'lastName':1}")
     public Optional<UserDto> findSimpleUserById(String userId);
 
     @Query(value = "{ 'buddies.buddyId': ?0, 'buddies.notificationEnabled': ?1, token: { $exists: true } }", fields = "{'id':1, 'token': 1}")

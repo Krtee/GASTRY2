@@ -12,7 +12,7 @@ export const latestMatchSelector = selector<Match | undefined>({
   key: "latestMatchSelector",
   get: async ({ get }) => {
     const { instance: axios } = get(axiosState);
-    const user = get(userState);
+    const { user } = get(userState);
     if (!axios || axios === null || !user || !user.activeMatch) {
       return undefined;
     }

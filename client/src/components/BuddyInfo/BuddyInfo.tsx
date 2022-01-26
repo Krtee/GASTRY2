@@ -19,16 +19,16 @@ const BuddyInfo: React.FC<BuddyInfoProps> = ({ buddy }) => {
   const { t } = useTranslation();
   const { axios } = useAxios();
   const [requestSent, setRequestSent] = useState<boolean>(false);
-  const currentUser = useRecoilValue(userState);
+  const { user } = useRecoilValue(userState);
   let { url } = useRouteMatch();
 
   /**
    * adds a buddy to buddylist
    */
   const handleAddBuddy = async () => {
-    if (buddy && currentUser) {
+    if (buddy && user) {
       const request = await addBuddy(axios, {
-        userId: currentUser.id,
+        userId: user.id,
         buddyId: buddy?.id,
       });
       if (request) {
@@ -41,9 +41,9 @@ const BuddyInfo: React.FC<BuddyInfoProps> = ({ buddy }) => {
    * removes a buddy from buddylist
    */
   const handleRemoveBuddy = async () => {
-    if (buddy && currentUser) {
+    if (buddy && user) {
       const isRemoved = await removeBuddy(axios, {
-        userId: currentUser.id,
+        userId: user.id,
         buddyId: buddy?.id,
       });
       if (isRemoved) {
@@ -54,8 +54,8 @@ const BuddyInfo: React.FC<BuddyInfoProps> = ({ buddy }) => {
 
   const renderRightButton = () => {
     let status: BuddyType = BuddyType.REJECTED;
-    if (buddy && currentUser) {
-      status = getFriendRequestStatus(currentUser, buddy?.id);
+    if (buddy && user) {
+      status = getFriendRequestStatus(user, buddy?.id);
     }
     if (status === BuddyType.ACCEPTED) {
       return (

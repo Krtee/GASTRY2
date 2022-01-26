@@ -16,7 +16,7 @@ const MatchingStartpage: React.FC<{}> = () => {
   const navProps = useNavigation(Page.MATCHING_START, Page.MATCHING);
   const { t } = useTranslation();
   const { axios } = useAxios();
-  const user = useRecoilValue(userState);
+  const { user } = useRecoilValue(userState);
   const setMealsToSwipe = useSetRecoilState(randomMealsState);
   const setCurrentMatch = useSetRecoilState(currentMatchState);
   const history = useHistory();

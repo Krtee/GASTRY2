@@ -12,6 +12,7 @@ const InputComponent: FC<InputComponentProps> = ({
   label,
   required,
   errorLabel,
+  ref,
 }) => {
   return (
     <div className="input-component">
@@ -21,7 +22,13 @@ const InputComponent: FC<InputComponentProps> = ({
         </div>
       )}
       <div className="input">
+        {errorLabel && (
+          <div className="input-component--error-label">
+            <p>{errorLabel}</p>
+          </div>
+        )}
         <input
+          ref={ref}
           type={type}
           placeholder={placeholder}
           onChange={(evt) => {
@@ -39,11 +46,6 @@ const InputComponent: FC<InputComponentProps> = ({
               : () => {}
           }
         />
-        {errorLabel && (
-          <div className="input-component--error-label">
-            <p>{errorLabel}</p>
-          </div>
-        )}
       </div>
     </div>
   );

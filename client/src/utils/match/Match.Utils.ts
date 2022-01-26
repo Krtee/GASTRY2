@@ -1,5 +1,5 @@
 import { AxiosInstance } from "axios";
-import { Geolocation } from "../hooks/useGeoLocation";
+import { Coordinates } from "../hooks/useGeoLocation";
 import { GoogleMapsResponseRestaurant, Match } from "./Match.types";
 
 /**
@@ -79,12 +79,12 @@ export const postNewMatch = (
 export const updateMatch = (
   axios: AxiosInstance,
   newMatch: Match,
-  location: Geolocation
+  coords: Coordinates
 ): Promise<Match> =>
   axios
     .post("/data/match/update", {
       match: newMatch,
-      location: location.coordinates,
+      location: coords,
     })
     .then((res) => res.data)
     .catch(() => undefined);
@@ -100,12 +100,12 @@ export const updateMatch = (
 export const matchRestaurants = (
   axios: AxiosInstance,
   newMatch: Match,
-  location: Geolocation
+  coords: Coordinates
 ): Promise<Match> =>
   axios
     .post("/data/match/restaurant", {
       match: newMatch,
-      location: location.coordinates,
+      location: coords,
     })
     .then((res) => res.data)
     .catch(() => undefined);

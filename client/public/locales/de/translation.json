@@ -25,9 +25,14 @@
     "pages": {
       "matching": "Matchen",
       "register": {
+        "tabUser": "Privatperson",
         "header": "Registriere dich",
         "email": "E-Mail",
         "username": "Benutzername",
+        "firstName": "Name",
+        "lastName": "Nachname",
+        "exists": "Du hast schon ein Konto?",
+        "login": "Anmelden",
         "passwordAgain": "Passwort wiederholen",
         "password": "Passwort",
         "passwordConfirm": "Passwort bestätigen",

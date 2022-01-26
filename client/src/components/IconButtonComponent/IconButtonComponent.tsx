@@ -11,6 +11,7 @@ const IconButtonComponent: React.FC<IconButtonComponentProps> = ({
   color,
   filled = false,
   size = "default",
+  hideBorder,
 }) => (
   <div
     data-testid="ButtonComponent"
@@ -26,9 +27,14 @@ const IconButtonComponent: React.FC<IconButtonComponentProps> = ({
       onClick={onClick}
       form={form}
       style={{
-        borderColor: color === "primary" ? "#F2594B" : color,
+        borderColor: hideBorder
+          ? "transparent"
+          : color === "primary"
+          ? "#F2594B"
+          : color,
         color: color === "primary" ? "#F2594B" : color,
         fill: color === "primary" ? "#F2594B" : color,
+        boxShadow: hideBorder ? "none" : undefined,
       }}
     >
       {value}

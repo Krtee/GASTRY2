@@ -16,7 +16,7 @@ export const latestMultiMatchSelector = selector<MultiUserMatch | undefined>({
   get: async ({ get }) => {
     const { instance: axios } = get(axiosState);
     const currentSingleMatch = get(currentMatchState);
-    const user = get(userState);
+    const { user } = get(userState);
 
     if (
       !axios ||

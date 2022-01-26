@@ -28,12 +28,23 @@ const UserSettings = () => {
     if (!user) return;
 
     try {
-      const result = await updateUser(axios, {
+      const data = await updateUser(axios, {
         ...user,
         diets: convertObjToArr(diets),
         types: convertObjToArr(types),
         cuisines: convertObjToArr(cuisines),
       });
+      if (data) {
+        setUser((prevState) => ({
+          ...prevState,
+          user: {
+            ...user,
+            diets: convertObjToArr(diets),
+            types: convertObjToArr(types),
+            cuisines: convertObjToArr(cuisines),
+          },
+        }));
+      }
     } catch (err) {
       console.log(err);
     }

@@ -56,8 +56,8 @@ const BuddyProfilePage: FC<{}> = () => {
         <BuddyStats
           posts={user?.posts?.length || 0}
           visitedRestaurants={user?.visitedRestaurants?.length || 0}
-          followers={user?.subscribedRestaurants?.length || 0}
-          followings={user?.buddies?.length || 0}
+          subscribedRestaurants={user?.subscribedRestaurants?.length || 0}
+          buddies={user?.buddies?.length || 0}
         />
         <ProfileNav />
         <Switch>

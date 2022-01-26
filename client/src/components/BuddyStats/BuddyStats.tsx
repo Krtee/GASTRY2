@@ -8,8 +8,8 @@ import "./BuddyStats.styles.scss";
 const BuddyStats: FC<BuddyStatsProps> = ({
   visitedRestaurants,
   posts,
-  followings,
-  followers,
+  subscribedRestaurants,
+  buddies,
 }) => {
   const { t } = useTranslation();
   let { url } = useRouteMatch();
@@ -26,11 +26,11 @@ const BuddyStats: FC<BuddyStatsProps> = ({
       </div>
       {/* TODO: add the right path when this feature is ready */}
       <Link to={`${url}`} className="user-stats-box">
-        <p className="user-stats-number">{followings}</p>
+        <p className="user-stats-number">{subscribedRestaurants}</p>
         <p>{t("general.pages.profile.subscribedRestaurants")}</p>
       </Link>
       <Link to={`${url}`} className="user-stats-box">
-        <p className="user-stats-number">{followers}</p>
+        <p className="user-stats-number">{buddies}</p>
         <p>{t("general.pages.profile.friends")}</p>
       </Link>
     </div>

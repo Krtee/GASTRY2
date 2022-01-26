@@ -4,14 +4,15 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 
 import io.yumatch.userservice.constants.BuddyType;
+import io.yumatch.userservice.constants.Cuisines;
 import io.yumatch.userservice.constants.Diets;
 import io.yumatch.userservice.constants.Intolerances;
+import io.yumatch.userservice.constants.Types;
 import io.yumatch.userservice.constants.UserRole;
 import lombok.Data;
 
@@ -38,11 +39,14 @@ public class UserDto implements Serializable {
     private String latitude = "";
     private String longitude = "";
     private String bio = "";
+
     private List<Diets> diets;
-    private Intolerances intolerances;
-    private Set<String> favoriteRestaurantIds;
-    private Set<String> followerUserIds;
-    private Set<String> followingUserIds;
+    private List<Intolerances> intolerances;
+    private List<Cuisines> cuisines;
+    private List<Types> types;
+    private List<String> favoriteRestaurantIds;
+    private List<String> visitedRestaurantIds;
+    private List<String> subscribedRestaurantIds;
 
     /**
      * Helper method to update this {@link UserDTO} instance
@@ -62,11 +66,14 @@ public class UserDto implements Serializable {
         this.latitude = updatedUser.getLatitude();
         this.longitude = updatedUser.getLongitude();
         this.bio = updatedUser.getBio();
+
         this.diets = updatedUser.getDiets();
         this.intolerances = updatedUser.getIntolerances();
+        this.cuisines = updatedUser.getCuisines();
+        this.types = updatedUser.getTypes();
         this.favoriteRestaurantIds = updatedUser.getFavoriteRestaurantIds();
-        this.followerUserIds = updatedUser.getFollowerUserIds();
-        this.followingUserIds = updatedUser.getFollowingUserIds();
+        this.visitedRestaurantIds = updatedUser.getVisitedRestaurantIds();
+        this.subscribedRestaurantIds = updatedUser.getSubscribedRestaurantIds();
     }
 
     /**

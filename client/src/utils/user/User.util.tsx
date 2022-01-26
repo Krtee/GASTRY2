@@ -172,7 +172,10 @@ export const removeBuddy = async (
 ): Promise<boolean> => {
   return axios
     .post("/user/buddy/remove", bodyRequest)
-    .then((resp) => resp.data)
+    .then((resp) => {
+      console.log(resp);
+      return resp.data;
+    })
     .catch((exc) => console.error("Error while removing a buddy!", exc));
 };
 /**

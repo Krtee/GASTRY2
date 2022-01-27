@@ -139,7 +139,11 @@ const MatchingPage: FC<MatchingPageProps> = () => {
       updatedMatch = await updateMatch(
         axios,
         currentMatch!,
-        location.coordinates || { latitude: user?.lat!, longitude: user?.long! }
+        location.coordinates || {
+          latitude: user?.lat!,
+          longitude: user?.long!,
+        },
+        true
       );
     } else {
       updatedMatch = await matchRestaurants(

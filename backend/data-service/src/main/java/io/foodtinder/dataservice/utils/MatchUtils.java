@@ -230,7 +230,10 @@ public class MatchUtils {
         googleRespSave.setCategory(maxValues.get("category"));
         googleRespSave.setTag(maxValues.get("tag"));
         googleRespSave.setLocation(location);
-        googleRepo.save(googleRespSave);
+
+        if (googleRespSave.getRestaurants().size() > 0) {
+            googleRepo.save(googleRespSave);
+        }
 
         List<GoogleMapsResponseRestaurant> restaurantsToSave = new ArrayList<GoogleMapsResponseRestaurant>();
 

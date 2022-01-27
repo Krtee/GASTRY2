@@ -30,10 +30,19 @@
 
   &-header {
     width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: end;
+    div:first-child {
+      display: flex;
+      flex-direction: column;
+      .button-component {
+        margin: 12px 0;
+      }
+      a {
+        width: 100%;
+      }
+    }
     &-background {
       align-self: flex-end;
       position: absolute;

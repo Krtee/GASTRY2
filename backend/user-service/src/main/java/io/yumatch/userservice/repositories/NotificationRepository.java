@@ -21,4 +21,6 @@ public interface NotificationRepository extends MongoRepository<PersistedNotific
     @Query(value = "{ 'userId': ?0, 'seen': ?1 }")
     List<PersistedNotification> findByUserIdAndSeen(String userId, boolean seen);
 
+    int countByUserId(String userId);
+
 }

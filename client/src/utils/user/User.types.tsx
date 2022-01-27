@@ -35,13 +35,6 @@ export enum CUISINES {
   FRENCH = "FRENCH",
 }
 
-export enum BUDDY_REQUEST {
-  ACCEPTED = "ACCEPTED",
-  REJECTED = "REJECTED",
-  PENDING = "PENDING",
-  INCOMING = "INCOMING",
-}
-
 export interface Buddy {
   createDate: Date;
   lastUpdated: Date;

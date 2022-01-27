@@ -8,4 +8,5 @@ import lombok.Data;
 public class MatchRequestBody {
     private Match match;
     private GeoLocation location;
+    private boolean finishedMatching;
 }

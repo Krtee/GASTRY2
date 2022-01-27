@@ -5,7 +5,7 @@
       "logout": "Ausloggen",
       "login": "Einloggen",
       "retry": "Erneut versuchen",
-      "canel": "Abbrechen",
+      "cancel": "Abbrechen",
       "showmore": "Mehr anzeigen",
       "showless": "Weniger anzeigen",
       "start": "Los geht`s!",
@@ -13,7 +13,8 @@
       "remove": "Entfernen",
       "added": "Hinzugefügt",
       "pending": "Pending",
-      "save": "Speichern"
+      "save": "Speichern",
+      "accept":"Akzeptieren"
     },
     "navigation": {
       "FEED": "Feed",

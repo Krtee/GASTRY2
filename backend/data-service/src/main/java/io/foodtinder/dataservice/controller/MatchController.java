@@ -140,7 +140,7 @@ public class MatchController {
             log.warn("no location!");
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).build();
         }
-
+        log.info("updating match");
         foundMatch.update(requestBody.getMatch());
         if (foundMatch.isPartOfGroup()) {
             log.info("given match is part of a multi user match");
@@ -156,7 +156,7 @@ public class MatchController {
                     multiUserMatch.setMatchedRestaurants(
                             matchUtils.matchRestaurants(allMatchesInMultiUserMatch, requestBody.getLocation()));
                     multiUserMatch.setUpdatedAt(LocalDateTime.now());
-                    restUtils.sendMultiMatchFoundNotification(
+                    restUtils.sendMultiMatchFinishedNotification(
                             new MultiMatchRequest(
                                     multiUserMatch.getUserList().stream()
                                             .filter(userWrapper -> userWrapper
@@ -167,8 +167,7 @@ public class MatchController {
                     multiUserMatchRepo.save(multiUserMatch);
                 }
             }
-        } else if ((foundMatch.getMatchedMeals().size() + foundMatch.getUnmatchedMeals().size()) >= 15
-                && foundMatch.getMatchedRestaurants().size() < 3) {
+        } else if (requestBody.isFinishedMatching() && foundMatch.getMatchedRestaurants().size() < 3) {
             log.info("solo match is finished");
             foundMatch
                     .setMatchedRestaurants(matchUtils.matchRestaurants(List.of(foundMatch), requestBody.getLocation()));
@@ -192,6 +191,7 @@ public class MatchController {
         Match match = requestBody.getMatch();
         match.update(requestBody.getMatch());
         if (match.getMatchedRestaurants().size() >= 3) {
+            log.info("match already matched restaurants");
             return ResponseEntity.status(HttpStatus.OK)
                     .body(match);
         }

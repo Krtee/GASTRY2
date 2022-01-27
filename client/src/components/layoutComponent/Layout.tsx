@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { useHistory } from "react-router";
+import { useWindowDimensions } from "../../utils/hooks/useWindowDimensions";
 import IconButtonComponent from "../IconButtonComponent/IconButtonComponent";
 import { ReactComponent as NotificationIcon } from "./../../assets/icons/notification.svg";
 import { LayoutProps } from "./Layout.types";
@@ -15,10 +16,12 @@ const Layout: FC<LayoutProps> = ({
   withBackgroundImage = false,
 }) => {
   const history = useHistory();
+  const { height } = useWindowDimensions();
   return (
     <div
       id="layout-component"
       className={withBackgroundImage ? "with-background-image" : ""}
+      style={{ height: `${height}px` }}
     >
       {!!header && (
         <div id="layout-component-header">

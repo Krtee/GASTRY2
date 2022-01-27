@@ -49,7 +49,7 @@ public class RestUtils {
                 userServiceWebClient = WebClient.builder()
                                 .clientConnector(new ReactorClientHttpConnector(
                                                 HttpClient.create().followRedirect(true)))
-                                .baseUrl("http://yumatch-user-service").filter(logRequest())
+                                .baseUrl("http://yumatch-user-service:80").filter(logRequest())
                                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                                 .defaultHeader(HttpHeaders.USER_AGENT,
                                                 "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; Googlebot/2.1; +http://www.google.com/bot.html) Safari/537.36")
@@ -205,7 +205,7 @@ public class RestUtils {
          * 
          * @param userIds
          */
-        public void sendMultiMatchFoundNotification(MultiMatchRequest request) {
+        public void sendMultiMatchFinishedNotification(MultiMatchRequest request) {
                 userServiceWebClient.post().uri("/notifications/multi/match/finished").bodyValue(request)
                                 .retrieve()
                                 .toBodilessEntity()

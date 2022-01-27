@@ -44,8 +44,8 @@ const SearchPage: FC<{}> = () => {
 
   const renderButton = (userId: string) => {
     if (!user) return;
-    const status: BuddyType = getFriendRequestStatus(user, userId);
-    if (status === BuddyType.PENDING) {
+    const status: BuddyType | undefined = getFriendRequestStatus(user, userId);
+    if (!!status) {
       return (
         <button className="button-inactive">
           {t("general.pages.search.added")}

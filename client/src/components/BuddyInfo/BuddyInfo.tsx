@@ -55,7 +55,7 @@ const BuddyInfo: React.FC<BuddyInfoProps> = ({ buddy }) => {
   const renderRightButton = () => {
     let status: BuddyType = BuddyType.REJECTED;
     if (buddy && user) {
-      status = getFriendRequestStatus(user, buddy?.id);
+      status = getFriendRequestStatus(user, buddy?.id) || BuddyType.REJECTED;
     }
     if (status === BuddyType.ACCEPTED) {
       return (

@@ -59,7 +59,7 @@ public class MultiUserMatchController {
             foundMatch.setPartOfGroup(true);
             matchRepository.save(foundMatch);
         }
-        restUtils.sendMultiMatchFoundNotification(
+        restUtils.sendMultiMatchRequestNotification(
                 new MultiMatchRequest(
                         newMultiUserMatch.getUserList().stream()
                                 .filter(userWrapper -> userWrapper.getStatus() == MultiMatchRequestStatus.ACCEPTED
@@ -125,7 +125,6 @@ public class MultiUserMatchController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(matchUtils.checkIfAllMatchesAreFinishedInsideMultiUserMatch(multiUserMatch));
     }
-
 
     /**
      * POST API to update a group match

@@ -1,6 +1,6 @@
 import { AxiosInstance } from "axios";
 import { ResponseTypes } from "../AxiosUtil";
-import { Buddy, BuddyType, User, UserRole } from "./User.types";
+import { BuddyType, User, UserRole } from "./User.types";
 
 /**
  * Helper function to create an empty user for modification
@@ -188,14 +188,12 @@ export const removeBuddy = async (
 export const acceptBuddy = async (
   axios: AxiosInstance,
   userId: string,
-  buddyId: string,
-  updatedBuddy: Buddy
+  buddyId: string
 ): Promise<boolean> => {
   return axios
     .post("/user/buddy/accept", {
       userId: userId,
       buddyId: buddyId,
-      updatedBuddy: updatedBuddy,
     })
     .then((resp) => resp.data)
     .catch((exc) => console.error("Error while removing a buddy!", exc));
@@ -211,11 +209,5 @@ export const acceptBuddy = async (
 export const getFriendRequestStatus = (
   user: User,
   buddyId: string
-): BuddyType => {
-  const buddy = user.buddies.find((buddy) => buddy.buddyId === buddyId);
-  if (buddy) {
-    return buddy?.buddyType;
-  }
-
-  return BuddyType.REJECTED;
-};
+): BuddyType | undefined =>
+  user.buddies.find((buddy) => buddy.buddyId === buddyId)?.buddyType;

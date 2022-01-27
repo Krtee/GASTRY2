@@ -10,7 +10,7 @@ import Searchbar from "../components/Searchbar/Searchbar";
 import { useAxios } from "../utils/AxiosUtil";
 import { Page, useNavigation } from "../utils/hooks/useNavigation";
 import { getUserForBuddiesSelector, userState } from "../utils/user/User.state";
-import { Buddy, BuddyType, User } from "../utils/user/User.types";
+import { BuddyType, User } from "../utils/user/User.types";
 import { acceptBuddy, removeBuddy } from "../utils/user/User.util";
 import "./../styles/BuddyPage.styles.scss";
 const BuddiesPage: React.FC<{}> = () => {
@@ -27,13 +27,25 @@ const BuddiesPage: React.FC<{}> = () => {
    * accepts friend requests
    * @auther Minh
    */
-  const handleAcceptFriend = (buddy: Buddy) =>
+  const handleAcceptFriend = (buddyId: string) =>
     axios &&
     user &&
-    acceptBuddy(axios, user.id!, buddy.buddyId, {
-      ...buddy,
-      buddyType: BuddyType.ACCEPTED,
-    });
+    acceptBuddy(axios, user.id!, buddyId).then(
+      (result) =>
+        result &&
+        setUser((prevState) => ({
+          user: {
+            ...prevState.user!,
+            buddies: prevState.user!.buddies.map((buddy) => {
+              if (buddy.buddyId === buddyId) {
+                return { ...buddy, buddyType: BuddyType.ACCEPTED };
+              }
+              return buddy;
+            }),
+          },
+          loading: false,
+        }))
+    );
 
   const handleUnfollowFriend = async (buddyId: string) => {
     if (axios && user) {
@@ -82,8 +94,8 @@ const BuddiesPage: React.FC<{}> = () => {
                 <div key={buddy.id} className="list-item">
                   <p>{buddy.firstName}</p>
                   <ButtonComponent
-                    onClick={() => handleAcceptFriend}
-                    value=""
+                    onClick={() => handleAcceptFriend(buddy.id)}
+                    value={t("general.buttons.accept")}
                     size="mini"
                   />
                 </div>

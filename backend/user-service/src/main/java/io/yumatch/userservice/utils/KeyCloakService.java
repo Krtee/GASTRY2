@@ -1,19 +1,5 @@
 package io.yumatch.userservice.utils;
 
-import io.yumatch.userservice.YumatchConfig;
-import io.yumatch.userservice.model.UserDto;
-import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.keycloak.admin.client.Keycloak;
-import org.keycloak.admin.client.resource.RealmResource;
-import org.keycloak.admin.client.resource.UserResource;
-import org.keycloak.admin.client.resource.UsersResource;
-import org.keycloak.representations.idm.CredentialRepresentation;
-import org.keycloak.representations.idm.RoleRepresentation;
-import org.keycloak.representations.idm.UserRepresentation;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +7,20 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.ws.rs.core.Response;
+
+import org.keycloak.admin.client.Keycloak;
+import org.keycloak.admin.client.resource.RealmResource;
+import org.keycloak.admin.client.resource.UserResource;
+import org.keycloak.admin.client.resource.UsersResource;
+import org.keycloak.representations.idm.CredentialRepresentation;
+import org.keycloak.representations.idm.RoleRepresentation;
+import org.keycloak.representations.idm.UserRepresentation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import io.yumatch.userservice.YumatchConfig;
+import io.yumatch.userservice.model.UserDto;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -52,13 +52,16 @@ public class KeyCloakService {
         UsersResource userResource = realmResource.users();
         // String newPassword = generateRandomPassword();
         Response response = userResource.create(createNewKeycloakUser(newUser, newUser.getPassword()));
-            if (response.getStatus() == 201) {
+        if (response.getStatus() == 201) {
             log.info("New user successfully created on keycloak!");
             String userId = response.getLocation().getPath().replaceAll(".*/([^/]+)$", "$1");
+
             UserResource userResources = userResource.get(userId);
+            log.info("getting userRoles for Role {}", newUser.getRole().toString());
             RoleRepresentation userRealmRole = keycloakInstance.realm(config.getKeycloak().getRealm()).roles()
                     .get(newUser.getRole().toString()).toRepresentation();
-            userResources.roles().realmLevel().add(Arrays.asList(userRealmRole));
+
+            userResources.roles().realmLevel().add(List.of(userRealmRole));
             // TODO should an email be sent?
             return response.getStatus();
         } else {
@@ -178,9 +181,9 @@ public class KeyCloakService {
     }
 
     /**
-     * Delete an {@link User} on keycloak
+     * Delete an {@link UserDTO} on keycloak
      * 
-     * @param deleteUser The {@link User} object to delete
+     * @param deleteUser The {@link UserDTO} object to delete
      * @return true if update was successfull, false otherwise
      */
     public boolean deleteUserOnKeycloak(UserDto deleteUser) {

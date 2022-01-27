@@ -97,6 +97,22 @@ public class NotificationController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return ResponseEntity.status(HttpStatus.OK).body(notiRepo.findByUserId(userId));
+    }
+
+    /**
+     * GET API to receive notificationCount belonging to user
+     * 
+     * @param userId - string representing user id
+     */
+    @GetMapping(value = "/persistent/count")
+    public ResponseEntity<?> getNotificationCountForUser(@RequestParam String userId) {
+        log.info("Request to get notification Count belonging to a user, {}", userId);
+        UserDto loadedUser = userRepo.findById(userId).orElse(null);
+        if (loadedUser == null) {
+            log.warn("User with id {} not found!", userId);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(notiRepo.countByUserId(userId));
 
     }
 
@@ -173,7 +189,7 @@ public class NotificationController {
      */
     @PostMapping(value = "/multi/match")
 
-    public ResponseEntity<Boolean> sendMultiMatchNotification(@RequestBody MultiMatchRequest request) {
+    public ResponseEntity<Boolean> sendMultiMatchNotificationFinished(@RequestBody MultiMatchRequest request) {
         log.info("Request to send notifications to users in match group");
         List<DirectNotification> notifications = new ArrayList<DirectNotification>();
         request.getUserIds().forEach(userId -> {
@@ -197,6 +213,41 @@ public class NotificationController {
         });
         firebaseService.sendMultipleNotification(notifications, "matchId", request.getMatchId(),
                 NotificationType.MULTI_MATCH.toString());
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    /**
+     * POST API to send notification to all users part of the matching group
+     * 
+     * @param notification
+     * @return 200
+     */
+    @PostMapping(value = "/multi/match/finished")
+
+    public ResponseEntity<Boolean> sendMultiMatchNotificationNew(@RequestBody MultiMatchRequest request) {
+        log.info("Request to send notifications to users in match group");
+        List<DirectNotification> notifications = new ArrayList<DirectNotification>();
+        request.getUserIds().forEach(userId -> {
+            UserDto loadedUser = userRepo.findById(userId).orElse(null);
+            if (loadedUser == null) {
+                log.warn("User with id {} not found!", userId);
+            } else {
+                log.info("Creating both notification and persistent notification for page");
+                String title = "Du wurdest zu einem Yumatch hinzugefügt!";
+                String message = "Klicke hier um jetzt zu matchen!";
+                DirectNotification newNotification = new DirectNotification(loadedUser.getToken(), title, message);
+                notifications.add(newNotification);
+                PersistedNotification persistNotification = new PersistedNotification();
+                persistNotification.setTitle(title);
+                persistNotification.setMessage(message);
+                persistNotification.setUserId(loadedUser.getId());
+                persistNotification.setNotificationType(NotificationType.REQUEST_MULTI_MATCH);
+                persistNotification.setMatchId(request.getMatchId());
+                notiRepo.save(persistNotification);
+            }
+        });
+        firebaseService.sendMultipleNotification(notifications, "matchId", request.getMatchId(),
+                NotificationType.REQUEST_MULTI_MATCH.toString());
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

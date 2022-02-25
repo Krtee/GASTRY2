@@ -46,7 +46,7 @@ const NotificationPage: React.FC<NotificationPageProps> = () => {
     return () => {
       persistentNotificationHaveBeenSeen(user!.id!, axios);
     };
-  }, [axios, user]);
+  }, [axios]);
 
   const handleNotiClick = async (noti: Notification) => {
     switch (noti.notificationType) {

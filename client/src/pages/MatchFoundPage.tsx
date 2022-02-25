@@ -4,7 +4,7 @@ import { useHistory, useParams } from "react-router";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { ReactComponent as ArrowLeftIcon } from "../assets/icons/arrow_left.svg";
 import { ReactComponent as DoneIcon } from "../assets/icons/done.svg";
-import { ReactComponent as PeopleIcon } from "../assets/icons/people.svg";
+import { ReactComponent as Add2 } from "../assets/icons/add_2.svg";
 import { ReactComponent as ShareIcon } from "../assets/icons/share.svg";
 import { ReactComponent as StarIcon } from "../assets/icons/star.svg";
 import ButtonComponent from "../components/ButtonComponent/ButtonComponent";
@@ -163,7 +163,7 @@ const MatchFoundPage: FC<MatchFoundPageProps> = () => {
           className="rematch-button"
           onClick={() => handleRematch()}
         />
-        <IconButtonComponent value={<PeopleIcon />} color="primary" />
+        <IconButtonComponent value={<Add2 />} color="primary" />
         {restaurantToShow && (
           <IconButtonComponent value={<DoneIcon />} color="primary" />
         )}

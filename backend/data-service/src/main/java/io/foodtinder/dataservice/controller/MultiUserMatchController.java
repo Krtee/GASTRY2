@@ -59,15 +59,20 @@ public class MultiUserMatchController {
             foundMatch.setPartOfGroup(true);
             matchRepository.save(foundMatch);
         }
-        restUtils.sendMultiMatchRequestNotification(
-                new MultiMatchRequest(
-                        newMultiUserMatch.getUserList().stream()
-                                .filter(userWrapper -> userWrapper.getStatus() == MultiMatchRequestStatus.ACCEPTED
-                                        && userWrapper.getUserId() != newMultiUserMatch.getCreatorId())
-                                .map(MultiMatchUserWrapper::getUserId)
-                                .collect(Collectors.toList()),
-                        newMultiUserMatch.getId()));
-        return ResponseEntity.status(HttpStatus.OK).body(multiUserMatchRepo.save(newMultiUserMatch));
+        try {
+            restUtils.sendMultiMatchRequestNotification(
+                    new MultiMatchRequest(
+                            newMultiUserMatch.getUserList().stream()
+                                    .filter(userWrapper -> userWrapper.getStatus() == MultiMatchRequestStatus.ACCEPTED
+                                            && userWrapper.getUserId() != newMultiUserMatch.getCreatorId())
+                                    .map(MultiMatchUserWrapper::getUserId)
+                                    .collect(Collectors.toList()),
+                            newMultiUserMatch.getId()));
+            return ResponseEntity.status(HttpStatus.OK).body(multiUserMatchRepo.save(newMultiUserMatch));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+
+        }
     }
 
     /**

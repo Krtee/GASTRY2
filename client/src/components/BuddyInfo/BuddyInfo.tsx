@@ -28,8 +28,8 @@ const BuddyInfo: React.FC<BuddyInfoProps> = ({ buddy }) => {
   const handleAddBuddy = async () => {
     if (buddy && user) {
       const request = await addBuddy(axios, {
-        userId: user.id,
-        buddyId: buddy?.id,
+        userId: user.id!,
+        buddyId: buddy?.id!,
       });
       if (request) {
         setRequestSent(true);
@@ -43,8 +43,8 @@ const BuddyInfo: React.FC<BuddyInfoProps> = ({ buddy }) => {
   const handleRemoveBuddy = async () => {
     if (buddy && user) {
       const isRemoved = await removeBuddy(axios, {
-        userId: user.id,
-        buddyId: buddy?.id,
+        userId: user.id!,
+        buddyId: buddy?.id!,
       });
       if (isRemoved) {
         setRequestSent(false);
@@ -55,7 +55,7 @@ const BuddyInfo: React.FC<BuddyInfoProps> = ({ buddy }) => {
   const renderRightButton = () => {
     let status: BuddyType = BuddyType.REJECTED;
     if (buddy && user) {
-      status = getFriendRequestStatus(user, buddy?.id) || BuddyType.REJECTED;
+      status = getFriendRequestStatus(user, buddy?.id!) || BuddyType.REJECTED;
     }
     if (status === BuddyType.ACCEPTED) {
       return (

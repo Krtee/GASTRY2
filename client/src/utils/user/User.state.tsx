@@ -30,7 +30,7 @@ export const getUserForBuddiesSelector = selector<User[]>({
     if (!axios || axios === null || !user) {
       return [];
     }
-    const usersToReturn = await loadFriends(axios, user.id);
+    const usersToReturn = await loadFriends(axios, user.id!);
     return usersToReturn || [];
   },
 });

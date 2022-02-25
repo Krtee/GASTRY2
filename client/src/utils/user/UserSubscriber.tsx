@@ -23,7 +23,7 @@ export const UserSubscriber: React.FC<{}> = () => {
    * Loads user from backend when authenticated via keycloak and
    */
   useEffect(() => {
-    if (initialized && keycloak.authenticated && axios && !user?.username)
+    if (initialized && keycloak.authenticated && !!axios && !user?.username)
       setUser((prevState) => ({ ...prevState, loading: true }));
     keycloak.loadUserProfile().then(
       (profile) =>

@@ -45,29 +45,39 @@ public class BuddyController {
     private YumatchConfig config;
 
     /**
-     * CREATE API to add {@link Buddy} to {@link User}
+     * CREATE API to add {@link Buddy} to {@link UserDTO}
      * 
      * @param buddyId id of buddy to be added
      * @param userId  id of user to have their buddies updated
-     * @return 201 in case of success, 412 in case the {@link User} could not be
+     * @return 201 in case of success, 412 in case the {@link UserDTO} could not be
      *         found
      */
     @PostMapping(value = "/")
     public ResponseEntity<Boolean> addNewBuddy(@RequestBody BuddyRequest buddyRequest) {
         String userId = buddyRequest.getUserId();
         String buddyId = buddyRequest.getBuddyId();
+
         log.info("Request to add new buddy with id: {}, to user with id: {}", buddyId, userId);
         UserDto loadedUser = userRepo.findById(userId).orElse(null);
         if (loadedUser == null) {
             log.warn("User with id {} not found to add a new buddy!", userId);
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).build();
         }
+
         UserDto buddyUser = userRepo.findById(buddyId).orElse(null);
         if (buddyUser == null) {
             log.warn("Buddy user with id is missing {}!", buddyId);
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).build();
         }
+
+        if (loadedUser.getBuddies().stream().filter(buddy -> buddy.getBuddyId() == buddyId).count() > 0
+                || buddyUser.getBuddies().stream().filter(buddy -> buddy.getBuddyId() == userId).count() > 0) {
+            log.warn("Buddy already exist {}!", buddyId);
+            return ResponseEntity.status(HttpStatus.ALREADY_REPORTED).build();
+        }
+
         buddyUser.addBuddy(userId, BuddyType.INCOMING);
+
         PersistedNotification persistNotification = new PersistedNotification();
         persistNotification.setTitle(config.getNotification().getBuddyRequestTitle());
         persistNotification.setMessage(config.getNotification().getBuddyRequestText());
@@ -89,11 +99,11 @@ public class BuddyController {
     }
 
     /**
-     * DELETE API to delete {@link Buddy} from {@link User}
+     * DELETE API to delete {@link Buddy} from {@link UserDTO}
      * 
      * @param buddyId id of buddy to be removed
      * @param userId  id of user to have their buddies updated
-     * @return 200 in case of success, 412 in case the {@link User} could not be
+     * @return 200 in case of success, 412 in case the {@link UserDTO} could not be
      *         found or buddy not be removed
      */
     @PostMapping(value = "/remove")
@@ -219,7 +229,7 @@ public class BuddyController {
     }
 
     /**
-     * GET API to get all {@link Buddy} belonging to a {@link User}
+     * GET API to get all {@link Buddy} belonging to a {@link UserDTO}
      * 
      * @param userId the id of the user
      * @return the list of buddies

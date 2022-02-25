@@ -28,14 +28,14 @@ public class InternalController {
     /**
      * Get API to receive match by id
      * 
-     * @param id - a string representing the id of a {@link MultiUserMatch}
+     * @param matchId - a string representing the id of a {@link MultiUserMatch}
      * @return 200 when match found, 404 when not found
      * @author Minh
      */
     @GetMapping(value = "/multimatch/user")
-    public ResponseEntity<List<String>> getMultiUserMatchById(@RequestParam String id) {
-        log.info("Looking for match with id: {}", id);
-        MultiUserMatch multiUserMatch = multiUserMatchRepo.findById(id).orElse(null);
+    public ResponseEntity<List<String>> getMultiUserMatchById(@RequestParam String matchId) {
+        log.info("Looking for match with id: {}", matchId);
+        MultiUserMatch multiUserMatch = multiUserMatchRepo.findById(matchId).orElse(null);
         if (multiUserMatch != null) {
             log.info("Successfully found match");
             return ResponseEntity.status(HttpStatus.OK)

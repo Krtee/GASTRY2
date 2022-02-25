@@ -9,7 +9,7 @@ import { updateUser } from "../../utils/user/User.util";
 import Switch from "../Switch/Switch";
 import "./UserSettings.styles.scss";
 
-const UserSettings = () => {
+const UserSettings: React.FC<{}> = () => {
   const { axios } = useAxios();
   const { t } = useTranslation();
 

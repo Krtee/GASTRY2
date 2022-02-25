@@ -1,4 +1,7 @@
 import { AxiosInstance } from "axios";
+import { createEmptyMatch, postNewMatch } from "../match/Match.Utils";
+import { User } from "../user/User.types";
+import { updateUser } from "./../user/User.util";
 import { MultiMatchUserWrapper, MultiUserMatch } from "./MultiMatch.types";
 
 /**
@@ -52,6 +55,33 @@ export const fetchMultiMatchForSingleMatchId = (
     .then(({ data }) => data)
     .catch(() => undefined);
 
+/**
+ * GET API - to fetch a multimatch for id
+ * @param axios axios instance
+ * @param userId id of the multimatch
+ * @returns a multimatch if successful, else returns undefined
+ * @author Minh
+ */
+export const fetchMultiMatchMultiMatchId = (
+  axios: AxiosInstance,
+  matchId: string
+): Promise<MultiUserMatch> =>
+  axios
+    .get("/data/group/match/id", {
+      params: { id: matchId },
+    })
+    .then(({ data }) => data)
+    .catch(() => undefined);
+
+export const updateMultimatch = (
+  axios: AxiosInstance,
+  multiMatch: MultiUserMatch
+): Promise<boolean> =>
+  axios
+    .post("/data7match/group/match/update", multiMatch)
+    .then(() => true)
+    .catch(() => false);
+
 export const checkIfMultiMatchisFinished = (
   axios: AxiosInstance,
   multimatchId: string
@@ -61,4 +91,34 @@ export const checkIfMultiMatchisFinished = (
       params: { id: multimatchId },
     })
     .then(({ data }) => data)
+    .catch(() => undefined);
+
+export const acceptMultiMatch = (
+  axios: AxiosInstance,
+  user: User,
+  multiMatchId: string
+): Promise<string | undefined> =>
+  Promise.all([
+    postNewMatch(axios, { ...createEmptyMatch(user?.id), partOfGroup: true }),
+    fetchMultiMatchMultiMatchId(axios, multiMatchId),
+  ])
+    .then(
+      ([newMatch, multiMatch]) =>
+        newMatch &&
+        multiMatch &&
+        Promise.all([
+          updateMultimatch(axios, {
+            ...multiMatch,
+            matches: [...multiMatch.matches, newMatch.id!],
+          }),
+          updateUser(axios, { ...user, activeMatch: newMatch.id }),
+          newMatch.id,
+        ])
+    )
+    .then((success) => {
+      if (!success || !success[0] || !success[1]) {
+        return undefined;
+      }
+      return success[2];
+    })
     .catch(() => undefined);

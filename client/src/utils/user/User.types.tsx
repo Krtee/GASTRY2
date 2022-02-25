@@ -49,7 +49,7 @@ export interface Buddy {
 }
 
 export interface User {
-  id: string;
+  id?: string;
   photo?: string;
   firstName?: string;
   lastName?: string;
@@ -62,14 +62,14 @@ export interface User {
   bio?: string;
   password?: string;
   token?: string;
-  posts?: [];
-  diets?: string[];
-  intolerances?: string[];
-  cuisines?: string[];
-  types?: string[];
-  favoriteRestaurants?: [];
-  visitedRestaurants?: [];
-  subscribedRestaurants?: [];
+  posts: [];
+  diets: string[];
+  intolerances: string[];
+  cuisines: string[];
+  types: string[];
+  favoriteRestaurants: [];
+  visitedRestaurants: [];
+  subscribedRestaurants: [];
   buddies: Buddy[];
   activeMatch?: string;
 }

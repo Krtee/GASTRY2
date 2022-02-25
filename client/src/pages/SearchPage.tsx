@@ -9,7 +9,7 @@ import "../styles/SearchPage.styles.scss";
 import { useAxios } from "../utils/AxiosUtil";
 import { Page, useNavigation } from "../utils/hooks/useNavigation";
 import { userState } from "../utils/user/User.state";
-import { BuddyType, User } from "../utils/user/User.types";
+import { User } from "../utils/user/User.types";
 import {
   addBuddy,
   fetchAllUsers,
@@ -39,25 +39,7 @@ const SearchPage: FC<{}> = () => {
 
   const handleAddBuddy = async (buddyId: string) => {
     if (!user) return;
-    await addBuddy(axios, { userId: user.id, buddyId });
-  };
-
-  const renderButton = (userId: string) => {
-    if (!user) return;
-    const status: BuddyType | undefined = getFriendRequestStatus(user, userId);
-    if (!!status) {
-      return (
-        <button className="button-inactive">
-          {t("general.pages.search.added")}
-        </button>
-      );
-    }
-
-    return (
-      <button className="button-active" onClick={() => handleAddBuddy(userId)}>
-        {t("general.pages.search.add")}
-      </button>
-    );
+    await addBuddy(axios, { userId: user.id!, buddyId });
   };
 
   return (
@@ -92,9 +74,10 @@ const SearchPage: FC<{}> = () => {
               users
                 ?.filter((result) => {
                   return (
-                    result.email?.toLowerCase().includes(searchValue) ||
-                    result.firstName?.toLowerCase().includes(searchValue) ||
-                    result.lastName?.toLowerCase().includes(searchValue)
+                    (result.email?.toLowerCase().includes(searchValue) ||
+                      result.firstName?.toLowerCase().includes(searchValue) ||
+                      result.lastName?.toLowerCase().includes(searchValue)) &&
+                    result.id !== user?.id
                   );
                 })
                 ?.map((result) => (
@@ -104,7 +87,28 @@ const SearchPage: FC<{}> = () => {
                     className="search-page-search-results-item"
                   >
                     <p>{result.email}</p>
-                    {renderButton(result.id)}
+                    {!!getFriendRequestStatus(user!, result.id!) ? (
+                      <button
+                        className="button-inactive"
+                        onClick={(event) => {
+                          event.preventDefault();
+                          event.stopPropagation();
+                        }}
+                      >
+                        {t("general.pages.search.added")}
+                      </button>
+                    ) : (
+                      <button
+                        className="button-active"
+                        onClick={(event) => {
+                          event.preventDefault();
+                          event.stopPropagation();
+                          handleAddBuddy(result.id!);
+                        }}
+                      >
+                        {t("general.pages.search.add")}
+                      </button>
+                    )}
                   </Link>
                 ))}
           </div>

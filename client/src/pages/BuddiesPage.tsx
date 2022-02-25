@@ -49,7 +49,7 @@ const BuddiesPage: React.FC<{}> = () => {
 
   const handleUnfollowFriend = async (buddyId: string) => {
     if (axios && user) {
-      const isRemoved = await removeBuddy(axios, { userId: user.id, buddyId });
+      const isRemoved = await removeBuddy(axios, { userId: user.id!, buddyId });
       if (isRemoved) {
         setUser((prevState) => ({
           ...prevState,
@@ -88,13 +88,13 @@ const BuddiesPage: React.FC<{}> = () => {
               .filter(
                 (friend) =>
                   user.buddies.find((buddy) => buddy.buddyId === friend.id)
-                    ?.buddyType === BuddyType.INCOMING
+                    ?.buddyType === BuddyType[BuddyType.INCOMING]
               )
               .map((buddy: User) => (
                 <div key={buddy.id} className="list-item">
                   <p>{buddy.firstName}</p>
                   <ButtonComponent
-                    onClick={() => handleAcceptFriend(buddy.id)}
+                    onClick={() => handleAcceptFriend(buddy.id!)}
                     value={t("general.buttons.accept")}
                     size="mini"
                   />
@@ -118,7 +118,7 @@ const BuddiesPage: React.FC<{}> = () => {
                   <Link to={`/user/${buddy.id}`} key={buddy.id}>
                     <p>{`${buddy.firstName} ${buddy.lastName}`}</p>
                   </Link>
-                  <button onClick={() => handleUnfollowFriend(buddy.id)}>
+                  <button onClick={() => handleUnfollowFriend(buddy.id!)}>
                     {t("general.buttons.remove")}
                   </button>
                 </div>

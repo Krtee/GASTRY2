@@ -22,6 +22,7 @@ import io.yumatch.userservice.constants.UserRole;
 import io.yumatch.userservice.model.Buddy;
 import io.yumatch.userservice.model.UserDto;
 import io.yumatch.userservice.repositories.UserRepository;
+import io.yumatch.userservice.utils.BuddyUtil;
 import io.yumatch.userservice.utils.KeyCloakService;
 import io.yumatch.userservice.utils.RestUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +38,9 @@ public class UserController {
 
     @Autowired
     private KeyCloakService keycloakUtil;
+
+    @Autowired
+    private BuddyUtil buddyUtil;
 
     @Autowired
     private RestUtils restUtils;
@@ -241,8 +245,14 @@ public class UserController {
             userRepo.deleteById(userId);
             return ResponseEntity.status(HttpStatus.OK).build();
         }
+        buddyUtil.deleteBuddyInAllUsers(userId);
         log.warn("UserDTO was not deleted on keycloak!");
         return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).build();
     }
 
+    @PostMapping(value = "/delete/all")
+    public ResponseEntity<?> deleteAllUser() {
+        userRepo.deleteAll();
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }

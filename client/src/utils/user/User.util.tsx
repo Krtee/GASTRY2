@@ -1,6 +1,6 @@
 import { AxiosInstance } from "axios";
 import { ResponseTypes } from "../AxiosUtil";
-import { BuddyType, User, UserRole } from "./User.types";
+import { Buddy, BuddyType, User, UserRole } from "./User.types";
 
 /**
  * Helper function to create an empty user for modification
@@ -9,7 +9,6 @@ import { BuddyType, User, UserRole } from "./User.types";
  */
 export const createEmptyUser = (): User => {
   return {
-    id: "",
     photo: "",
     username: "",
     password: "",
@@ -209,5 +208,10 @@ export const acceptBuddy = async (
 export const getFriendRequestStatus = (
   user: User,
   buddyId: string
-): BuddyType | undefined =>
-  user.buddies.find((buddy) => buddy.buddyId === buddyId)?.buddyType;
+): BuddyType | undefined => {
+  const buddy: Buddy | undefined = user.buddies.find(
+    (buddy) => buddy.buddyId === buddyId
+  );
+
+  return buddy ? BuddyType[buddy.buddyType] : undefined;
+};

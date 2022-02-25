@@ -79,7 +79,7 @@ const ChooseFriendsPage: React.FC<ChooseFriendsPageProps> = () => {
         createEmptyMultiUserMatch(
           user.id,
           chosenFriends.map((userToAdd) => ({
-            userId: userToAdd.id,
+            userId: userToAdd.id!,
             status: MultiMatchRequestStatus.PENDING,
           })),
           currentMatch.id

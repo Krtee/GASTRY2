@@ -206,7 +206,7 @@ public class RestUtils {
          * @param userIds
          */
         public void sendMultiMatchFinishedNotification(MultiMatchRequest request) {
-                userServiceWebClient.post().uri("/notifications/multi/match/finished").bodyValue(request)
+                userServiceWebClient.post().uri("/notification/multi/match/finished").bodyValue(request)
                                 .retrieve()
                                 .toBodilessEntity()
                                 .block();
@@ -218,7 +218,7 @@ public class RestUtils {
          * @param request
          */
         public void sendMultiMatchRequestNotification(MultiMatchRequest request) {
-                userServiceWebClient.post().uri("/notifications/multi/match").bodyValue(request)
+                userServiceWebClient.post().uri("/notification/multi/match").bodyValue(request)
                                 .retrieve()
                                 .toBodilessEntity()
                                 .block();
